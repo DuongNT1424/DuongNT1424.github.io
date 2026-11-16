@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nguyen Thai Duong · Backend & AI Engineer</title>
+  <meta name="description" content="Portfolio of Nguyen Thai Duong, backend (Java/.NET) and AI engineer. Try DevPrep, BookNest, ViDa Bioleather and BioPestControl live in your browser.">
+  <meta property="og:title" content="Nguyen Thai Duong · Backend & AI Engineer">
+  <meta property="og:description" content="Backend Java/.NET and AI. Open a project to try it right away.">
+  <meta property="og:image" content="assets/duong.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2314304a'/><text x='16' y='22' font-size='16' font-family='Arial' font-weight='700' fill='white' text-anchor='middle'>D</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#projects">Skip to projects</a>
+
+  <header class="top">
+   <div class="top-in">
+    <a class="brand" href="#" data-t="person.name"></a>
+    <nav aria-label="Main">
+      <a href="#projects" data-nav="0"></a>
+      <a href="#experience" data-nav="1"></a>
+      <a href="#skills" data-nav="2"></a>
+      <a href="#contact" data-nav="3"></a>
+    </nav>
+    <button class="lang" type="button" id="lang"></button>
+   </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-text">
+        <h1 data-t="person.name"></h1>
+        <p class="role" data-t="person.role"></p>
+        <p class="intro" data-t="person.intro"></p>
+        <div class="hero-actions">
+          <a class="btn primary" id="cv-link" download data-t="ui.downloadCv"></a>
+          <a class="btn" id="hero-mail" data-t="ui.emailMe"></a>
+          <a class="btn ghost" id="hero-gh" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+      <figure class="hero-photo">
+        <img src="assets/duong.jpg" alt="Portrait of Nguyen Thai Duong" width="640" height="800">
+      </figure>
+    </section>
+
+    <section id="projects" class="block">
+      <h2 data-t="ui.projectsTitle"></h2>
+      <p class="lead" data-t="ui.projectsLead"></p>
+      <ol class="board" id="board"></ol>
+    </section>
+
+    <section id="experience" class="block split">
+      <div>
+        <h2 data-t="ui.expTitle"></h2>
+        <div id="exp"></div>
+      </div>
+      <div>
+        <h2 data-t="ui.eduTitle"></h2>
+        <div id="edu"></div>
+      </div>
+    </section>
+
+    <section id="skills" class="block split">
+      <div>
+        <h2 data-t="ui.skillsTitle"></h2>
+        <dl class="skills" id="skill-list"></dl>
+      </div>
+      <div>
+        <h2 data-t="ui.certTitle"></h2>
+        <ul class="certs" id="cert-list"></ul>
+      </div>
+    </section>
+
+    <section id="contact" class="block contact">
+      <h2 data-t="ui.contactTitle"></h2>
+      <p class="lead" data-t="ui.contactLead"></p>
+      <ul class="contact-list" id="contact-list"></ul>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p><span data-t="person.name"></span> · <span id="year"></span> · <span data-t="ui.footer"></span></p>
+  </footer>
+
+  <script src="content.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

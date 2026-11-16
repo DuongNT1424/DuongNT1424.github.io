@@ -33,11 +33,11 @@
     var board = document.getElementById("board");
     board.innerHTML = "";
     S.projects.forEach(function (p) {
-      var live = p.status === "live";
-      var statusText = live ? tr(S.ui.statusLive) : tr(S.ui.statusSoon);
+      var live = p.status === "live" || p.status === "ui";
+      var statusText = p.status === "live" ? tr(S.ui.statusLive) : p.status === "ui" ? tr(S.ui.statusUi) : tr(S.ui.statusSoon);
 
       var actions = el("div", { class: "row-actions" });
-      if (live && p.demo) actions.appendChild(link(p.demo, tr(S.ui.openDemo), "btn primary", true));
+      if (live && p.demo) actions.appendChild(link(p.demo, tr(S.ui.openDemo), "btn primary", p.demo.indexOf("http") === 0));
       var player = null;
       if (p.video) {
         var vbtn = el("button", { class: "btn primary", type: "button", "aria-expanded": "false", "aria-controls": "v-" + p.id, text: tr(S.ui.watchVideo) });
@@ -78,13 +78,13 @@
       var stack = el("ul", { class: "stack", "aria-label": "Tech stack" });
       p.stack.forEach(function (s) { stack.appendChild(el("li", { text: s })); });
 
-      var row = el("li", { class: "row " + (live ? "is-live" : "is-soon") }, [
+      var row = el("li", { class: "row " + (p.status === "live" ? "is-live" : p.status === "ui" ? "is-ui" : "is-soon") }, [
         el("div", { class: "row-main" }, [
           el("p", { class: "status" }, [el("span", { class: "dot", "aria-hidden": "true" }), document.createTextNode(statusText)]),
           el("h3", { text: p.name }),
           el("p", { class: "tagline", text: tr(p.tagline) }),
           stack,
-          !live && p.demoNote ? el("p", { class: "note", text: tr(p.demoNote) }) : null
+          p.status !== "live" && p.demoNote ? el("p", { class: "note", text: tr(p.demoNote) }) : null
         ]),
         el("div", { class: "row-side" }, [actions, toggle]),
         player,

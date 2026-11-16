@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest | Book Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <script src="../../js/lucide.min.js"></script>
+    <style>
+        :root {
+            --primary: #F37021;
+            --bg: #f8fafc;
+            --text: #1f2937;
+        }
+
+        body {
+            background: var(--bg);
+        }
+
+        header,
+        .nav-bar * {
+            font-family: 'Roboto', sans-serif !important;
+        }
+
+        .detail-root {
+            color: var(--text);
+            font-size: 14px;
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .detail-container {
+            max-width: 1240px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 12px;
+        }
+
+        .content-wrap {
+            display: grid;
+            gap: 24px;
+            margin: 10px auto 28px;
+        }
+
+        .error-box {
+            border: 1px solid #fecaca;
+            background: #fff1f2;
+            color: #b91c1c;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-weight: 500;
+        }
+
+        .crumbs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .crumbs a {
+            text-decoration: none;
+            color: #64748b;
+        }
+
+        .crumbs a:hover {
+            color: #d97706;
+        }
+
+        .product-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: minmax(320px, 420px) 1fr;
+            align-items: stretch;
+        }
+
+        .product-image-col {
+            background: #f8fafc;
+            border-right: 1px solid #f1f5f9;
+            padding: 28px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-wrap {
+            width: min(100%, 360px);
+            height: 520px;
+            position: relative;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            box-shadow: 0 18px 32px rgba(0, 0, 0, 0.18);
+            background: #fff;
+            transition: transform .25s ease;
+            display: block;
+        }
+
+        .product-image:hover {
+            transform: scale(1.02);
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .2px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stock-badge.in {
+            background: #16a34a;
+        }
+
+        .stock-badge.out {
+            background: #dc2626;
+        }
+
+        .product-info-col {
+            padding: 30px 34px;
+            display: grid;
+            gap: 16px;
+            align-content: start;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 2px;
+        }
+
+        .product-title {
+            font-size: 36px;
+            line-height: 1.2;
+            color: #111827;
+            font-weight: 800;
+        }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .rating-star {
+            color: #f59e0b;
+        }
+
+        .meta-rows {
+            display: grid;
+            gap: 8px;
+            margin: 2px 0;
+            background: #fcfcfd;
+            border: 1px solid #edf2f7;
+            border-radius: 12px;
+            padding: 10px 12px;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: baseline;
+            border-bottom: 1px solid #eef2f6;
+            padding-bottom: 6px;
+            color: #475569;
+        }
+
+        .meta-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .meta-label {
+            width: 130px;
+            flex-shrink: 0;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .meta-value {
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .meta-value.highlight {
+            color: #b45309;
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-size: 40px;
+            font-weight: 800;
+            color: #111827;
+            line-height: 1.15;
+        }
+
+        .price-unit {
+            font-size: 20px;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .stock-text {
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .price-block {
+            margin-top: 2px;
+            margin-bottom: 4px;
+        }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .qty-box {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            margin-right: 8px;
+        }
+
+        .qty-box button {
+            width: 34px;
+            height: 42px;
+            border: none;
+            background: #f8fafc;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .qty-box input {
+            width: 58px;
+            height: 42px;
+            border: none;
+            text-align: center;
+            outline: none;
+            font-weight: 700;
+        }
+
+        .btn-primary {
+            border: none;
+            background: linear-gradient(135deg, #F37021 0%, #FF8A3D 100%);
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 800;
+            padding: 12px 18px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(243, 112, 33, 0.35);
+            text-decoration: none;
+            letter-spacing: .2px;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(.93);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            border: 2px solid #e5e7eb;
+            background: #fff;
+            color: #4b5563;
+            border-radius: 12px;
+            font-weight: 700;
+            padding: 11px 18px;
+            text-decoration: none;
+        }
+
+        .sections-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .sections-left {
+            display: grid;
+            gap: 20px;
+        }
+
+        .section-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, .04);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 14px;
+        }
+
+        .section-description {
+            color: #475569;
+            line-height: 1.8;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 14px;
+            max-width: 780px;
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 190px 1fr;
+            gap: 12px 16px;
+        }
+
+        .spec-key {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .spec-val {
+            color: #1f2937;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .reviews-panel {
+            position: sticky;
+            top: 16px;
+            align-self: start;
+        }
+
+        .reviews-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .review-card {
+            border: 1px solid #f1f5f9;
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .review-text {
+            margin-top: 8px;
+            color: #475569;
+            line-height: 1.6;
+            font-size: 13px;
+        }
+
+        .admin-reply {
+            margin-top: 8px;
+            border: 1px solid #f3e8ff;
+            background: #faf5ff;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        .review-form {
+            margin-top: 14px;
+            border: 1px solid #f1f5f9;
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .star-input input {
+            display: none;
+        }
+
+        .star-input label {
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .star-input input:checked~label,
+        .star-input label:hover,
+        .star-input label:hover~label {
+            color: #f59e0b;
+        }
+
+        .review-form textarea {
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            min-height: 100px;
+            padding: 10px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        footer {
+            background: #fff;
+            border-top: 3px solid var(--primary);
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image-col {
+                border-right: none;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .image-wrap {
+                height: 500px;
+            }
+
+            .product-title {
+                font-size: 30px;
+            }
+
+            .product-info-col {
+                padding: 24px;
+            }
+
+            .sections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-panel {
+                position: static;
+            }
+
+            .meta-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .meta-label {
+                width: auto;
+            }
+
+            .spec-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .product-title {
+                font-size: 26px;
+            }
+
+            .image-wrap {
+                height: 430px;
+            }
+
+            .product-info-col {
+                padding: 20px;
+                gap: 14px;
+            }
+        }
+    </style>
+<script>window.__BN_ROOT="../..";window.__BN_GROUP="customer";</script><script src="../../demo-shim.js"></script>
+</head>
+
+<body>
+    <div>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+        :root {
+            --vb-brown: #f37120;
+            --border: #ddd;
+            --text: #333;
+        }
+
+        .nav-bar * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        header {
+            background: #fff;
+            padding: 0 0;
+            border-bottom: 2px solid var(--vb-brown);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            min-width: 220px;
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--vb-brown);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-container button {
+            background: var(--vb-brown);
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        #global-search-suggest {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 58px;
+            z-index: 20;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #global-search-suggest:not(.hidden) {
+            display: block;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9f9f9;
+            padding: 8px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .auth-links a {
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .auth-links .logout-btn {
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.2;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .auth-links a.primary {
+            background: var(--vb-brown);
+            color: #fff;
+            border-color: var(--vb-brown);
+        }
+
+        .nav-bar {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .nav-links li a:hover {
+            background: var(--vb-brown);
+            color: #fff;
+        }
+
+        @media (max-width: 1024px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                min-width: 220px;
+            }
+
+            .logo-text {
+                font-size: 32px;
+                font-weight: 900;
+                color: var(--vb-brown);
+                text-decoration: none;
+                letter-spacing: -1px;
+            }
+
+            .search-container {
+                flex: 1;
+                display: flex;
+                position: relative;
+            }
+
+            .search-container input {
+                flex: 1;
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                border-right: none;
+                border-radius: 4px 0 0 4px;
+                outline: none;
+            }
+
+            .search-container button {
+                background: var(--vb-brown);
+                color: #fff;
+                border: none;
+                padding: 0 20px;
+                border-radius: 0 4px 4px 0;
+                cursor: pointer;
+                font-weight: 700;
+            }
+
+            #global-search-suggest {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 58px;
+                z-index: 20;
+                background: #fff;
+                border: 1px solid #e6e6e6;
+                border-top: none;
+                border-radius: 0 0 6px 6px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+            #global-search-suggest:not(.hidden) {
+                display: block;
+            }
+
+            .cart-box {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #f9f9f9;
+                padding: 8px 15px;
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                text-decoration: none;
+                color: var(--text);
+                white-space: nowrap;
+            }
+
+            .auth-links {
+                display: flex;
+                gap: 8px;
+                white-space: nowrap;
+            }
+
+            .auth-links a {
+                text-decoration: none;
+                border: 1px solid var(--border);
+                background: #fff;
+                color: #444;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+
+            .auth-links .logout-btn {
+                text-decoration: none;
+                border: 1px solid var(--border);
+                background: #fff;
+                color: #444;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 1.2;
+                font-family: 'Roboto', sans-serif;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .auth-links a.primary {
+                background: var(--vb-brown);
+                color: #fff;
+                border-color: var(--vb-brown);
+            }
+
+            .nav-bar {
+                background: #fff;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                margin-bottom: 20px;
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                list-style: none;
+                overflow-x: auto;
+            }
+
+            .nav-links li a {
+                display: block;
+                padding: 12px 20px;
+                text-decoration: none;
+                color: var(--text);
+                font-weight: 500;
+                text-transform: uppercase;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            .nav-links li a:hover {
+                background: var(--vb-brown);
+                color: #fff;
+            }
+
+            @media (max-width: 1024px) {
+                .header-content {
+                    flex-wrap: wrap;
+                }
+
+                .logo {
+                    min-width: 170px;
+                }
+            }
+        </style>
+
+        <header>
+            <div class="container header-content">
+                <div class="logo">
+                    <a href="../../index.html" style="display: flex; align-items: center; gap: 0px; text-decoration: none; padding: 5px 0;">
+                        <img src="../../logo/Logo2.png" alt="BookNest" style="height: 100px; object-fit: contain; flex-shrink: 0;">
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <span class="logo-text" style="font-size: 32px; font-weight: 900; color: #f37120; margin: 0; line-height: 1;">BookNest</span>
+                            <span style="font-size: 11px; color: #999; margin-top: 2px;">Online Bookstore</span>
+                        </div>
+                    </a>
+                </div>
+
+                <form class="search-container" action="/search" method="get">
+                    <input id="global-search-input" type="text" name="q" placeholder="Search books or stationery..."
+                        autocomplete="off">
+                    <button type="submit">SEARCH</button>
+                    <div id="global-search-suggest" class="hidden"></div>
+                </form>
+
+                <a href="../../cart/index.html" class="cart-box">
+                    <i data-lucide="shopping-cart" size="20"></i>
+                    <div>
+                        <span style="display:block; font-size: 10px; color: #999;">Shopping Cart</span>
+                        <strong style="font-size: 12px;">(4) items</strong>
+                    </div>
+                </a>
+
+                
+
+                <div class="auth-links">
+                    <a href="../../account/index.html">Account</a>
+                    <a href="../../orders/index.html">Order</a>
+                    
+                    <form method="post" action="../../login/index.html" style="display:inline-flex; margin: 0;">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <div class="nav-bar">
+            <div class="container">
+                <ul class="nav-links">
+                    <li>
+                        <a href="../../index.html">
+                            <i data-lucide="home" size="14" style="margin-bottom: -2px;"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../index.html"
+                            style="background: var(--vb-brown); color: #fff;">BOOKS</a>
+                    </li>
+                    <li>
+                        <a href="../../stationery/index.html">STATIONERY</a>
+                    </li>
+                    <li>
+                        <a href="../../orders/index.html">Order</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                if (window.__globalSearchSuggestInit) {
+                    return;
+                }
+                window.__globalSearchSuggestInit = true;
+
+                const input = document.getElementById('global-search-input');
+                const box = document.getElementById('global-search-suggest');
+                if (!input || !box) {
+                    return;
+                }
+
+                let debounceTimer;
+                let abortController;
+
+                const escapeHtml = (text) => (text || '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#39;');
+
+                const hide = () => {
+                    box.classList.add('hidden');
+                    box.innerHTML = '';
+                };
+
+                const render = (items) => {
+                    if (!Array.isArray(items) || !items.length) {
+                        hide();
+                        return;
+                    }
+
+                    box.innerHTML = items.map((item) => {
+                        const title = escapeHtml(item.title || '');
+                        const author = escapeHtml(item.author || '');
+                        const typeName = escapeHtml(item.typeName || 'Book');
+                        const url = item.url || `/books/${item.id}`;
+                        return `<a href="${url}" style="display:block;padding:10px 12px;border-bottom:1px solid #f0f0f0;text-decoration:none;color:#333;"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;"><div style="font-size:12px;font-weight:600;">${title}</div><span style="font-size:10px;font-weight:700;color:#F37021;text-transform:uppercase;">${typeName}</span></div><div style="font-size:11px;color:#777;">${author}</div></a>`;
+                    }).join('');
+
+                    box.classList.remove('hidden');
+                };
+
+                input.addEventListener('input', () => {
+                    const q = (input.value || '').trim();
+                    clearTimeout(debounceTimer);
+
+                    if (q.length < 2) {
+                        hide();
+                        return;
+                    }
+
+                    debounceTimer = setTimeout(async () => {
+                        try {
+                            if (abortController) {
+                                abortController.abort();
+                            }
+                            abortController = new AbortController();
+                            const response = await fetch(`/search/suggest?q=${encodeURIComponent(q)}`, {
+                                signal: abortController.signal
+                            });
+                            if (!response.ok) {
+                                hide();
+                                return;
+                            }
+                            const data = await response.json();
+                            render(data);
+                        } catch {
+                            hide();
+                        }
+                    }, 180);
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!box.contains(event.target) && event.target !== input) {
+                        hide();
+                    }
+                });
+            })();
+        </script>
+    </div>
+
+    <div class="detail-root">
+
+        <main class="detail-container content-wrap">
+            
+
+            <nav class="crumbs">
+                <a href="../../index.html">Home</a>
+                <span>/</span>
+                <a href="../index.html">Books</a>
+                <span>/</span>
+                <span style="color:#1f2937;font-weight:600;">Sống Chậm Giữa Đời Vội</span>
+            </nav>
+
+            <section class="product-card">
+                <div class="product-grid">
+                    <div class="product-image-col">
+                        <div class="image-wrap">
+                            <img class="product-image" src="../../images/books/demo-b7.png" alt="Sống Chậm Giữa Đời Vội">
+                            
+
+                            <span class="stock-badge in">IN STOCK: 63</span>
+                            
+                        </div>
+                    </div>
+
+                    <div class="product-info-col">
+                        <div class="title-row">
+                            <h1 class="product-title">Sống Chậm Giữa Đời Vội</h1>
+                        </div>
+
+                        <div class="rating-row">
+                            <div>
+                                <span class="rating-star">&#9733;</span><span class="rating-star">&#9733;</span><span class="rating-star">&#9733;</span><span class="rating-star">&#9733;</span><span class="rating-star"
+                                    style="color:#ddd;">&#9733;</span>
+                            </div>
+                            <span style="font-size:12px;color:#64748b;">
+                                <span>
+                                    <span>4.0</span>
+                                    (<span>1</span>
+                                    reviews)
+                                </span>
+                                
+                            </span>
+                        </div>
+
+                        <div class="meta-rows">
+                            <div class="meta-row">
+                                <span class="meta-label">Author:</span>
+                                <span class="meta-value">Hồ Ngọc Lan</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-label">Product type:</span>
+                                <span class="meta-value">Sách</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-label">Category:</span>
+                                <span class="meta-value">Kỹ năng sống</span>
+                            </div>
+                            <div class="meta-row">
+                                <span class="meta-label">Publisher:</span>
+                                <span class="meta-value highlight">NXB Trẻ</span>
+                            </div>
+                        </div>
+
+                        <div class="price-block">
+                            <div class="product-price">
+                                <span>85,000</span>
+                                <small class="price-unit">VND</small>
+                            </div>
+                            <div class="stock-text">Available: 63 book(s)</div>
+                        </div>
+
+                        <div class="action-row">
+                            <form method="post" action="/cart/add" class="action-row">
+                                <input type="hidden" name="bookId" value="7">
+                                <div class="qty-box">
+                                    <button type="button" onclick="changeQty(-1)">-</button>
+                                    <input id="qty-input" type="number" name="quantity" value="1" min="1" max="63">
+                                    <button type="button" onclick="changeQty(1)">+</button>
+                                </div>
+                                <button class="btn-primary" type="submit">ADD TO CART</button>
+                            </form>
+                            <a href="../index.html" class="btn-outline">Go back to list</a>
+                        </div>
+
+                        
+
+                        
+                    </div>
+                </div>
+            </section>
+
+            <section class="sections-grid">
+                <div class="sections-left">
+                    <article class="section-card">
+                        <h2 class="section-title">Description</h2>
+                        <p class="section-description">Sống Chậm Giữa Đời Vội là cuốn sách được nhiều độc giả BookNest yêu thích. Nội dung gần gũi, dễ đọc, phù hợp để đọc thư giãn hoặc làm quà tặng.</p>
+                    </article>
+
+                    <article class="section-card">
+                        <h2 class="section-title">Product Details</h2>
+                        <div class="spec-grid">
+                            <div class="spec-key">Author</div>
+                            <div class="spec-val">Hồ Ngọc Lan</div>
+
+                            <div class="spec-key">Product type</div>
+                            <div class="spec-val">Sách</div>
+
+                            <div class="spec-key">Category</div>
+                            <div class="spec-val">Kỹ năng sống</div>
+
+                            <div class="spec-key">Publisher</div>
+                            <div class="spec-val">NXB Trẻ</div>
+
+                            <div class="spec-key">Published year</div>
+                            <div class="spec-val">2024</div>
+
+                            <div class="spec-key">Page count</div>
+                            <div class="spec-val">240</div>
+
+                            <div class="spec-key">Size (W x H x T)</div>
+                            <div class="spec-val">14.50 x 20.50 x 2.00 cm</div>
+                        </div>
+                    </article>
+                </div>
+
+                <aside class="section-card reviews-panel" id="reviews-section">
+                    <h2 class="section-title">Reviews</h2>
+
+                    
+                    
+
+                    <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #e5e7eb;">
+                        <form method="get" action="index.html" id="filter-form"
+                            style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                            <label style="font-weight:600;font-size:13px;color:#475569;">Filter:</label>
+                            <select name="ratingFilter"
+                                style="padding:6px 8px;border:1px solid #e5e7eb;border-radius:6px;font-size:12px;cursor:pointer;"
+                                onchange="submitReviewFilterWithAnchor()">
+                                <option value="" selected="selected">All ratings</option>
+                                <option value="5">★★★★★ 5 stars</option>
+                                <option value="4">★★★★ 4 stars</option>
+                                <option value="3">★★★ 3 stars</option>
+                                <option value="2">★★ 2 stars</option>
+                                <option value="1">★ 1 star</option>
+                            </select>
+                            <input type="hidden" name="reviewPage" value="1">
+                        </form>
+                    </div>
+
+                    <div class="reviews-list">
+                        <article class="review-card" style="display:grid;gap:8px;">
+                            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                                <div>
+                                    <strong>Phạm Hồng Phúc</strong>
+                                    <span style="font-size:11px;color:#64748b;margin-left:8px;">10 Nov 2026 17:03</span>
+                                </div>
+                                <div>
+                                    <span style="color:#f59e0b;">&#9733;</span><span style="color:#f59e0b;">&#9733;</span><span style="color:#f59e0b;">&#9733;</span><span style="color:#f59e0b;">&#9733;</span><span style="color:#ddd;">&#9733;</span>
+                                </div>
+                            </div>
+                            <p class="review-text">Đọc xong thấy nhẹ lòng hơn hẳn.</p>
+
+                            
+                        </article>
+                    </div>
+
+                    
+
+                    
+                    
+
+                    
+
+                    <p style="margin-top:12px;color:#64748b;font-size:13px;line-height:1.5;">You can review after buying this book.</p>
+
+                    
+                </aside>
+            </section>
+        </main>
+
+        <div>
+    <style>
+        .site-footer {
+            background: #fff;
+            border-top: 3px solid #F37021;
+            padding: 20px 0;
+            margin-top: 25px;
+        }
+
+        .site-footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .site-footer .sf-cols {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .site-footer .sf-cols h4 {
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #F37021;
+            text-transform: uppercase;
+        }
+
+        .site-footer .sf-cols ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .site-footer .sf-cols li {
+            margin-bottom: 5px;
+        }
+
+        .site-footer .sf-cols a {
+            text-decoration: none;
+            color: #666;
+        }
+
+        .site-footer .sf-bottom {
+            text-align: center;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 10px;
+            color: #999;
+        }
+
+        @media (max-width: 1024px) {
+            .site-footer .sf-cols {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .site-footer .sf-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <footer class="site-footer">
+        <div class="container sf-cols">
+            <div>
+                <h4>Customer Support</h4>
+                <ul>
+                    <li><a href="../index.html">Products and orders</a></li>
+                    <li><a href="#">Return policy</a></li>
+                    <li><a href="#">Shipping method</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>About BookNest</h4>
+                <ul>
+                    <li><a href="#">About BookNest</a></li>
+                    <li><a href="#">Terms of use</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="../../login/index.html">Login</a></li>
+                    <li><a href="../../register/index.html">Create account</a></li>
+                    <li><a href="../../orders/index.html">Order history</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="sf-bottom">
+            &copy; 2026 BookNest. All rights reserved.
+        </div>
+    </footer>
+</div>
+
+        <script>
+            lucide.createIcons();
+
+            function changeQty(step) {
+                const input = document.getElementById('qty-input');
+                if (!input) {
+                    return;
+                }
+                const current = parseInt(input.value || '1', 10);
+                const maxValue = parseInt(input.max || '9999', 10);
+                const next = Math.max(1, Math.min(maxValue, current + step));
+                input.value = next;
+            }
+
+            function enforceReviewWordLimit() {
+                const textarea = document.querySelector('textarea[name="content"][data-word-limit]');
+                if (!textarea) {
+                    return;
+                }
+
+                const counter = document.getElementById('review-word-counter');
+                const maxWords = parseInt(textarea.getAttribute('data-word-limit') || '100', 10);
+
+                const update = () => {
+                    const tokens = (textarea.value || '').trim().split(/\s+/).filter(Boolean);
+                    if (tokens.length > maxWords) {
+                        textarea.value = tokens.slice(0, maxWords).join(' ');
+                    }
+
+                    const currentTokens = (textarea.value || '').trim().split(/\s+/).filter(Boolean);
+                    if (counter) {
+                        counter.textContent = String(currentTokens.length);
+                    }
+                };
+
+                textarea.addEventListener('input', update);
+                update();
+            }
+
+            function submitReviewFilterWithAnchor() {
+                const form = document.getElementById('filter-form');
+                if (!form) {
+                    return;
+                }
+
+                const action = form.getAttribute('action') || window.location.pathname;
+                const params = new URLSearchParams(new FormData(form));
+                const query = params.toString();
+                window.location.href = action + (query ? ('?' + query) : '') + '#reviews-section';
+            }
+
+            function bindReviewPaginationAnchor() {
+                const pageLinks = document.querySelectorAll('.review-page-link');
+                pageLinks.forEach((link) => {
+                    link.addEventListener('click', (event) => {
+                        const href = link.getAttribute('href');
+                        if (!href) {
+                            return;
+                        }
+
+                        event.preventDefault();
+                        window.location.href = href + '#reviews-section';
+                    });
+                });
+            }
+
+            enforceReviewWordLimit();
+            bindReviewPaginationAnchor();
+        </script>
+    </div>
+</body>
+
+</html>

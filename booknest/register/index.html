@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest | Register Account</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="../js/lucide.min.js"></script>
+    <style>
+        :root {
+            --vb-brown: #F37021;
+            --bg-gray: #f5f5f5;
+            --border: #ddd;
+            --text: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gray);
+            color: var(--text);
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        header {
+            background: #fff;
+            padding: 15px 0;
+            border-bottom: 2px solid var(--vb-brown);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            min-width: 220px;
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--vb-brown);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-container button {
+            background: var(--vb-brown);
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        #global-search-suggest {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 58px;
+            z-index: 20;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #global-search-suggest:not(.hidden) {
+            display: block;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9f9f9;
+            padding: 8px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .cart-box:hover {
+            color: var(--text);
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .auth-links a {
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .auth-links a.primary {
+            background: var(--vb-brown);
+            color: #fff;
+            border-color: var(--vb-brown);
+        }
+
+        .nav-bar {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 22px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .nav-links li a:hover {
+            background: var(--vb-brown);
+            color: #fff;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            max-width: 560px;
+            margin: 16px auto 30px;
+        }
+
+        .panel-head {
+            background: #f3f3f3;
+            color: var(--vb-brown);
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+            font-weight: 700;
+            padding: 12px 14px;
+            text-transform: uppercase;
+        }
+
+        .panel-body {
+            padding: 16px;
+        }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            border: 1px solid #d8d8d8;
+            border-radius: 4px;
+            padding: 11px;
+            outline: none;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: var(--vb-brown);
+        }
+
+        .password-wrap {
+            position: relative;
+        }
+
+        .password-wrap input {
+            padding-right: 56px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #8a8a8a;
+            cursor: pointer;
+            padding: 4px 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle .icon-off {
+            display: none;
+        }
+
+        .password-toggle.showing .icon-on {
+            display: none;
+        }
+
+        .password-toggle.showing .icon-off {
+            display: inline;
+        }
+
+        .error-box {
+            margin-bottom: 12px;
+            border: 1px solid #f3c3c3;
+            background: #fff3f3;
+            color: #ba1f1f;
+            border-radius: 4px;
+            padding: 10px 12px;
+            font-weight: 500;
+        }
+
+        .error-message {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #ba1f1f;
+            display: none;
+        }
+
+        .btn-submit {
+            width: 100%;
+            border: none;
+            background: var(--vb-brown);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 4px;
+            padding: 11px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .sub-row {
+            margin-top: 12px;
+            color: #777;
+            text-align: center;
+        }
+
+        .sub-row a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        footer {
+            background: #fff;
+            border-top: 3px solid var(--vb-brown);
+            padding: 30px 0;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                min-width: 170px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .logo-text {
+                font-size: 28px;
+            }
+
+            .search-container {
+                width: 100%;
+                order: 3;
+            }
+        }
+    </style>
+<script>window.__BN_ROOT="..";window.__BN_GROUP="guest";</script><script src="../demo-shim.js"></script>
+</head>
+
+<body>
+    <div>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+        :root {
+            --vb-brown: #f37120;
+            --border: #ddd;
+            --text: #333;
+        }
+
+        .nav-bar * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        header {
+            background: #fff;
+            padding: 0 0;
+            border-bottom: 2px solid var(--vb-brown);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            min-width: 220px;
+        }
+
+        .logo-text {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--vb-brown);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            position: relative;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-right: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+
+        .search-container button {
+            background: var(--vb-brown);
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        #global-search-suggest {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 58px;
+            z-index: 20;
+            background: #fff;
+            border: 1px solid #e6e6e6;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #global-search-suggest:not(.hidden) {
+            display: block;
+        }
+
+        .cart-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f9f9f9;
+            padding: 8px 15px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .auth-links a {
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .auth-links .logout-btn {
+            text-decoration: none;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: #444;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 1.2;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .auth-links a.primary {
+            background: var(--vb-brown);
+            color: #fff;
+            border-color: var(--vb-brown);
+        }
+
+        .nav-bar {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-links li a {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .nav-links li a:hover {
+            background: var(--vb-brown);
+            color: #fff;
+        }
+
+        @media (max-width: 1024px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            .logo {
+                min-width: 220px;
+            }
+
+            .logo-text {
+                font-size: 32px;
+                font-weight: 900;
+                color: var(--vb-brown);
+                text-decoration: none;
+                letter-spacing: -1px;
+            }
+
+            .search-container {
+                flex: 1;
+                display: flex;
+                position: relative;
+            }
+
+            .search-container input {
+                flex: 1;
+                padding: 10px 15px;
+                border: 1px solid #ccc;
+                border-right: none;
+                border-radius: 4px 0 0 4px;
+                outline: none;
+            }
+
+            .search-container button {
+                background: var(--vb-brown);
+                color: #fff;
+                border: none;
+                padding: 0 20px;
+                border-radius: 0 4px 4px 0;
+                cursor: pointer;
+                font-weight: 700;
+            }
+
+            #global-search-suggest {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 58px;
+                z-index: 20;
+                background: #fff;
+                border: 1px solid #e6e6e6;
+                border-top: none;
+                border-radius: 0 0 6px 6px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                max-height: 300px;
+                overflow-y: auto;
+            }
+
+            #global-search-suggest:not(.hidden) {
+                display: block;
+            }
+
+            .cart-box {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #f9f9f9;
+                padding: 8px 15px;
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                text-decoration: none;
+                color: var(--text);
+                white-space: nowrap;
+            }
+
+            .auth-links {
+                display: flex;
+                gap: 8px;
+                white-space: nowrap;
+            }
+
+            .auth-links a {
+                text-decoration: none;
+                border: 1px solid var(--border);
+                background: #fff;
+                color: #444;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+
+            .auth-links .logout-btn {
+                text-decoration: none;
+                border: 1px solid var(--border);
+                background: #fff;
+                color: #444;
+                padding: 8px 12px;
+                border-radius: 4px;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 1.2;
+                font-family: 'Roboto', sans-serif;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+            .auth-links a.primary {
+                background: var(--vb-brown);
+                color: #fff;
+                border-color: var(--vb-brown);
+            }
+
+            .nav-bar {
+                background: #fff;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                margin-bottom: 20px;
+            }
+
+            .nav-links {
+                display: flex;
+                align-items: center;
+                list-style: none;
+                overflow-x: auto;
+            }
+
+            .nav-links li a {
+                display: block;
+                padding: 12px 20px;
+                text-decoration: none;
+                color: var(--text);
+                font-weight: 500;
+                text-transform: uppercase;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            .nav-links li a:hover {
+                background: var(--vb-brown);
+                color: #fff;
+            }
+
+            @media (max-width: 1024px) {
+                .header-content {
+                    flex-wrap: wrap;
+                }
+
+                .logo {
+                    min-width: 170px;
+                }
+            }
+        </style>
+
+        <header>
+            <div class="container header-content">
+                <div class="logo">
+                    <a href="../index.html" style="display: flex; align-items: center; gap: 0px; text-decoration: none; padding: 5px 0;">
+                        <img src="../logo/Logo2.png" alt="BookNest" style="height: 100px; object-fit: contain; flex-shrink: 0;">
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <span class="logo-text" style="font-size: 32px; font-weight: 900; color: #f37120; margin: 0; line-height: 1;">BookNest</span>
+                            <span style="font-size: 11px; color: #999; margin-top: 2px;">Online Bookstore</span>
+                        </div>
+                    </a>
+                </div>
+
+                <form class="search-container" action="/search" method="get">
+                    <input id="global-search-input" type="text" name="q" placeholder="Search books or stationery..."
+                        autocomplete="off">
+                    <button type="submit">SEARCH</button>
+                    <div id="global-search-suggest" class="hidden"></div>
+                </form>
+
+                <a href="../cart/index.html" class="cart-box">
+                    <i data-lucide="shopping-cart" size="20"></i>
+                    <div>
+                        <span style="display:block; font-size: 10px; color: #999;">Shopping Cart</span>
+                        <strong style="font-size: 12px;">(0) items</strong>
+                    </div>
+                </a>
+
+                <div class="auth-links">
+                    <a href="../login/index.html">Login</a>
+                    <a href="index.html" class="primary">Register</a>
+                </div>
+
+                
+            </div>
+        </header>
+
+        <div class="nav-bar">
+            <div class="container">
+                <ul class="nav-links">
+                    <li>
+                        <a href="../index.html">
+                            <i data-lucide="home" size="14" style="margin-bottom: -2px;"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="../books/index.html">BOOKS</a>
+                    </li>
+                    <li>
+                        <a href="../stationery/index.html">STATIONERY</a>
+                    </li>
+                    <li>
+                        <a href="../orders/index.html">Order</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                if (window.__globalSearchSuggestInit) {
+                    return;
+                }
+                window.__globalSearchSuggestInit = true;
+
+                const input = document.getElementById('global-search-input');
+                const box = document.getElementById('global-search-suggest');
+                if (!input || !box) {
+                    return;
+                }
+
+                let debounceTimer;
+                let abortController;
+
+                const escapeHtml = (text) => (text || '')
+                    .replaceAll('&', '&amp;')
+                    .replaceAll('<', '&lt;')
+                    .replaceAll('>', '&gt;')
+                    .replaceAll('"', '&quot;')
+                    .replaceAll("'", '&#39;');
+
+                const hide = () => {
+                    box.classList.add('hidden');
+                    box.innerHTML = '';
+                };
+
+                const render = (items) => {
+                    if (!Array.isArray(items) || !items.length) {
+                        hide();
+                        return;
+                    }
+
+                    box.innerHTML = items.map((item) => {
+                        const title = escapeHtml(item.title || '');
+                        const author = escapeHtml(item.author || '');
+                        const typeName = escapeHtml(item.typeName || 'Book');
+                        const url = item.url || `/books/${item.id}`;
+                        return `<a href="${url}" style="display:block;padding:10px 12px;border-bottom:1px solid #f0f0f0;text-decoration:none;color:#333;"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;"><div style="font-size:12px;font-weight:600;">${title}</div><span style="font-size:10px;font-weight:700;color:#F37021;text-transform:uppercase;">${typeName}</span></div><div style="font-size:11px;color:#777;">${author}</div></a>`;
+                    }).join('');
+
+                    box.classList.remove('hidden');
+                };
+
+                input.addEventListener('input', () => {
+                    const q = (input.value || '').trim();
+                    clearTimeout(debounceTimer);
+
+                    if (q.length < 2) {
+                        hide();
+                        return;
+                    }
+
+                    debounceTimer = setTimeout(async () => {
+                        try {
+                            if (abortController) {
+                                abortController.abort();
+                            }
+                            abortController = new AbortController();
+                            const response = await fetch(`/search/suggest?q=${encodeURIComponent(q)}`, {
+                                signal: abortController.signal
+                            });
+                            if (!response.ok) {
+                                hide();
+                                return;
+                            }
+                            const data = await response.json();
+                            render(data);
+                        } catch {
+                            hide();
+                        }
+                    }, 180);
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!box.contains(event.target) && event.target !== input) {
+                        hide();
+                    }
+                });
+            })();
+        </script>
+    </div>
+
+    <main class="container">
+        <section class="panel">
+            <div class="panel-head">Register Account</div>
+            <div class="panel-body">
+                
+
+                <form id="registerForm" method="post" action="index.html">
+                    <div class="field">
+                        <label>Full name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                        <div id="fullNameError" class="error-message"></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Email</label>
+                        <input type="email" id="email" name="email" required placeholder="name@company.com">
+                        <div id="emailError" class="error-message"></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="password" name="password" required placeholder="Enter password">
+                            <button id="toggleRegisterPassword" class="password-toggle" type="button"
+                                aria-label="Show password" aria-pressed="false">
+                                <i class="icon-on" data-lucide="eye" size="18"></i>
+                                <i class="icon-off" data-lucide="eye-off" size="18"></i>
+                            </button>
+                        </div>
+                        <div id="passwordError" class="error-message"></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Phone number</label>
+                        <input type="text" id="phone" name="phone" placeholder="Example: 0912345678" required>
+                        <div id="phoneError" class="error-message"></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Gender</label>
+                        <select name="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div id="genderError" class="error-message"></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Date of birth</label>
+                        <div style="display: flex; gap: 8px;">
+                            <select name="birthDay" style="flex: 1;" id="birthDay" required>
+                                <option value="">Day</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                            </select>
+                            <select name="birthMonth" style="flex: 1;" id="birthMonth" required>
+                                <option value="">Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <select name="birthYear" style="flex: 1;" id="birthYear" required>
+                                <option value="">Year</option>
+                                <option value="1900">1900</option>
+                                <option value="1901">1901</option>
+                                <option value="1902">1902</option>
+                                <option value="1903">1903</option>
+                                <option value="1904">1904</option>
+                                <option value="1905">1905</option>
+                                <option value="1906">1906</option>
+                                <option value="1907">1907</option>
+                                <option value="1908">1908</option>
+                                <option value="1909">1909</option>
+                                <option value="1910">1910</option>
+                                <option value="1911">1911</option>
+                                <option value="1912">1912</option>
+                                <option value="1913">1913</option>
+                                <option value="1914">1914</option>
+                                <option value="1915">1915</option>
+                                <option value="1916">1916</option>
+                                <option value="1917">1917</option>
+                                <option value="1918">1918</option>
+                                <option value="1919">1919</option>
+                                <option value="1920">1920</option>
+                                <option value="1921">1921</option>
+                                <option value="1922">1922</option>
+                                <option value="1923">1923</option>
+                                <option value="1924">1924</option>
+                                <option value="1925">1925</option>
+                                <option value="1926">1926</option>
+                                <option value="1927">1927</option>
+                                <option value="1928">1928</option>
+                                <option value="1929">1929</option>
+                                <option value="1930">1930</option>
+                                <option value="1931">1931</option>
+                                <option value="1932">1932</option>
+                                <option value="1933">1933</option>
+                                <option value="1934">1934</option>
+                                <option value="1935">1935</option>
+                                <option value="1936">1936</option>
+                                <option value="1937">1937</option>
+                                <option value="1938">1938</option>
+                                <option value="1939">1939</option>
+                                <option value="1940">1940</option>
+                                <option value="1941">1941</option>
+                                <option value="1942">1942</option>
+                                <option value="1943">1943</option>
+                                <option value="1944">1944</option>
+                                <option value="1945">1945</option>
+                                <option value="1946">1946</option>
+                                <option value="1947">1947</option>
+                                <option value="1948">1948</option>
+                                <option value="1949">1949</option>
+                                <option value="1950">1950</option>
+                                <option value="1951">1951</option>
+                                <option value="1952">1952</option>
+                                <option value="1953">1953</option>
+                                <option value="1954">1954</option>
+                                <option value="1955">1955</option>
+                                <option value="1956">1956</option>
+                                <option value="1957">1957</option>
+                                <option value="1958">1958</option>
+                                <option value="1959">1959</option>
+                                <option value="1960">1960</option>
+                                <option value="1961">1961</option>
+                                <option value="1962">1962</option>
+                                <option value="1963">1963</option>
+                                <option value="1964">1964</option>
+                                <option value="1965">1965</option>
+                                <option value="1966">1966</option>
+                                <option value="1967">1967</option>
+                                <option value="1968">1968</option>
+                                <option value="1969">1969</option>
+                                <option value="1970">1970</option>
+                                <option value="1971">1971</option>
+                                <option value="1972">1972</option>
+                                <option value="1973">1973</option>
+                                <option value="1974">1974</option>
+                                <option value="1975">1975</option>
+                                <option value="1976">1976</option>
+                                <option value="1977">1977</option>
+                                <option value="1978">1978</option>
+                                <option value="1979">1979</option>
+                                <option value="1980">1980</option>
+                                <option value="1981">1981</option>
+                                <option value="1982">1982</option>
+                                <option value="1983">1983</option>
+                                <option value="1984">1984</option>
+                                <option value="1985">1985</option>
+                                <option value="1986">1986</option>
+                                <option value="1987">1987</option>
+                                <option value="1988">1988</option>
+                                <option value="1989">1989</option>
+                                <option value="1990">1990</option>
+                                <option value="1991">1991</option>
+                                <option value="1992">1992</option>
+                                <option value="1993">1993</option>
+                                <option value="1994">1994</option>
+                                <option value="1995">1995</option>
+                                <option value="1996">1996</option>
+                                <option value="1997">1997</option>
+                                <option value="1998">1998</option>
+                                <option value="1999">1999</option>
+                                <option value="2000">2000</option>
+                                <option value="2001">2001</option>
+                                <option value="2002">2002</option>
+                                <option value="2003">2003</option>
+                                <option value="2004">2004</option>
+                                <option value="2005">2005</option>
+                                <option value="2006">2006</option>
+                                <option value="2007">2007</option>
+                                <option value="2008">2008</option>
+                                <option value="2009">2009</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                            </select>
+                        </div>
+                        <div id="dateOfBirthError" class="error-message"></div>
+                    </div>
+
+                    <div class="field">
+                        <label>Address</label>
+                        <input type="text" id="address" name="address" placeholder="Enter delivery address">
+                    </div>
+
+                    <button type="submit" class="btn-submit">Register</button>
+                </form>
+
+                <p class="sub-row">Already have an account? <a href="../login/index.html">Login</a></p>
+            </div>
+        </section>
+    </main>
+
+    <div>
+    <style>
+        .site-footer {
+            background: #fff;
+            border-top: 3px solid #F37021;
+            padding: 20px 0;
+            margin-top: 25px;
+        }
+
+        .site-footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .site-footer .sf-cols {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+        }
+
+        .site-footer .sf-cols h4 {
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #F37021;
+            text-transform: uppercase;
+        }
+
+        .site-footer .sf-cols ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .site-footer .sf-cols li {
+            margin-bottom: 5px;
+        }
+
+        .site-footer .sf-cols a {
+            text-decoration: none;
+            color: #666;
+        }
+
+        .site-footer .sf-bottom {
+            text-align: center;
+            padding-top: 15px;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 10px;
+            color: #999;
+        }
+
+        @media (max-width: 1024px) {
+            .site-footer .sf-cols {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .site-footer .sf-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <footer class="site-footer">
+        <div class="container sf-cols">
+            <div>
+                <h4>Customer Support</h4>
+                <ul>
+                    <li><a href="../books/index.html">Products and orders</a></li>
+                    <li><a href="#">Return policy</a></li>
+                    <li><a href="#">Shipping method</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>About BookNest</h4>
+                <ul>
+                    <li><a href="#">About BookNest</a></li>
+                    <li><a href="#">Terms of use</a></li>
+                    <li><a href="#">Privacy policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <ul>
+                    <li><a href="../login/index.html">Login</a></li>
+                    <li><a href="index.html">Create account</a></li>
+                    <li><a href="../orders/index.html">Order history</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="sf-bottom">
+            &copy; 2026 BookNest. All rights reserved.
+        </div>
+    </footer>
+</div>
+
+    <script>
+        lucide.createIcons();
+
+        function setError(inputId, errorId, message) {
+            const input = document.getElementById(inputId);
+            const errorDiv = document.getElementById(errorId);
+            if (message) {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                input.style.borderColor = '#ba1f1f';
+                return false;
+            }
+            errorDiv.style.display = 'none';
+            input.style.borderColor = '#d8d8d8';
+            return true;
+        }
+
+        function validateFullName() {
+            const fullName = document.getElementById('fullName').value.trim();
+            if (fullName === '') {
+                return setError('fullName', 'fullNameError', 'Full name: Please enter your full name');
+            }
+            if (fullName.length < 3) {
+                return setError('fullName', 'fullNameError', 'Full name: Must contain at least 3 characters');
+            }
+            return setError('fullName', 'fullNameError', '');
+        }
+
+        function validateEmail() {
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email === '') {
+                return setError('email', 'emailError', 'Email: Please enter an email address');
+            }
+            if (!emailRegex.test(email)) {
+                return setError('email', 'emailError', 'Email: Invalid email format');
+            }
+            return setError('email', 'emailError', '');
+        }
+
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            if (password === '') {
+                return setError('password', 'passwordError', 'Password: Please enter a password');
+            }
+            if (password.length < 6) {
+                return setError('password', 'passwordError', 'Password: Must contain at least 6 characters');
+            }
+            return setError('password', 'passwordError', '');
+        }
+
+        function validateGender() {
+            const gender = document.querySelector('select[name="gender"]').value;
+            if (gender === '') {
+                return setError('gender', 'genderError', 'Gender: Please select your gender');
+            }
+            return setError('gender', 'genderError', '');
+        }
+
+        function validateDateOfBirth() {
+            const birthDay = document.getElementById('birthDay').value;
+            const birthMonth = document.getElementById('birthMonth').value;
+            const birthYear = document.getElementById('birthYear').value;
+            
+            if (birthDay === '' || birthMonth === '' || birthYear === '') {
+                return setError('birthDay', 'dateOfBirthError', 'Date of birth: Please select your complete date of birth');
+            }
+            
+            const selectedDate = new Date(birthYear, birthMonth - 1, birthDay);
+            const today = new Date();
+            const age = today.getFullYear() - selectedDate.getFullYear();
+            const monthDiff = today.getMonth() - selectedDate.getMonth();
+            const dayDiff = today.getDate() - selectedDate.getDate();
+            const actualAge = monthDiff < 0 || (monthDiff === 0 && dayDiff < 0) ? age - 1 : age;
+            
+            if (actualAge < 13) {
+                return setError('birthDay', 'dateOfBirthError', 'Date of birth: You must be at least 13 years old');
+            }
+            if (actualAge > 120) {
+                return setError('birthDay', 'dateOfBirthError', 'Date of birth: Please enter a valid date of birth');
+            }
+            return setError('birthDay', 'dateOfBirthError', '');
+        }
+
+        function validatePhone() {
+            const phone = document.getElementById('phone').value.trim();
+            const phoneRegex = /^[0-9]{10,11}$/;
+            if (phone === '') {
+                return setError('phone', 'phoneError', 'Phone number: Please enter your phone number');
+            }
+            if (!phoneRegex.test(phone)) {
+                return setError('phone', 'phoneError', 'Phone number: Must be 10-11 digits');
+            }
+            return setError('phone', 'phoneError', '');
+        }
+
+        document.getElementById('fullName').addEventListener('input', validateFullName);
+        document.getElementById('email').addEventListener('input', validateEmail);
+        document.getElementById('password').addEventListener('input', validatePassword);
+        document.querySelector('select[name="gender"]').addEventListener('change', validateGender);
+        document.getElementById('birthDay').addEventListener('change', validateDateOfBirth);
+        document.getElementById('birthMonth').addEventListener('change', validateDateOfBirth);
+        document.getElementById('birthYear').addEventListener('change', validateDateOfBirth);
+        document.getElementById('phone').addEventListener('input', validatePhone);
+
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            const isFullNameValid = validateFullName();
+            const isEmailValid = validateEmail();
+            const isPasswordValid = validatePassword();
+            const isGenderValid = validateGender();
+            const isDateOfBirthValid = validateDateOfBirth();
+            const isPhoneValid = validatePhone();
+
+            if (!isFullNameValid || !isEmailValid || !isPasswordValid || !isGenderValid || !isDateOfBirthValid || !isPhoneValid) {
+                e.preventDefault();
+            }
+        });
+
+        const registerPasswordInput = document.getElementById('password');
+        const toggleRegisterPasswordButton = document.getElementById('toggleRegisterPassword');
+
+        if (registerPasswordInput && toggleRegisterPasswordButton) {
+            toggleRegisterPasswordButton.addEventListener('click', function () {
+                const showingPassword = registerPasswordInput.type === 'text';
+                registerPasswordInput.type = showingPassword ? 'password' : 'text';
+                toggleRegisterPasswordButton.classList.toggle('showing', !showingPassword);
+                toggleRegisterPasswordButton.setAttribute('aria-pressed', String(!showingPassword));
+                toggleRegisterPasswordButton.setAttribute('aria-label', showingPassword ? 'Show password' : 'Hide password');
+            });
+        }
+    </script>
+</body>
+
+</html>

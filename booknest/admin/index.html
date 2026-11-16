@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNest - Admin Dashboard</title>
+    <link rel="stylesheet" href="../tw.css">
+    <script src="../js/chart.umd.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #F37021;
+            --color-secondary: #00A859;
+            --color-bg: #f5f5f5;
+            --color-surface: #ffffff;
+            --color-text: #333333;
+            --color-border: #e5e0d8;
+            --color-success: #00A859;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #D95F14 100%);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .stat-card {
+            transition: all 0.3s ease;
+            border: 1px solid var(--color-border);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-row {
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.2s;
+        }
+
+        .table-row:hover {
+            background-color: rgba(243, 112, 33, 0.08);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #D95F14 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(243, 112, 33, 0.32);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: var(--color-success);
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: var(--color-warning);
+        }
+
+        .badge-error {
+            background-color: #fee2e2;
+            color: var(--color-error);
+        }
+
+        a {
+            transition: color 0.2s ease;
+        }
+
+        main a,
+        .sidebar-list a,
+        .footer-col a,
+        .info,
+        .text-info {
+            color: #0072BC;
+        }
+
+        button,
+        input[type="submit"],
+        .btn,
+        .btn-primary,
+        .checkout-btn {
+            border-radius: 8px;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+        }
+
+        button:hover,
+        input[type="submit"]:hover,
+        .btn:hover,
+        .btn-primary:hover,
+        .checkout-btn:hover {
+            filter: brightness(0.95);
+            transform: translateY(-1px);
+        }
+
+        .alert.success,
+        .message.success {
+            background: #e8f7ef;
+            border-color: #00A859;
+            color: #00A859;
+        }
+    </style>
+<script>window.__BN_ROOT="..";window.__BN_GROUP="admin";</script><script src="../demo-shim.js"></script>
+</head>
+
+<body class="h-full overflow-hidden" style="background-color: var(--color-bg);">
+    <div class="flex h-full w-full overflow-hidden">
+
+        <aside class="sidebar w-64 text-white flex flex-col fixed left-0 top-0 h-full">
+        <style>
+            .sidebar {
+                background: linear-gradient(135deg, #F37021 0%, #D95F14 100%) !important;
+            }
+            .sidebar-item {
+                transition: all 0.3s ease;
+            }
+            .sidebar-item:hover,
+            .sidebar-item.active {
+                background-color: rgba(255, 255, 255, 0.15) !important;
+            }
+
+            nav.flex-1.overflow-y-auto {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            nav.flex-1.overflow-y-auto::-webkit-scrollbar { 
+                display: none;
+            }
+        </style>
+        
+        <div class="p-6 border-b border-white/20">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg">BookNest</h1>
+                    <p class="text-xs opacity-75">Admin Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <a href="index.html"
+                class="sidebar-item active block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-3m0 0l7-4 7 4M5 9v7a1 1 0 001 1h12a1 1 0 001-1V9m-9 16l-7-4m0 0V5m7 4l7-4" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="books/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                <span>Book Management</span>
+            </a>
+
+            <a href="stationery/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                <span>Stationery</span>
+            </a>
+
+            <a href="categories/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+                <span>Category</span>
+            </a>
+
+            <a href="suppliers/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <span>Supplier</span>
+            </a>
+
+            <a href="users/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>User</span>
+            </a>
+
+            <a href="vouchers/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
+                </svg>
+                <span>Voucher</span>
+            </a>
+
+            <a href="reviews/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 10h8M8 14h5m-9 6l3.6-3.6A2 2 0 003 15V6a2 2 0 012-2h14a2 2 0 012 2v9a2 2 0 01-2 2H9a2 2 0 00-1.4.6L4 21z" />
+                </svg>
+                <span>Review</span>
+            </a>
+
+            <a href="orders/index.html"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <span>Order</span>
+            </a>
+
+            
+
+            <a href="#" data-demo-off="1"
+                class="sidebar-item block px-4 py-3 rounded-lg font-medium flex items-center gap-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <span>Confirm Import</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-white/20">
+            <div class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium truncate">Quản trị viên Demo</p>
+                    <p class="text-xs opacity-75">admin@booknest.demo</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+        <main class="flex-1 ml-64 overflow-y-auto h-full">
+            <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+                <div class="px-8 py-4 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold" style="color: var(--color-text);">Dashboard</h2>
+                        <p class="text-sm text-gray-500">Total system book management</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <form method="post" action="../login/index.html">
+                            <button type="submit" class="btn-primary text-white px-6 py-2 rounded-lg font-medium">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="stat-card bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 font-medium">Total Products</h3>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                                style="background: linear-gradient(135deg, rgba(243, 112, 33, 0.12), rgba(0, 168, 89, 0.12));">
+                                <svg class="w-6 h-6" style="color: var(--color-primary);" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold" style="color: var(--color-text);">17</p>
+                        <p class="text-sm text-gray-500 mt-2">Total products in system</p>
+                    </div>
+
+                    <div class="stat-card bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 font-medium">Product Type</h3>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                                style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));">
+                                <svg class="w-6 h-6" style="color: var(--color-success);" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold" style="color: var(--color-text);">2</p>
+                        <p class="text-sm text-gray-500 mt-2">Product types in system</p>
+                    </div>
+
+                    <div class="stat-card bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 font-medium">Stock</h3>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                                style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));">
+                                <svg class="w-6 h-6" style="color: var(--color-warning);" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M20 7l-8-4-8 4m0 0l8 4m-8-4v10l8 4m0-10l8 4m-8-4v10M8 13v2m0-6V7m8 6v2m0-6V7" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold" style="color: var(--color-text);">936</p>
+                        <p class="text-sm text-gray-500 mt-2">Total product quantity</p>
+                    </div>
+
+                    <div class="stat-card bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-gray-600 font-medium">User</h3>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center"
+                                style="background: linear-gradient(135deg, rgba(243, 112, 33, 0.12), rgba(0, 168, 89, 0.12));">
+                                <svg class="w-6 h-6" style="color: var(--color-primary);" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-3xl font-bold" style="color: var(--color-text);">7</p>
+                        <p class="text-sm text-gray-500 mt-2">Registered accounts</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold" style="color: var(--color-text);">Revenue Statistics</h3>
+                            <p class="text-sm text-gray-500 mt-1">Chart of products sold and revenue</p>
+                        </div>
+                        <div class="flex items-center gap-3 flex-wrap justify-end">
+                            <select id="periodSelect"
+                                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-0">
+                                <option value="day">By Day (30 days)</option>
+                                <option value="month" selected>By Month (12 months)</option>
+                                <option value="year">By Year (5 years)</option>
+                            </select>
+                            <input id="startDateInput" type="date"
+                                class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-0"
+                                title="From Date">
+                            <input id="endDateInput" type="date"
+                                class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-offset-0"
+                                title="To Date">
+                            <button id="applyFilterBtn" type="button"
+                                class="btn-primary text-white px-4 py-2 rounded-lg font-medium">Apply</button>
+                            <button id="resetFilterBtn" type="button"
+                                class="px-4 py-2 rounded-lg font-medium border border-gray-300 text-gray-600 hover:bg-gray-50">Default</button>
+                        </div>
+                    </div>
+                    <div class="relative" style="height: 400px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold" style="color: var(--color-text);">Latest Books</h3>
+                            <a href="books/index.html" class="text-sm font-medium" style="color: var(--color-primary);">View
+                                all
+                                -></a>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Mùa Hạ Bên Sông</p>
+                                    <p class="text-xs text-gray-500">Lê Minh Thư</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">89,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">45</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Thành Phố Không Ngủ</p>
+                                    <p class="text-xs text-gray-500">Trần Gia Bảo</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">115,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">32</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Tư Duy Tài Chính Cá Nhân</p>
+                                    <p class="text-xs text-gray-500">Nguyễn Hoài Nam</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">139,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">58</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Khởi Nghiệp Từ Con Số 0</p>
+                                    <p class="text-xs text-gray-500">Võ Thanh Tùng</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">159,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">27</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Quản Trị Thời Gian</p>
+                                    <p class="text-xs text-gray-500">Đặng Thu Hà</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">98,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">40</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold" style="color: var(--color-text);">Product Type</h3>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 pb-3 border-b">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, rgba(243, 112, 33, 0.12), rgba(0, 168, 89, 0.12));">
+                                    <svg class="w-5 h-5" style="color: var(--color-primary);" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                    </svg>
+                                </div>
+                                <span class="flex-1 text-sm font-medium">Sách</span>
+                                <span class="text-sm font-bold" style="color: var(--color-primary);">11</span>
+                            </div>
+                            <div class="flex items-center gap-3 pb-3 border-b">
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, rgba(243, 112, 33, 0.12), rgba(0, 168, 89, 0.12));">
+                                    <svg class="w-5 h-5" style="color: var(--color-primary);" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                    </svg>
+                                </div>
+                                <span class="flex-1 text-sm font-medium">Văn phòng phẩm</span>
+                                <span class="text-sm font-bold" style="color: var(--color-primary);">6</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold" style="color: var(--color-text);">Latest Stationery</h3>
+                            <a href="stationery/index.html" class="text-sm font-medium"
+                                style="color: var(--color-primary);">View all -></a>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 4h8v4H8V4zm-2 6h12v10H6V10zm2 2h8v6H8v-6z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Bút bi xanh hộp 3 cây</p>
+                                    <p class="text-xs text-gray-500">BookNest</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">15,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">93</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 4h8v4H8V4zm-2 6h12v10H6V10zm2 2h8v6H8v-6z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Bút dạ quang 5 màu</p>
+                                    <p class="text-xs text-gray-500">BookNest</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">35,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">86</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 4h8v4H8V4zm-2 6h12v10H6V10zm2 2h8v6H8v-6z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Sổ tay A5 bìa vải</p>
+                                    <p class="text-xs text-gray-500">BookNest</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">45,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">79</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 4h8v4H8V4zm-2 6h12v10H6V10zm2 2h8v6H8v-6z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Sổ lò xo 200 trang</p>
+                                    <p class="text-xs text-gray-500">BookNest</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">38,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">72</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 pb-3 border-b">
+                                <div class="w-12 h-16 rounded-lg flex items-center justify-center"
+                                    style="background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 4h8v4H8V4zm-2 6h12v10H6V10zm2 2h8v6H8v-6z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-sm truncate">Thước kẻ nhôm 30cm</p>
+                                    <p class="text-xs text-gray-500">BookNest</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-sm" style="color: var(--color-primary);">22,000 VND</p>
+                                    <span class="text-xs px-2 py-1 rounded-full badge-success">65</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg">
+                    <h3 class="text-lg font-bold mb-4" style="color: var(--color-text);">Quick Actions</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <a href="books/new/index.html"
+                            class="p-4 rounded-lg border hover:border-primary transition-colors text-center"
+                            style="border-color: var(--color-border);">
+                            <svg class="w-8 h-8 mx-auto mb-2" style="color: var(--color-primary);" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            <p class="text-sm font-medium">Add Book</p>
+                        </a>
+
+                        <a href="categories/new/index.html"
+                            class="p-4 rounded-lg border hover:border-primary transition-colors text-center"
+                            style="border-color: var(--color-border);">
+                            <svg class="w-8 h-8 mx-auto mb-2" style="color: var(--color-primary);" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                            </svg>
+                            <p class="text-sm font-medium">Add Category</p>
+                        </a>
+
+                        <a href="orders/index.html"
+                            class="p-4 rounded-lg border hover:border-primary transition-colors text-center"
+                            style="border-color: var(--color-border);">
+                            <svg class="w-8 h-8 mx-auto mb-2" style="color: var(--color-primary);" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <p class="text-sm font-medium">View Orders</p>
+                        </a>
+
+                        <a href="users/index.html"
+                            class="p-4 rounded-lg border hover:border-primary transition-colors text-center"
+                            style="border-color: var(--color-border);">
+                            <svg class="w-8 h-8 mx-auto mb-2" style="color: var(--color-primary);" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <p class="text-sm font-medium">Manage Users</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let revenueChart = null;
+        const periodSelect = document.getElementById('periodSelect');
+        const startDateInput = document.getElementById('startDateInput');
+        const endDateInput = document.getElementById('endDateInput');
+        const applyFilterBtn = document.getElementById('applyFilterBtn');
+        const resetFilterBtn = document.getElementById('resetFilterBtn');
+
+        function formatDateForInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function applyDefaultDateRange() {
+            const now = new Date();
+            const start = new Date(now);
+            const period = periodSelect.value;
+
+            if (period === 'day') {
+                start.setDate(start.getDate() - 30);
+            } else if (period === 'month') {
+                start.setMonth(start.getMonth() - 11);
+                start.setDate(1);
+            } else {
+                start.setFullYear(start.getFullYear() - 4);
+                start.setMonth(0);
+                start.setDate(1);
+            }
+
+            startDateInput.value = formatDateForInput(start);
+            endDateInput.value = formatDateForInput(now);
+        }
+
+        function loadRevenueChart() {
+            const period = periodSelect.value;
+            const params = new URLSearchParams({ period });
+
+            if (startDateInput.value) {
+                params.append('startDate', startDateInput.value);
+            }
+            if (endDateInput.value) {
+                params.append('endDate', endDateInput.value);
+            }
+
+            fetch(`/admin/api/revenue-statistics?${params.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    renderChart(data);
+                })
+                .catch(error => {
+                    console.error('Error loading revenue statistics:', error);
+                });
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+
+            revenueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Books',
+                            data: data.booksSold,
+                            backgroundColor: 'rgba(243, 112, 33, 0.75)',
+                            borderColor: 'rgba(243, 112, 33, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-products',
+                            stack: 'sold'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Stationery',
+                            data: data.stationerySold || [],
+                            backgroundColor: 'rgba(59, 130, 246, 0.70)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-products',
+                            stack: 'sold'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Revenue (VND)',
+                            data: data.revenue,
+                            backgroundColor: 'rgba(16, 185, 129, 0.70)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1,
+                            yAxisID: 'y-revenue',
+                            stack: 'revenue'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        'y-products': {
+                            type: 'linear',
+                            position: 'left',
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: 'Products'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                precision: 0
+                            }
+                        },
+                        'y-revenue': {
+                            type: 'linear',
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Revenue (VND)'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function (value) {
+                                    return new Intl.NumberFormat('vi-VN').format(value);
+                                }
+                            },
+                            grid: {
+                                drawOnChartArea: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            stacked: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.dataset.yAxisID === 'y-revenue') {
+                                        // Revenue
+                                        label += new Intl.NumberFormat('vi-VN').format(context.parsed.y) + ' VND';
+                                        return label;
+                                    }
+                                    label += context.parsed.y + ' item(s)';
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        periodSelect.addEventListener('change', function () {
+            applyDefaultDateRange();
+            loadRevenueChart();
+        });
+
+        applyFilterBtn.addEventListener('click', function () {
+            loadRevenueChart();
+        });
+
+        resetFilterBtn.addEventListener('click', function () {
+            periodSelect.value = 'month';
+            applyDefaultDateRange();
+            loadRevenueChart();
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            applyDefaultDateRange();
+            loadRevenueChart();
+        });
+    </script>
+</body>
+
+</html>

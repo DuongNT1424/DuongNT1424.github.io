@@ -68,11 +68,11 @@ window.SITE = {
         en: "SWP391 Software Development Project · Team of 3 · Mar–Apr 2026"
       },
       stack: ["Java 17", "Spring Boot", "Spring Data JPA", "Thymeleaf", "SQL Server"],
-      status: "soon",
-      demo: null,
+      status: "ui",
+      demo: "booknest/index.html",
       demoNote: {
-        vi: "Đang đưa lên chạy thật để bạn đăng nhập và thử mua hàng.",
-        en: "Being deployed so you can sign in and place a test order."
+        vi: "Bản demo giao diện với dữ liệu mẫu: xem được cả trang cửa hàng lẫn trang quản trị, các thao tác lưu đã được tắt.",
+        en: "UI demo with sample data: browse both the store and the admin panel. Saving is turned off."
       },
       code: "https://github.com/DuongNT1424/Bookstore",
       points: {
@@ -181,11 +181,12 @@ window.SITE = {
     nav: { vi: ["Dự án", "Kinh nghiệm", "Kỹ năng", "Liên hệ"], en: ["Projects", "Experience", "Skills", "Contact"] },
     projectsTitle: { vi: "Dự án", en: "Projects" },
     projectsLead: {
-      vi: "Bấm “Mở demo” để dùng thử ngay trên trình duyệt. Dự án nào có ký hiệu xanh là đang chạy.",
-      en: "Press “Open demo” to try a project right in your browser. A green marker means it's running now."
+      vi: "Bấm “Mở demo” để dùng thử ngay trên trình duyệt. Chấm xanh lá là bản đang chạy thật, chấm xanh dương là bản demo giao diện với dữ liệu mẫu.",
+      en: "Press “Open demo” to try a project right in your browser. A green marker means the app is live; a blue one means a UI demo with sample data."
     },
     statusLive: { vi: "Đang chạy", en: "Running" },
     statusSoon: { vi: "Đang chuẩn bị demo", en: "Demo in preparation" },
+    statusUi: { vi: "Demo giao diện", en: "UI demo" },
     openDemo: { vi: "Mở demo", en: "Open demo" },
     watchVideo: { vi: "Xem video demo", en: "Watch demo video" },
     hideVideo: { vi: "Đóng video", en: "Close video" },

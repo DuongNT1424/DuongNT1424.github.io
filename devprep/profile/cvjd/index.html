@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"candidate",page:"/Profile/CvJd"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV &amp; JD | DevPrep AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/devprep/css/profile.css?v=Ip2wZq8ax05JiRD7n2bFpIUbNhPMT37lYPT9HXcU14o" />
+    <link rel="stylesheet" href="/devprep/css/cvjd.css?v=12yT6IXkxZHWdkyqmGpZJgT-UhaGVnRDTDeb5ugkONI" />
+    <style>
+        .tag.req-skill.matched, .tag.nice-skill.matched { background: rgba(16,185,129,.10); color: #34d399; border-color: rgba(16,185,129,.3); }
+        .tag.req-skill.missing, .tag.nice-skill.missing { background: rgba(239,68,68,.10);  color: #f87171; border-color: rgba(239,68,68,.3); }
+        #cvStrengths .exp-card.matched { border: 1px solid rgba(16,185,129,.35); }
+        .pf-btn-danger { background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.3); color: #f87171; }
+        .pf-btn-danger:hover { background: rgba(239,68,68,.18); color: #fca5a5; }
+
+        /* In-page confirmation dialog. Replaces window.confirm(), which renders as a bare
+           browser chrome box that cannot be styled and looks nothing like the rest of the app. */
+        .cvjd-confirm { position: fixed; inset: 0; z-index: 1080; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .cvjd-confirm.is-open { display: flex; }
+        .cvjd-confirm-backdrop { position: absolute; inset: 0; background: rgba(6,6,12,.72); backdrop-filter: blur(3px); }
+        .cvjd-confirm-box {
+            position: relative; width: 100%; max-width: 430px; padding: 26px;
+            border: 1px solid rgba(196,192,255,.16); border-radius: 16px;
+            background: #14141d; box-shadow: 0 24px 70px rgba(0,0,0,.5); color: #e4e4e7;
+        }
+        .cvjd-confirm-box h3 { margin: 0 0 10px; font-size: 19px; font-weight: 700; color: #fff; }
+        .cvjd-confirm-box p { margin: 0 0 22px; font-size: 14px; line-height: 1.6; color: #a1a1aa; }
+        .cvjd-confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .cvjd-confirm-actions button { min-height: 40px; padding: 0 18px; border-radius: 10px; font: inherit; font-weight: 600; cursor: pointer; }
+        .cvjd-cancel { border: 1px solid rgba(196,192,255,.2); background: transparent; color: #d4d4d8; }
+        .cvjd-cancel:hover { background: rgba(255,255,255,.05); color: #fff; }
+        .cvjd-ok { border: 0; background: #dc2626; color: #fff; }
+        .cvjd-ok:hover { background: #ef4444; }
+        .cvjd-confirm-actions button:focus-visible { outline: 2px solid #6c63ff; outline-offset: 2px; }
+    </style>
+</head>
+<body class="pf-page">
+<header class="pf-topbar">
+    <a class="pf-brand" href="/devprep/">DevPrep AI</a>
+    <div class="pf-topbar-actions">
+        <div class="pf-user-menu" id="pf-user-menu">
+            <button class="pf-avatar-btn" id="pf-avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" title="candidate@devprep.demo">
+                C
+            </button>
+            <div class="pf-dropdown" role="menu">
+                <div class="pf-dropdown-head">
+                    <span class="pf-dropdown-email">candidate@devprep.demo</span>
+                </div>
+                    <a class="pf-dropdown-item pf-dropdown-credits" role="menuitem" href="/devprep/profile/credithistory/">
+                        <svg width="18" height="18" fill="none" stroke="#F9D949" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"></circle><path d="M12 8v8M9.5 10h3.75a1.75 1.75 0 1 1 0 3.5H10.75a1.75 1.75 0 1 0 0 3.5H14.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+                        Credits
+                        <span class="pf-credit-value" id="pf-credit-value">&hellip;</span>
+                    </a>
+                <a class="pf-dropdown-item" role="menuitem" href="/devprep/profile/">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    View Profile
+                </a>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="pf-dropdown-item pf-dropdown-logout" role="menuitem">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmaJi4SNEbKNx_mRKAPxvvK-fzUl6Zq53Lyr1n7-3j8-Jl5v73veB6MFJJup3UvaDasTLYLiQ0MtMLIBUbmA_wMvzrJ34rAURNhT7O5NjCtj7pwcyY3_e5Ps6m2ur1f7nAGXPwrswONF0fe9FnrAjQJOkJWAu0oCbtf5JbONtmThLw" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="devprep-ann-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(4,7,18,.62); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:16px;">
+    <div style="width:100%; max-width:460px; background:#1a1f30; border:1px solid rgba(255,255,255,.1); border-top:1px solid rgba(255,255,255,.18); border-radius:16px; box-shadow:0 30px 70px rgba(0,0,0,.6); overflow:hidden; font-family:Inter,system-ui,sans-serif; color:#e5e1e7;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px 12px;">
+            <div>
+                <p style="margin:0 0 2px; font:600 10px/1.2 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:#8b5cf6;">Announcement</p>
+                <h2 style="margin:0; font-size:18px; font-weight:800;">📢 DevPrep News</h2>
+            </div>
+            <button type="button" id="devprep-ann-x" aria-label="Close" style="background:none; border:none; color:#9ca3af; font-size:26px; line-height:1; cursor:pointer;">&times;</button>
+        </div>
+        <div id="devprep-ann-list" style="display:flex; flex-direction:column; gap:12px; max-height:48vh; overflow-y:auto; padding:0 20px 4px;"></div>
+        <div style="padding:14px 20px 18px;">
+            <label style="display:flex; align-items:center; gap:9px; margin-bottom:14px; cursor:pointer; font-size:13px; color:#c8c5d0;">
+                <input type="checkbox" id="devprep-ann-hide" style="width:16px; height:16px; accent-color:#6366f1; cursor:pointer;" />
+                Don't show this announcement again
+            </label>
+            <button type="button" id="devprep-ann-ok" style="width:100%; padding:11px; border:none; border-radius:10px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-weight:700; font-size:14px; cursor:pointer;">Got it</button>
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        var overlay = document.getElementById('devprep-ann-overlay');
+        if (!overlay || overlay.dataset.annInit === '1') return;
+        overlay.dataset.annInit = '1';
+
+        var HIDE_KEY = 'devprep-ann-hidden';   // sessionStorage: chỉ sống trong phiên trình duyệt
+        function esc(s) { return (s == null ? '' : String(s)).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+        // Đã tick "không hiển thị nữa" trong phiên này -> bỏ qua hoàn toàn (không cần fetch).
+        try { if (sessionStorage.getItem(HIDE_KEY) === '1') return; } catch (e) { }
+
+        function close() {
+            try { if (document.getElementById('devprep-ann-hide').checked) sessionStorage.setItem(HIDE_KEY, '1'); } catch (e) { }
+            overlay.style.display = 'none';
+        }
+
+        fetch('/Home/Announcements', { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (items) {
+                if (!items || !items.length) return;
+                document.getElementById('devprep-ann-list').innerHTML = items.map(function (a) {
+                    return '<div style="border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:13px 15px; background:rgba(255,255,255,.03);">'
+                        + '<div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:5px;">'
+                        + '<strong style="font-size:14.5px;">' + esc(a.title) + '</strong>'
+                        + '<span style="font-size:11px; opacity:.6; white-space:nowrap;">' + esc(a.createdAt) + '</span></div>'
+                        + '<p style="margin:0; font-size:13px; line-height:1.55; opacity:.85; white-space:pre-wrap;">' + esc(a.content) + '</p></div>';
+                }).join('');
+                overlay.style.display = 'flex';
+                document.getElementById('devprep-ann-ok').addEventListener('click', close);
+                document.getElementById('devprep-ann-x').addEventListener('click', close);
+            })
+            .catch(function () { /* best-effort: lỗi thì không hiện popup */ });
+    })();
+</script>
+
+
+<script>
+    (function () {
+        var menu = document.getElementById('pf-user-menu');
+        var btn = document.getElementById('pf-avatar-btn');
+        if (!menu || !btn) return;
+        // Số credit hiện có — fetch same-origin mỗi lần mở dropdown (giống navbar homepage).
+        var loadCredits = function () {
+            var creditValue = document.getElementById('pf-credit-value');
+            if (!creditValue) return;
+            fetch('/Profile/CreditBalance', { headers: { 'Accept': 'application/json' } })
+                .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+                .then(function (data) { creditValue.textContent = Number(data.balance).toLocaleString('en-US'); })
+                .catch(function () { creditValue.textContent = '—'; });
+        };
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) loadCredits();
+        });
+        document.addEventListener('click', function (e) {
+            if (!menu.contains(e.target)) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+        });
+    })();
+</script>
+
+<div class="pf-shell">
+    <aside class="pf-sidebar">
+    <ul class="pf-nav">
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Information</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link active" href="/devprep/profile/cvjd/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>CV &amp; JD</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/identity/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Identity Verification</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/transactionhistory/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Transaction History</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/credithistory/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Credit History</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/changepassword/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Change Password</span>
+            </a>
+        </li>
+    </ul>
+</aside>
+
+    <main class="pf-main">
+        <div class="pf-glow"></div>
+        <div class="pf-content">
+            <h1 class="pf-page-title">CV &amp; JD Analyzer</h1>
+            <p style="color:var(--pf-muted);font-size:.85rem;margin-bottom:20px;">Upload your CV and Job Description for AI to score how well they match.</p>
+
+            <div class="cvjd-grid">
+
+                <!-- ══ LEFT ══ -->
+                <div>
+                    <!-- ── CV SECTION ── -->
+                    <div class="pf-card pf-card-pad mb-3">
+                        <div class="section-label">Your CV</div>
+                        <div id="cvStatus" class="sb"></div>
+
+                        <div id="cvUploadArea">
+                            <label class="drop-zone" id="cvDrop">
+                                <input type="file" id="cvFile" accept=".pdf,.doc,.docx" />
+                                <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg>
+                                <div style="font-size:.85rem;color:var(--pf-text);margin-top:4px;"><strong>Click or drag &amp; drop</strong> your CV file</div>
+                                <div style="font-size:.72rem;color:var(--pf-muted);">PDF, DOC, DOCX</div>
+                                <div id="cvFileName" class="fname"></div>
+                            </label>
+                            <div style="margin-top:10px;">
+                                <button class="pf-btn pf-btn-primary cvjd-btn-sm" id="btnUpload" style="width:auto;padding:7px 18px;">
+                                    Upload &amp; Parse CV
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Loading overlay (shown during upload/parse) -->
+                        <div class="upload-loading" id="cvLoadingArea">
+                            <div class="spinner-xl"></div>
+                            <div class="elapsed-num" id="elapsedTime">0s</div>
+                            <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+                            <div class="elapsed-sub" id="cvLoadingMsg">Connecting to AI service...</div>
+                            <button class="pf-btn pf-btn-ghost cvjd-btn-sm" style="width:auto;padding:5px 16px;margin-top:4px;" onclick="cancelCvUpload()">
+                                ✕ Cancel
+                            </button>
+                        </div>
+
+                        <!-- Parsed CV sections (hidden until parse success) -->
+                        <div id="cvParsed" style="display:none;">
+                            <!-- Personal Info -->
+                            <div class="cv-section">
+                                <div class="cv-section-head">Personal Information</div>
+                                <div class="row g-2">
+                                    <div class="col-6"><label class="cvjd-label">Full Name</label><input id="cvName" class="cvjd-input" /></div>
+                                    <div class="col-6"><label class="cvjd-label">Email</label><input id="cvEmail" class="cvjd-input" /></div>
+                                    <div class="col-6"><label class="cvjd-label">Phone</label><input id="cvPhone" class="cvjd-input" /></div>
+                                    <div class="col-6"><label class="cvjd-label">Location</label><input id="cvLocation" class="cvjd-input" /></div>
+                                </div>
+                            </div>
+
+                            <!-- Skills -->
+                            <div class="cv-section">
+                                <div class="cv-section-head">Skills <span id="cvSkillMatchSummary" style="color:var(--pf-muted);font-weight:400;font-size:.75rem;"></span></div>
+                                <div class="tag-list" id="cvSkillTags"></div>
+                                <div class="add-skill-row">
+                                    <input class="cvjd-input" id="newSkill" placeholder="Add a skill..." />
+                                    <button class="pf-btn pf-btn-primary" onclick="addSkill()">+</button>
+                                </div>
+                            </div>
+
+                            <!-- Strengths -->
+                            <div class="cv-section">
+                                <div class="cv-section-head">Strengths</div>
+                                <div id="cvStrengths"></div>
+                            </div>
+
+                            <!-- Careers -->
+                            <div class="cv-section" id="cvCareersWrap" style="display:none;">
+                                <div class="cv-section-head">Work Experience</div>
+                                <div id="cvCareers"></div>
+                            </div>
+
+                            <!-- Education -->
+                            <div class="cv-section" id="cvEduWrap" style="display:none;">
+                                <div class="cv-section-head">Education</div>
+                                <div id="cvEducation"></div>
+                            </div>
+
+                            <!-- Save button -->
+                            <div style="margin-top:14px;display:flex;gap:8px;align-items:center;">
+                                <button class="pf-btn pf-btn-primary cvjd-btn-sm" id="btnSaveCv" style="width:auto;padding:7px 18px;">
+                                    Save changes
+                                </button>
+                                <button class="pf-btn pf-btn-danger cvjd-btn-sm" id="btnDeleteCv" style="width:auto;padding:7px 18px;">
+                                    🗑 Delete CV
+                                </button>
+                                <span id="saveStatus" class="sb" style="margin:0;padding:5px 10px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── JD SECTION ── -->
+                    <div class="pf-card pf-card-pad">
+                        <div class="section-label">Job Description</div>
+                        <div id="jdStatus" class="sb"></div>
+
+                        <!-- JD Input area -->
+                        <div id="jdInputArea">
+                            <!-- Position + Company -->
+                            <div class="row g-2 mb-3">
+                                <div class="col-12">
+                                    <label class="cvjd-label">Job Position *</label>
+                                    <select id="jdPosition" class="cvjd-input">
+                                        <option value="">Loading position list...</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="cvjd-label">Company (optional)</label>
+                                    <input id="jdCompany" class="cvjd-input" placeholder="Company name..." />
+                                </div>
+                            </div>
+
+                            <!-- Input method tabs -->
+                            <div class="jd-tabs">
+                                <button class="jd-tab active" id="tabPaste" onclick="switchTab('paste')">📋 Paste text</button>
+                                <button class="jd-tab" id="tabFile" onclick="switchTab('file')">📄 Upload file</button>
+                            </div>
+
+                            <!-- Paste mode -->
+                            <div id="jdPasteMode">
+                                <textarea id="jdText" class="cvjd-textarea" placeholder="Paste the Job Description content here..."></textarea>
+                            </div>
+
+                            <!-- File mode -->
+                            <div id="jdFileMode" style="display:none;">
+                                <label class="drop-zone" id="jdDrop">
+                                    <input type="file" id="jdFile" accept=".pdf,.doc,.docx" />
+                                    <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/></svg>
+                                    <div style="font-size:.82rem;color:var(--pf-text);margin-top:4px;"><strong>Click or drag &amp; drop</strong> the JD file</div>
+                                    <div style="font-size:.7rem;color:var(--pf-muted);">PDF, DOC, DOCX</div>
+                                    <div id="jdFileName" class="fname"></div>
+                                </label>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div class="parse-btn-wrap">
+                                <div class="parse-btn-group">
+                                    <button class="pf-btn pf-btn-primary cvjd-btn-sm" id="btnAiParse">🤖 AI Parse</button>
+                                    <div class="parse-btn-desc">AI analyzes the JD, extracts required skills, and clarifies the job description</div>
+                                </div>
+                                <div class="parse-btn-group">
+                                    <button class="pf-btn cvjd-btn-secondary cvjd-btn-sm" id="btnNormal">📋 Normal</button>
+                                    <div class="parse-btn-desc">Save the JD as-is without AI — best when the content is already complete</div>
+                                </div>
+                            </div>
+                            <button class="pf-btn pf-btn-ghost cvjd-btn-sm" id="btnCancelJdEdit" style="display:none;margin-top:8px;width:auto;padding:6px 16px;">
+                                ✕ Cancel
+                            </button>
+                        </div>
+
+                        <!-- JD loading overlay (spinner + timer) -->
+                        <div class="upload-loading" id="jdLoadingArea">
+                            <div class="spinner-xl"></div>
+                            <div class="elapsed-num" id="jdElapsedTime">0s</div>
+                            <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+                            <div class="elapsed-sub" id="jdLoadingMsg">AI is analyzing the JD...</div>
+                            <button class="pf-btn pf-btn-ghost cvjd-btn-sm" style="width:auto;padding:5px 16px;margin-top:4px;" onclick="cancelJdParse()">
+                                ✕ Cancel
+                            </button>
+                        </div>
+
+                        <!-- JD parsed result card -->
+                        <div id="jdParsed" style="display:none;">
+                            <div class="jd-result-card">
+                                <div class="jd-result-header">
+                                    <div>
+                                        <div class="jd-pos-name" id="jdParsedPosition">—</div>
+                                        <div class="jd-co-name" id="jdParsedCompany"></div>
+                                    </div>
+                                    <div style="display:flex;gap:6px;">
+                                        <button class="change-jd-btn" onclick="changeJd()">✎ Change JD</button>
+                                        <button class="change-jd-btn" style="color:#f87171;border-color:rgba(239,68,68,.3);" id="btnDeleteJd">🗑 Delete</button>
+                                    </div>
+                                </div>
+                                <div class="jd-result-body">
+                                    <div id="jdReqWrap" style="display:none;">
+                                        <div class="jd-skill-group-label req">Required Skills</div>
+                                        <div class="tag-list" id="jdReqTags"></div>
+                                    </div>
+                                    <div id="jdNiceWrap" style="display:none;">
+                                        <div class="jd-skill-group-label nice">Nice-to-have Skills</div>
+                                        <div class="tag-list" id="jdNiceTags"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ RIGHT ══ -->
+                <div>
+                    <div class="pf-card pf-card-pad" style="position:sticky;top:80px;">
+                        <div class="section-label" style="text-align:center;">Match Score</div>
+
+                        <div style="display:flex;flex-direction:column;align-items:center;padding:16px 0;">
+                            <div class="score-circle">
+                                <svg viewBox="0 0 130 130" width="130" height="130">
+                                    <circle class="bg" cx="65" cy="65" r="55"/>
+                                    <circle class="fg" id="scoreFg" cx="65" cy="65" r="55"
+                                            stroke-dasharray="345" stroke-dashoffset="345" stroke="var(--pf-indigo)"/>
+                                </svg>
+                                <div class="score-num">
+                                    <span id="scoreNum">—</span>
+                                    <small id="scoreLbl">not analyzed yet</small>
+                                </div>
+                            </div>
+                            <button class="pf-btn pf-btn-primary cvjd-btn-sm" id="btnAnalyze" style="width:auto;margin-top:14px;padding:7px 20px;">
+                                Analyze Match
+                            </button>
+                            <div id="analyzeStatus" class="sb" style="margin-top:8px;text-align:center;width:100%;"></div>
+                        </div>
+
+                        <!-- Breakdown -->
+                        <div id="breakdownWrap" style="display:none;padding-top:8px;border-top:1px solid var(--pf-border);">
+                            <div style="font-size:.73rem;color:var(--pf-muted);">
+                                <div class="d-flex justify-content-between mb-1"><span>Required Skills (60%)</span><span id="brkReq">—</span></div>
+                                <div class="d-flex justify-content-between mb-1"><span>Matching Strengths (25%)</span><span id="brkStr">—</span></div>
+                                <div class="d-flex justify-content-between mb-2"><span>Nice-to-have Skills (15%)</span><span id="brkNice">—</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Tiêu chí 1: kỹ năng yêu cầu (60%) -->
+                        <div id="reqMatchWrap" style="display:none;padding-top:10px;border-top:1px solid var(--pf-border);">
+                            <div class="cvjd-label" style="margin-bottom:2px;">1. Required Skills <span id="reqMatchCount" style="color:var(--pf-muted);font-weight:400;"></span></div>
+                            <div style="font-size:.7rem;color:var(--pf-muted);margin-bottom:6px;">
+                                JD's required skills (60%). ✓ green = CV has it, ✗ red = CV is missing it.
+                            </div>
+                            <div class="tag-list" id="reqMatchTags"></div>
+                        </div>
+
+                        <!-- Tiêu chí 2: điểm mạnh phù hợp (25%) -->
+                        <div id="strMatchWrap" style="display:none;padding-top:10px;border-top:1px solid var(--pf-border);">
+                            <div class="cvjd-label" style="margin-bottom:2px;">2. Matching Strengths <span id="strMatchCount" style="color:var(--pf-muted);font-weight:400;"></span></div>
+                            <div style="font-size:.7rem;color:var(--pf-muted);margin-bottom:6px;">
+                                CV strengths relevant to the JD's requirements (25%). ✓ green = relevant.
+                            </div>
+                            <div class="tag-list" id="strMatchTags"></div>
+                        </div>
+
+                        <!-- Tiêu chí 3: kỹ năng ưu tiên (15%) -->
+                        <div id="niceMatchWrap" style="display:none;padding-top:10px;border-top:1px solid var(--pf-border);">
+                            <div class="cvjd-label" style="margin-bottom:2px;">3. Nice-to-have Skills <span id="niceMatchCount" style="color:var(--pf-muted);font-weight:400;"></span></div>
+                            <div style="font-size:.7rem;color:var(--pf-muted);margin-bottom:6px;">
+                                JD's optional skills that still earn points if the CV has them (15%). ✓ green = CV has it, ✗ red = CV doesn't have it.
+                            </div>
+                            <div class="tag-list" id="niceMatchTags"></div>
+                        </div>
+
+                        <!-- Suggestions -->
+                        <div id="suggestWrap" style="display:none;margin-top:12px;padding-top:10px;border-top:1px solid var(--pf-border);">
+                            <div class="section-label">AI Suggestions</div>
+                            <div id="suggestions"></div>
+                        </div>
+
+                        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--pf-border);
+                                    font-size:.7rem;color:var(--pf-muted);line-height:1.5;">
+                            This evaluation is based only on the objective criteria taken from the CV
+                            and the Job Description.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="cvjd-confirm" id="cvjdConfirm" role="dialog" aria-modal="true" aria-labelledby="cvjdConfirmTitle" hidden>
+    <div class="cvjd-confirm-backdrop" data-cvjd-dismiss></div>
+    <div class="cvjd-confirm-box">
+        <h3 id="cvjdConfirmTitle"></h3>
+        <p id="cvjdConfirmBody"></p>
+        <div class="cvjd-confirm-actions">
+            <button type="button" class="cvjd-cancel" data-cvjd-dismiss>Cancel</button>
+            <button type="button" class="cvjd-ok" id="cvjdConfirmOk">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+let cvParsedData = null;  // holds current parsed CV JSON object
+
+// ── Safe fetch helpers ──
+async function safeJson(resp) {
+    const text = await resp.text();
+    try { return JSON.parse(text); }
+    catch { return { error: 'Server error: ' + text.substring(0, 120) }; }
+}
+function setStatus(id, msg, type) {
+    const el = $(id); el.className = 'sb ' + type; el.textContent = msg;
+}
+
+// In-page replacement for window.confirm(). Resolves true only when the user presses Delete;
+// backdrop, Cancel and Escape all resolve false. Restores focus to whatever opened it.
+function askConfirm(title, body, okLabel) {
+    return new Promise(resolve => {
+        const modal = $('cvjdConfirm'), ok = $('cvjdConfirmOk');
+        const opener = document.activeElement;
+        $('cvjdConfirmTitle').textContent = title;
+        $('cvjdConfirmBody').textContent = body;
+        ok.textContent = okLabel || 'Delete';
+
+        function close(answer) {
+            modal.classList.remove('is-open');
+            modal.hidden = true;
+            ok.removeEventListener('click', onOk);
+            modal.removeEventListener('click', onDismiss);
+            document.removeEventListener('keydown', onKey);
+            if (opener && opener.focus) opener.focus();
+            resolve(answer);
+        }
+        function onOk() { close(true); }
+        function onDismiss(e) { if (e.target.hasAttribute('data-cvjd-dismiss')) close(false); }
+        function onKey(e) { if (e.key === 'Escape') close(false); }
+
+        ok.addEventListener('click', onOk);
+        modal.addEventListener('click', onDismiss);
+        document.addEventListener('keydown', onKey);
+        modal.hidden = false;
+        modal.classList.add('is-open');
+        ok.focus();
+    });
+}
+
+// ── Drag & drop: CV ──
+const cvDrop = $('cvDrop'), cvFile = $('cvFile'), cvFName = $('cvFileName');
+cvDrop.addEventListener('dragover', e => { e.preventDefault(); cvDrop.classList.add('drag-over'); });
+cvDrop.addEventListener('dragleave', () => cvDrop.classList.remove('drag-over'));
+cvDrop.addEventListener('drop', e => { e.preventDefault(); cvDrop.classList.remove('drag-over'); if(e.dataTransfer.files.length){cvFile.files=e.dataTransfer.files;cvFName.textContent=e.dataTransfer.files[0].name;}});
+cvFile.addEventListener('change', () => cvFName.textContent = cvFile.files[0]?.name ?? '');
+
+// ── Drag & drop: JD ──
+const jdDrop = $('jdDrop'), jdFile = $('jdFile'), jdFName = $('jdFileName');
+if(jdDrop){
+    jdDrop.addEventListener('dragover', e => { e.preventDefault(); jdDrop.classList.add('drag-over'); });
+    jdDrop.addEventListener('dragleave', () => jdDrop.classList.remove('drag-over'));
+    jdDrop.addEventListener('drop', e => { e.preventDefault(); jdDrop.classList.remove('drag-over'); if(e.dataTransfer.files.length){jdFile.files=e.dataTransfer.files;jdFName.textContent=e.dataTransfer.files[0].name;}});
+    jdFile.addEventListener('change', () => jdFName.textContent = jdFile.files[0]?.name ?? '');
+}
+
+// ── JD tabs ──
+window.switchTab = function(mode) {
+    $('jdPasteMode').style.display = mode==='paste' ? 'block' : 'none';
+    $('jdFileMode').style.display  = mode==='file'  ? 'block' : 'none';
+    $('tabPaste').className = 'jd-tab' + (mode==='paste' ? ' active' : '');
+    $('tabFile').className  = 'jd-tab' + (mode==='file'  ? ' active' : '');
+};
+
+// ── Upload CV with timer + cancel ──
+let _cvController = null;
+let _timerInterval = null;
+
+function setCvLoading(on) {
+    $('cvUploadArea').style.display = on ? 'none' : 'block';
+    $('cvLoadingArea').style.display = on ? 'flex' : 'none';
+    if(on){
+        let sec = 0;
+        $('elapsedTime').textContent = '0s';
+        $('cvLoadingMsg').textContent = 'Uploading file...';
+        _timerInterval = setInterval(() => {
+            sec++;
+            $('elapsedTime').textContent = sec + 's';
+            if(sec === 5)  $('cvLoadingMsg').textContent = 'AI is reading the CV content...';
+            if(sec === 20) $('cvLoadingMsg').textContent = 'AI is extracting information (may take 1-2 minutes the first time)...';
+            if(sec === 60) $('cvLoadingMsg').textContent = 'The model is starting up for the first time, please wait a bit longer...';
+        }, 1000);
+    } else {
+        clearInterval(_timerInterval); _timerInterval = null;
+    }
+}
+
+window.cancelCvUpload = function() {
+    if(_cvController){ _cvController.abort(); _cvController = null; }
+};
+
+let _cvSeq = 0;
+
+$('btnUpload').addEventListener('click', async () => {
+    if(!cvFile.files.length){ setStatus('cvStatus','Please choose a CV file first.','err'); return; }
+    if(_cvController) _cvController.abort();
+    const seq = ++_cvSeq;
+    setCvLoading(true);
+    _cvController = new AbortController();
+    const form = new FormData();
+    form.append('file', cvFile.files[0]);
+    try {
+        const resp = await fetch('/CvJd/UploadCv', { method:'POST', body:form, signal:_cvController.signal });
+        if(seq !== _cvSeq) return;
+        const data = await safeJson(resp);
+        if(seq !== _cvSeq) return;
+        if(data.error){ setStatus('cvStatus','Error: ' + data.error,'err'); return; }
+        const parsed = data.parsedJson ? JSON.parse(data.parsedJson) : null;
+        if(parsed){ cvParsedData = parsed; renderCvParsed(parsed); setStatus('cvStatus','CV parsed successfully!','ok'); }
+        else { setStatus('cvStatus','CV saved but could not be parsed yet.','info'); }
+    } catch(e){
+        if(seq !== _cvSeq) return;
+        if(e.name === 'AbortError') setStatus('cvStatus','Upload cancelled.','info');
+        else setStatus('cvStatus','Error: '+e.message,'err');
+    } finally {
+        if(seq === _cvSeq){ setCvLoading(false); _cvController = null; }
+    }
+});
+
+function renderCvParsed(p) {
+    const info = p.personal_info || {};
+    $('cvName').value     = info.name     || '';
+    $('cvEmail').value    = info.email    || '';
+    $('cvPhone').value    = info.phone    || '';
+    $('cvLocation').value = info.location || '';
+
+    // Skills as removable tags
+    const skills = p.top_skills || [];
+    renderSkillTags(skills);
+
+    // Strengths
+    const strengths = p.strengths || [];
+    $('cvStrengths').innerHTML = strengths.map(s =>
+        `<div class="exp-card"><span class="exp-title">${esc(s.strength||'')}</span><div class="exp-sub" style="margin-top:3px;">${esc(s.reasoning||'')}</div></div>`
+    ).join('');
+
+    // Careers
+    const careers = p.careers || [];
+    if(careers.length){
+        $('cvCareers').innerHTML = careers.map(c =>
+            `<div class="exp-card"><div class="exp-title">${esc(c.title||'')} ${c.company?'@ '+esc(c.company):''}</div><div class="exp-sub">${esc(c.duration||'')}${c.description?' — '+esc(c.description):''}` +
+            `</div></div>`
+        ).join('');
+        $('cvCareersWrap').style.display = 'block';
+    }
+
+    // Education
+    const edu = p.education || {};
+    if(edu.school || edu.degree){
+        $('cvEducation').innerHTML = `<div class="exp-card"><div class="exp-title">${esc(edu.degree||'')} ${edu.major?'- '+esc(edu.major):''}</div><div class="exp-sub">${esc(edu.school||'')} ${edu.duration?'('+esc(edu.duration)+')':''}</div></div>`;
+        $('cvEduWrap').style.display = 'block';
+    }
+
+    $('cvParsed').style.display = 'block';
+}
+
+function renderSkillTags(skills) {
+    $('cvSkillTags').innerHTML = skills.map(s =>
+        `<span class="tag rm" onclick="removeSkill(this)">${esc(s)} ×</span>`
+    ).join('');
+}
+
+window.removeSkill = function(el) {
+    el.remove();
+    syncSkillsToData();
+};
+
+window.addSkill = function() {
+    const v = $('newSkill').value.trim();
+    if(!v) return;
+    const span = document.createElement('span');
+    span.className = 'tag rm';
+    span.textContent = v + ' ×';
+    span.onclick = () => { span.remove(); syncSkillsToData(); };
+    $('cvSkillTags').appendChild(span);
+    $('newSkill').value = '';
+    syncSkillsToData();
+};
+
+function syncSkillsToData() {
+    if(!cvParsedData) return;
+    cvParsedData.top_skills = [...$('cvSkillTags').querySelectorAll('.tag')]
+        .map(t => t.textContent.replace(/\s*×$/, '').trim());
+}
+
+// ── Save CV changes ──
+$('btnSaveCv').addEventListener('click', async () => {
+    if(!cvParsedData){ setStatus('saveStatus','No CV data yet.','err'); return; }
+    // Sync editable fields back to data
+    const info = cvParsedData.personal_info || {};
+    info.name = $('cvName').value; info.email = $('cvEmail').value;
+    info.phone = $('cvPhone').value; info.location = $('cvLocation').value;
+    cvParsedData.personal_info = info;
+    syncSkillsToData();
+
+    setStatus('saveStatus','Saving…','info');
+    $('btnSaveCv').disabled = true;
+    try {
+        const resp = await fetch('/CvJd/UpdateCvJson', {
+            method:'PUT',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ parsedJson: JSON.stringify(cvParsedData) })
+        });
+        const data = await safeJson(resp);
+        if(data.error) setStatus('saveStatus','Error: '+data.error,'err');
+        else setStatus('saveStatus','Saved!','ok');
+    } catch(e){ setStatus('saveStatus','Error: '+e.message,'err'); }
+    finally { $('btnSaveCv').disabled = false; }
+});
+
+// ── Delete CV ──
+$('btnDeleteCv').addEventListener('click', async () => {
+    const okDelete = await askConfirm(
+        'Delete this CV?',
+        'Your current CV and its match results will be removed. You will need to upload a new one before you can use CV & JD matching again.');
+    if(!okDelete) return;
+    $('btnDeleteCv').disabled = true;
+    try {
+        const resp = await fetch('/CvJd/DeleteCv', { method:'DELETE' });
+        const data = await safeJson(resp);
+        if(data.error){ setStatus('saveStatus','Error: '+data.error,'err'); return; }
+        cvParsedData = null;
+        $('cvParsed').style.display = 'none';
+        $('cvUploadArea').style.display = 'block';
+        cvFile.value = '';
+        cvFName.textContent = '';
+        setStatus('cvStatus','CV deleted.','info');
+    } catch(e){ setStatus('saveStatus','Error: '+e.message,'err'); }
+    finally { $('btnDeleteCv').disabled = false; }
+});
+
+// ── JD loading state ──
+let _jdController = null;
+let _jdTimer = null;
+let hasExistingJd = false; // true once a parsed JD has been rendered — lets "Đổi JD" offer Hủy
+
+function setJdLoading(on) {
+    $('jdLoadingArea').style.display = on ? 'flex' : 'none';
+    if(on) {
+        $('jdInputArea').style.display = 'none';
+        $('jdParsed').style.display    = 'none';
+        let sec = 0;
+        $('jdElapsedTime').textContent = '0s';
+        $('jdLoadingMsg').textContent  = 'AI is reading the JD content...';
+        _jdTimer = setInterval(() => {
+            sec++;
+            $('jdElapsedTime').textContent = sec + 's';
+            if(sec === 8)  $('jdLoadingMsg').textContent = 'AI is extracting required skills...';
+            if(sec === 30) $('jdLoadingMsg').textContent = 'Model is doing a deeper analysis, please wait a bit longer...';
+            if(sec === 90) $('jdLoadingMsg').textContent = 'Almost done, just a bit more...';
+        }, 1000);
+    } else {
+        clearInterval(_jdTimer); _jdTimer = null;
+        // only restore input if the result card isn't visible
+        if($('jdParsed').style.display !== 'block')
+            $('jdInputArea').style.display = 'block';
+    }
+}
+
+window.cancelJdParse = function() {
+    if(_jdController){ _jdController.abort(); _jdController = null; }
+    setJdLoading(false);
+    setStatus('jdStatus','JD parsing cancelled.','info');
+};
+
+// Vị trí tuyển dụng dropdown — cùng nguồn role voi trang Interview setup (/Interview/Catalog),
+// đồng bộ danh mục thay vì để người dùng gõ tự do.
+async function loadJdPositionOptions(preselect) {
+    const sel = $('jdPosition');
+    let roles = [];
+    try {
+        const resp = await fetch('/Interview/Catalog');
+        const catalog = await safeJson(resp);
+        if (catalog && Array.isArray(catalog.roles)) roles = catalog.roles;
+    } catch {}
+    sel.innerHTML = roles.length
+        ? '<option value="">-- Select a position --</option>' + roles.map(r => `<option value="${esc(r)}">${esc(r)}</option>`).join('')
+        : '<option value="">Could not load the position list</option>';
+    if (preselect) {
+        // Exact match first; fall back to a loose match for JD records saved before this
+        // dropdown existed (their Position was free text, e.g. "Backend Developer" instead
+        // of the catalog's plain "Backend").
+        const p = preselect.toLowerCase();
+        const match = roles.find(r => r.toLowerCase() === p) || roles.find(r => p.includes(r.toLowerCase()));
+        if (match) sel.value = match;
+    }
+    return roles;
+}
+
+window.changeJd = function() {
+    $('jdParsed').style.display = 'none';
+    $('jdInputArea').style.display = 'block';
+    setStatus('jdStatus','','');
+    // Only offer Hủy if there is an existing parsed JD to go back to — a first-time
+    // upload (no JD yet) has nothing to cancel into.
+    $('btnCancelJdEdit').style.display = hasExistingJd ? 'inline-flex' : 'none';
+};
+
+window.cancelJdEdit = function() {
+    $('jdInputArea').style.display = 'none';
+    $('jdParsed').style.display = 'block';
+    setStatus('jdStatus','','');
+};
+
+// ── Delete JD ──
+$('btnDeleteJd').addEventListener('click', async () => {
+    const okDelete = await askConfirm(
+        'Delete this Job Description?',
+        'The saved job description and its match results will be removed, and it will no longer appear on the Interview setup page.');
+    if(!okDelete) return;
+    $('btnDeleteJd').disabled = true;
+    try {
+        const resp = await fetch('/CvJd/DeleteJd', { method:'DELETE' });
+        const data = await safeJson(resp);
+        if(data.error){ setStatus('jdStatus','Error: '+data.error,'err'); return; }
+        hasExistingJd = false;
+        $('jdParsed').style.display = 'none';
+        $('jdInputArea').style.display = 'block';
+        $('jdText').value = '';
+        $('jdCompany').value = '';
+        $('jdPosition').value = '';
+        jdFile.value = '';
+        jdFName.textContent = '';
+        $('btnCancelJdEdit').style.display = 'none';
+        setStatus('jdStatus','JD deleted.','info');
+    } catch(e){ setStatus('jdStatus','Error: '+e.message,'err'); }
+    finally { $('btnDeleteJd').disabled = false; }
+});
+
+// ── JD: AI Parse ──
+$('btnAiParse').addEventListener('click', () => saveJd('ai'));
+$('btnNormal').addEventListener('click', () => saveJd('normal'));
+$('btnCancelJdEdit').addEventListener('click', cancelJdEdit);
+
+let _jdSeq = 0;
+
+async function saveJd(mode) {
+    const position = $('jdPosition').value.trim();
+    const isFile = $('tabFile').classList.contains('active');
+    if(isFile && !jdFile.files.length){ setStatus('jdStatus','Please choose a JD file first.','err'); return; }
+    if(!isFile && !$('jdText').value.trim()){ setStatus('jdStatus','Please enter the JD content first.','err'); return; }
+
+    if(_jdController) _jdController.abort();
+    const seq = ++_jdSeq;
+    setJdLoading(true);
+    _jdController = new AbortController();
+
+    try {
+        let data;
+        if(isFile){
+            const form = new FormData();
+            form.append('file', jdFile.files[0]);
+            if(position) form.append('position', position);
+            const resp = await fetch('/CvJd/UploadJdFile', { method:'POST', body:form, signal:_jdController.signal });
+            data = await safeJson(resp);
+        } else {
+            const form = new FormData();
+            form.append('jdText', $('jdText').value.trim());
+            form.append('position', position);
+            form.append('parseMode', mode);
+            const resp = await fetch('/CvJd/SaveJd', { method:'POST', body:form, signal:_jdController.signal });
+            data = await safeJson(resp);
+        }
+        if(seq !== _jdSeq) return;
+
+        if(data.error){ setStatus('jdStatus','Error: '+data.error,'err'); return; }
+        const clarified = data.clarifiedJson ? JSON.parse(data.clarifiedJson) : null;
+        if(clarified) renderJdParsed(clarified, position, $('jdCompany').value.trim());
+        setStatus('jdStatus', mode==='ai' ? 'JD parsed successfully by AI!' : 'JD saved (Normal mode).' , 'ok');
+    } catch(e){
+        if(seq !== _jdSeq) return;
+        if(e.name==='AbortError') return;
+        setStatus('jdStatus','Error: '+e.message,'err');
+    } finally {
+        if(seq === _jdSeq){ setJdLoading(false); _jdController = null; }
+    }
+}
+
+function skillLabel(s) {
+    if(typeof s === 'string') return s;
+    return s.name || s.skill || s.title || JSON.stringify(s);
+}
+
+function renderJdParsed(c, fallbackPosition, company) {
+    hasExistingJd = true;
+    $('jdParsedPosition').textContent = c.position || fallbackPosition || '—';
+    const co = c.company || company || '';
+    $('jdParsedCompany').textContent = co;
+    $('jdParsedCompany').style.display = co ? 'block' : 'none';
+
+    const reqs = c.required_skills || [];
+    $('jdReqTags').style.display = 'flex';
+    $('jdReqTags').innerHTML = reqs.map(s=>`<span class="tag req-skill">${esc(skillLabel(s))}</span>`).join('');
+    $('jdReqWrap').style.display = reqs.length ? 'block' : 'none';
+
+    const nices = c.nice_to_have || [];
+    $('jdNiceTags').style.display = 'flex';
+    $('jdNiceTags').innerHTML = nices.map(s=>`<span class="tag nice-skill">${esc(skillLabel(s))}</span>`).join('');
+    $('jdNiceWrap').style.display = nices.length ? 'block' : 'none';
+
+    $('jdParsed').style.display = 'block';
+}
+
+// ── Analyze Match ──
+$('btnAnalyze').addEventListener('click', async () => {
+    setStatus('analyzeStatus','Calculating score…','info');
+    $('btnAnalyze').disabled = true;
+    try {
+        const resp = await fetch('/CvJd/Analyze', { method:'POST' });
+        const data = await safeJson(resp);
+        if(resp.status === 400){ setStatus('analyzeStatus', data.error || 'Please parse the CV and JD first.','err'); return; }
+        if(data.error){ setStatus('analyzeStatus','Error: '+data.error,'err'); return; }
+        renderScore(data);
+        setStatus('analyzeStatus','Analysis complete!','ok');
+    } catch(e){ setStatus('analyzeStatus','Error: '+e.message,'err'); }
+    finally { $('btnAnalyze').disabled = false; }
+});
+
+function renderScore(d) {
+    const score = d.score ?? 0;
+    $('scoreNum').textContent = score;
+    $('scoreLbl').textContent = score>=80?'Great match':score>=60?'Good match':'Needs improvement';
+    const fg = $('scoreFg');
+    fg.style.strokeDashoffset = 345 - (345*score/100);
+    fg.style.stroke = score>=80?'var(--pf-success)':score>=60?'var(--pf-teal)':'var(--pf-indigo)';
+    const bd = d.breakdown||{};
+    $('brkReq').textContent  = (bd.required_skills_score??'—') +'/60';
+    $('brkStr').textContent  = (bd.strength_relevance_score??'—')+'/25';
+    $('brkNice').textContent = (bd.nice_to_have_score??'—')+'/15';
+    $('breakdownWrap').style.display = 'block';
+    const matched = (d.matched_skills||[]).map(skillLabel);
+    const miss = d.missing_skills||[];
+    const cvSkillEls = [...document.querySelectorAll('#cvSkillTags .tag')];
+    let cvSkillMatchedCount = 0;
+    cvSkillEls.forEach(el=>{
+        const skill = el.textContent.replace(/\s*×$/,'').trim().toLowerCase();
+        if(matched.some(m=>m.toLowerCase()===skill)){ el.classList.add('matched'); cvSkillMatchedCount++; }
+    });
+    $('cvSkillMatchSummary').textContent = cvSkillEls.length
+        ? `(✓ ${cvSkillMatchedCount} match the JD · ${cvSkillEls.length-cvSkillMatchedCount} not required by JD)`
+        : '';
+
+    const rMatched = (d.matched_required || d.matched_skills || []).map(skillLabel);
+    const rMissing = miss.map(skillLabel);
+    if(rMatched.length || rMissing.length){
+        $('reqMatchCount').textContent = `(CV has ${rMatched.length}/${rMatched.length + rMissing.length})`;
+        $('reqMatchTags').innerHTML =
+            rMatched.map(s=>`<span class="tag matched">✓ ${esc(s)}</span>`).join('') +
+            rMissing.map(s=>`<span class="tag missing">✗ ${esc(s)}</span>`).join('');
+        $('reqMatchWrap').style.display = 'block';
+    } else {
+        $('reqMatchWrap').style.display = 'none';
+    }
+
+    const strMatched = (d.matched_strengths||[]).map(s=>String(s));
+    const allStrengths = ((cvParsedData && cvParsedData.strengths) || []).map(s=>s.strength||'').filter(Boolean);
+    if(allStrengths.length && d.matched_strengths !== undefined){
+        $('strMatchCount').textContent = `(${strMatched.length}/${allStrengths.length} relevant to JD)`;
+        $('strMatchTags').innerHTML = allStrengths.map(s=>{
+            const hit = strMatched.some(m=>m.toLowerCase()===s.toLowerCase());
+            return `<span class="tag ${hit?'matched':''}">${hit?'✓ ':''}${esc(s)}</span>`;
+        }).join('');
+        $('strMatchWrap').style.display = 'block';
+    } else {
+        $('strMatchWrap').style.display = 'none';
+    }
+
+    // Group the CV's own "Điểm mạnh" card the same way (relevant to JD vs not),
+    // so the CV card itself already shows the criterion-2 breakdown.
+    if(allStrengths.length && d.matched_strengths !== undefined && cvParsedData){
+        const strengthObjs = cvParsedData.strengths || [];
+        const relevant = strengthObjs.filter(s => strMatched.some(m=>m.toLowerCase()===(s.strength||'').toLowerCase()));
+        const notRelevant = strengthObjs.filter(s => !strMatched.some(m=>m.toLowerCase()===(s.strength||'').toLowerCase()));
+        const card = s => `<div class="exp-card matched"><span class="exp-title">✓ ${esc(s.strength||'')}</span><div class="exp-sub" style="margin-top:3px;">${esc(s.reasoning||'')}</div></div>`;
+        const cardPlain = s => `<div class="exp-card"><span class="exp-title">${esc(s.strength||'')}</span><div class="exp-sub" style="margin-top:3px;">${esc(s.reasoning||'')}</div></div>`;
+        $('cvStrengths').innerHTML =
+            (relevant.length ? `<div class="jd-skill-group-label req" style="margin-top:0;">Relevant to JD (${relevant.length})</div>` + relevant.map(card).join('') : '') +
+            (notRelevant.length ? `<div class="jd-skill-group-label nice" style="margin-top:8px;">Not relevant to JD yet (${notRelevant.length})</div>` + notRelevant.map(cardPlain).join('') : '');
+    } else {
+        document.querySelectorAll('#cvStrengths .exp-card').forEach(card=>{
+            const title = (card.querySelector('.exp-title')?.textContent || '').trim().toLowerCase();
+            card.classList.toggle('matched', strMatched.some(m=>m.toLowerCase()===title));
+        });
+    }
+
+    const nMatched = (d.matched_nice_to_have||[]).map(skillLabel);
+    const nMissing = (d.missing_nice_to_have||[]).map(skillLabel);
+    if(nMatched.length || nMissing.length){
+        $('niceMatchCount').textContent = `(CV has ${nMatched.length}/${nMatched.length + nMissing.length})`;
+        $('niceMatchTags').innerHTML =
+            nMatched.map(s=>`<span class="tag matched">✓ ${esc(s)}</span>`).join('') +
+            nMissing.map(s=>`<span class="tag missing">✗ ${esc(s)}</span>`).join('');
+        $('niceMatchWrap').style.display = 'block';
+    } else {
+        $('niceMatchWrap').style.display = 'none';
+    }
+
+    // Group the JD card's own skill lists into Matched/Missing too, so the JD
+    // card itself already shows criteria 1 and 3 without needing the side panel.
+    function renderJdGroup(wrapId, matchedArr, missingArr, cls) {
+        if(!matchedArr.length && !missingArr.length) return;
+        const el = $(wrapId);
+        el.style.display = 'block'; // override the default flex tag-list layout — children here are group blocks, not bare tags
+        el.innerHTML =
+            (matchedArr.length ? `<div class="jd-skill-group-label req" style="margin-top:0;">CV has (${matchedArr.length})</div>
+                <div class="tag-list">${matchedArr.map(s=>`<span class="tag ${cls} matched">✓ ${esc(s)}</span>`).join('')}</div>` : '') +
+            (missingArr.length ? `<div class="jd-skill-group-label nice" style="margin-top:8px;">CV is missing (${missingArr.length})</div>
+                <div class="tag-list">${missingArr.map(s=>`<span class="tag ${cls} missing">✗ ${esc(s)}</span>`).join('')}</div>` : '');
+    }
+    renderJdGroup('jdReqTags', rMatched, rMissing, 'req-skill');
+    renderJdGroup('jdNiceTags', nMatched, nMissing, 'nice-skill');
+
+    const sugs = d.suggestions||[];
+    $('suggestions').innerHTML = sugs.map(s=>`<div class="sug-item"><div class="sug-dot"></div><div>${esc(s)}</div></div>`).join('');
+    $('suggestWrap').style.display = sugs.length?'block':'none';
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Load existing data on mount ──
+(async function load(){
+    try {
+        const r = await fetch('/CvJd/GetCvInfo');
+        if(r.ok){
+            const cv = await safeJson(r);
+            if(cv && !cv.error){
+                if(cv.fileName) cvFName.textContent = cv.fileName;
+                if(cv.parsedJson){
+                    try { cvParsedData = JSON.parse(cv.parsedJson); renderCvParsed(cvParsedData); setStatus('cvStatus','Current CV: '+cv.fileName,'ok'); }
+                    catch{}
+                }
+            }
+        }
+    } catch{}
+    let existingJdPosition = '';
+    try {
+        const r = await fetch('/CvJd/GetJdInfo');
+        if(r.ok){
+            const jd = await safeJson(r);
+            if(jd && !jd.error){
+                if(jd.rawText) $('jdText').value = jd.rawText;
+                existingJdPosition = jd.position||'';
+                if(jd.clarifiedJson){
+                    try { renderJdParsed(JSON.parse(jd.clarifiedJson), jd.position||''); setStatus('jdStatus','Current JD loaded.','ok'); }
+                    catch{}
+                }
+            }
+        }
+    } catch{}
+    await loadJdPositionOptions(existingJdPosition);
+})();
+})();
+</script>
+</body>
+</html>

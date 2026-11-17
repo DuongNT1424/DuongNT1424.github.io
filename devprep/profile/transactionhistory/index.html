@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"candidate",page:"/Profile/TransactionHistory"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction History – DevPrep AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="stylesheet" href="/devprep/css/profile.css?v=Ip2wZq8ax05JiRD7n2bFpIUbNhPMT37lYPT9HXcU14o" />
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:             #0e1323;
+            --bg-alt:         #111827;
+            --surface:        rgba(17, 24, 39, 0.72);
+            --surface-hover:  rgba(255,255,255,0.05);
+            --border:         rgba(255,255,255,0.08);
+            --border-muted:   rgba(255,255,255,0.04);
+            --primary:        #c7c2ff;
+            --primary-dim:    rgba(199,194,255,0.12);
+            --secondary:      #4cd7f6;
+            --success:        #10B981;
+            --success-dim:    rgba(16,185,129,0.12);
+            --error:          #ff6b6b;
+            --error-dim:      rgba(255,107,107,0.12);
+            --warning:        #F9D949;
+            --text:           #e5e1e7;
+            --text-muted:     #9ca3af;
+            --text-dim:       #6b7280;
+            --radius-sm:      8px;
+            --radius-md:      12px;
+            --radius-lg:      16px;
+            --radius-xl:      20px;
+        }
+
+        html, body { height: 100%; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ── Main content ───────────────────────────────────── */
+        .tx-main {
+            flex: 1;
+            margin-left: var(--pf-sidebar-w);
+            padding: 32px 32px 48px;
+            overflow-x: hidden;
+            min-width: 0;
+        }
+
+        /* ── Page header ─────────────────────────────────── */
+        .page-header { margin-bottom: 28px; }
+        .page-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            margin-bottom: 6px;
+        }
+        .page-title { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
+        .page-sub   { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+        /* ── Stats bento ─────────────────────────────────── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 22px 24px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+        }
+        .stat-card.stat-primary::before { background: linear-gradient(90deg, #6366f1, #a855f7); }
+        .stat-card.stat-success::before { background: linear-gradient(90deg, #10B981, #34d399); }
+        .stat-card.stat-secondary::before { background: linear-gradient(90deg, #4cd7f6, #818cf8); }
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .stat-value.primary   { color: var(--primary); }
+        .stat-value.success   { color: var(--success); }
+        .stat-value.secondary { color: var(--secondary); }
+        .stat-unit { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .stat-icon {
+            position: absolute;
+            top: 20px; right: 20px;
+            font-size: 28px;
+            opacity: 0.12;
+        }
+        .stat-icon.primary   { color: var(--primary); }
+        .stat-icon.success   { color: var(--success); }
+        .stat-icon.secondary { color: var(--secondary); }
+
+        /* ── Card ────────────────────────────────────────── */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+        }
+
+        /* ── Table toolbar ───────────────────────────────── */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 180px;
+        }
+        .search-icon {
+            position: absolute;
+            left: 10px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: var(--text-dim);
+            pointer-events: none;
+        }
+        .search-input {
+            width: 100%;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            padding: 8px 12px 8px 34px;
+            outline: none;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .search-input::placeholder { color: var(--text-dim); }
+        .search-input:focus { border-color: rgba(199,194,255,0.4); background: rgba(255,255,255,0.06); }
+
+        .filter-select {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            padding: 8px 12px;
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+        .filter-select:focus { border-color: rgba(199,194,255,0.4); }
+        .filter-select option { background: #1a1f30; }
+
+        .date-input {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            padding: 8px 12px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .date-input:focus { border-color: rgba(199,194,255,0.4); }
+        .date-input::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: opacity 0.15s, background 0.15s;
+        }
+        .btn .material-symbols-outlined { font-size: 16px; }
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: #fff;
+        }
+        .btn-primary:hover { opacity: 0.88; }
+        .btn-ghost {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+
+        /* ── Table ────────────────────────────────────────── */
+        .tx-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tx-table th {
+            text-align: left;
+            padding: 12px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .tx-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border-muted);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+        .tx-table tbody tr { transition: background 0.1s; }
+        .tx-table tbody tr:hover { background: var(--surface-hover); }
+        .tx-table tbody tr:last-child td { border-bottom: none; }
+        .tx-table .th-right { text-align: right; }
+        .tx-table .td-right { text-align: right; }
+
+        .order-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.02em;
+        }
+        .order-method {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+        .tx-date   { color: var(--text); font-weight: 500; }
+        .tx-time   { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+        .tx-desc   { color: var(--text); }
+        .tx-credits {
+            font-weight: 700;
+            color: var(--secondary);
+            font-size: 14px;
+        }
+        .tx-amount { color: var(--text); font-weight: 500; }
+        .tx-currency { font-size: 11px; color: var(--text-dim); }
+
+        /* Status badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .badge .material-symbols-outlined { font-size: 12px; }
+        .badge-paid    { background: var(--success-dim); color: var(--success); }
+        .badge-failed  { background: var(--error-dim);   color: var(--error);   }
+        .badge-pending { background: rgba(249,217,73,0.12); color: var(--warning); }
+
+        /* Empty / error states */
+        .table-empty {
+            text-align: center;
+            padding: 64px 24px;
+            color: var(--text-muted);
+        }
+        .table-empty .material-symbols-outlined { font-size: 48px; opacity: 0.25; display: block; margin-bottom: 12px; }
+        .table-empty p { font-size: 14px; margin-bottom: 16px; }
+
+        .error-banner {
+            margin: 0 20px 20px;
+            background: var(--error-dim);
+            border: 1px solid rgba(255,107,107,0.2);
+            border-radius: var(--radius-md);
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--error);
+        }
+
+        /* Hidden by JS filters */
+        .tx-row.hidden { display: none; }
+
+        /* ── Pagination ───────────────────────────────────── */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+        }
+        .pagination-info { font-size: 12px; color: var(--text-muted); }
+        .pagination-nav  { display: flex; gap: 6px; }
+        .page-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.03);
+            color: var(--text-muted);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+        .page-btn:hover         { background: var(--surface-hover); color: var(--text); }
+        .page-btn.page-btn-now  { background: var(--primary-dim); color: var(--primary); border-color: rgba(199,194,255,0.25); }
+        .page-btn .material-symbols-outlined { font-size: 14px; }
+
+        /* ── No-result overlay ────────────────────────────── */
+        .no-filter-result {
+            text-align: center;
+            padding: 40px 24px;
+            color: var(--text-muted);
+            font-size: 13px;
+            display: none;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 768px) {
+            .tx-main { padding: 20px 16px 40px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .col-hide { display: none; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <link rel="stylesheet" href="/devprep/css/components/pagination.css?v=M4UFAnJj6vGhEF9H66VZXLMHxUzMETNEdKjlPhUQjfQ" />
+</head>
+<body class="pf-page">
+
+<header class="pf-topbar">
+    <a class="pf-brand" href="/devprep/">DevPrep AI</a>
+    <div class="pf-topbar-actions">
+        <div class="pf-user-menu" id="pf-user-menu">
+            <button class="pf-avatar-btn" id="pf-avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" title="candidate@devprep.demo">
+                C
+            </button>
+            <div class="pf-dropdown" role="menu">
+                <div class="pf-dropdown-head">
+                    <span class="pf-dropdown-email">candidate@devprep.demo</span>
+                </div>
+                    <a class="pf-dropdown-item pf-dropdown-credits" role="menuitem" href="/devprep/profile/credithistory/">
+                        <svg width="18" height="18" fill="none" stroke="#F9D949" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"></circle><path d="M12 8v8M9.5 10h3.75a1.75 1.75 0 1 1 0 3.5H10.75a1.75 1.75 0 1 0 0 3.5H14.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></svg>
+                        Credits
+                        <span class="pf-credit-value" id="pf-credit-value">&hellip;</span>
+                    </a>
+                <a class="pf-dropdown-item" role="menuitem" href="/devprep/profile/">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    View Profile
+                </a>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="pf-dropdown-item pf-dropdown-logout" role="menuitem">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmYG7AekzdtnNhGtiZJgvBomZ0DWsUF1Bz7qGlthOG-VmP7es0c66ytBPoHbd4iZQ0BrmAHfEU5i51o47hTFz5TiTiMVihtGv4YiBe7BFSMDRprd_E_Adnifq81qlGZvcVGdIxFmuxyD02QkjhKmyRpLi709h3d2GLUXg4MamgkhXA" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="devprep-ann-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(4,7,18,.62); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:16px;">
+    <div style="width:100%; max-width:460px; background:#1a1f30; border:1px solid rgba(255,255,255,.1); border-top:1px solid rgba(255,255,255,.18); border-radius:16px; box-shadow:0 30px 70px rgba(0,0,0,.6); overflow:hidden; font-family:Inter,system-ui,sans-serif; color:#e5e1e7;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px 12px;">
+            <div>
+                <p style="margin:0 0 2px; font:600 10px/1.2 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:#8b5cf6;">Announcement</p>
+                <h2 style="margin:0; font-size:18px; font-weight:800;">📢 DevPrep News</h2>
+            </div>
+            <button type="button" id="devprep-ann-x" aria-label="Close" style="background:none; border:none; color:#9ca3af; font-size:26px; line-height:1; cursor:pointer;">&times;</button>
+        </div>
+        <div id="devprep-ann-list" style="display:flex; flex-direction:column; gap:12px; max-height:48vh; overflow-y:auto; padding:0 20px 4px;"></div>
+        <div style="padding:14px 20px 18px;">
+            <label style="display:flex; align-items:center; gap:9px; margin-bottom:14px; cursor:pointer; font-size:13px; color:#c8c5d0;">
+                <input type="checkbox" id="devprep-ann-hide" style="width:16px; height:16px; accent-color:#6366f1; cursor:pointer;" />
+                Don't show this announcement again
+            </label>
+            <button type="button" id="devprep-ann-ok" style="width:100%; padding:11px; border:none; border-radius:10px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-weight:700; font-size:14px; cursor:pointer;">Got it</button>
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        var overlay = document.getElementById('devprep-ann-overlay');
+        if (!overlay || overlay.dataset.annInit === '1') return;
+        overlay.dataset.annInit = '1';
+
+        var HIDE_KEY = 'devprep-ann-hidden';   // sessionStorage: chỉ sống trong phiên trình duyệt
+        function esc(s) { return (s == null ? '' : String(s)).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+        // Đã tick "không hiển thị nữa" trong phiên này -> bỏ qua hoàn toàn (không cần fetch).
+        try { if (sessionStorage.getItem(HIDE_KEY) === '1') return; } catch (e) { }
+
+        function close() {
+            try { if (document.getElementById('devprep-ann-hide').checked) sessionStorage.setItem(HIDE_KEY, '1'); } catch (e) { }
+            overlay.style.display = 'none';
+        }
+
+        fetch('/Home/Announcements', { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (items) {
+                if (!items || !items.length) return;
+                document.getElementById('devprep-ann-list').innerHTML = items.map(function (a) {
+                    return '<div style="border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:13px 15px; background:rgba(255,255,255,.03);">'
+                        + '<div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:5px;">'
+                        + '<strong style="font-size:14.5px;">' + esc(a.title) + '</strong>'
+                        + '<span style="font-size:11px; opacity:.6; white-space:nowrap;">' + esc(a.createdAt) + '</span></div>'
+                        + '<p style="margin:0; font-size:13px; line-height:1.55; opacity:.85; white-space:pre-wrap;">' + esc(a.content) + '</p></div>';
+                }).join('');
+                overlay.style.display = 'flex';
+                document.getElementById('devprep-ann-ok').addEventListener('click', close);
+                document.getElementById('devprep-ann-x').addEventListener('click', close);
+            })
+            .catch(function () { /* best-effort: lỗi thì không hiện popup */ });
+    })();
+</script>
+
+
+<script>
+    (function () {
+        var menu = document.getElementById('pf-user-menu');
+        var btn = document.getElementById('pf-avatar-btn');
+        if (!menu || !btn) return;
+        // Số credit hiện có — fetch same-origin mỗi lần mở dropdown (giống navbar homepage).
+        var loadCredits = function () {
+            var creditValue = document.getElementById('pf-credit-value');
+            if (!creditValue) return;
+            fetch('/Profile/CreditBalance', { headers: { 'Accept': 'application/json' } })
+                .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+                .then(function (data) { creditValue.textContent = Number(data.balance).toLocaleString('en-US'); })
+                .catch(function () { creditValue.textContent = '—'; });
+        };
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) loadCredits();
+        });
+        document.addEventListener('click', function (e) {
+            if (!menu.contains(e.target)) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+        });
+    })();
+</script>
+
+
+<div class="pf-shell">
+    <aside class="pf-sidebar">
+    <ul class="pf-nav">
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Information</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/cvjd/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>CV &amp; JD</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/identity/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Identity Verification</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link active" href="/devprep/profile/transactionhistory/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Transaction History</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/credithistory/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Credit History</span>
+            </a>
+        </li>
+        <li>
+            <a class="pf-nav-link" href="/devprep/profile/changepassword/">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                <span>Change Password</span>
+            </a>
+        </li>
+    </ul>
+</aside>
+
+
+    <main class="tx-main">
+
+        <!-- Page header -->
+        <div class="page-header">
+            <p class="page-label">Credit Wallet</p>
+            <h1 class="page-title">Transaction History</h1>
+            <p class="page-sub">Your credit purchases and wallet activity</p>
+        </div>
+
+        <!-- Stats bento -->
+        <div class="stats-grid">
+            <div class="stat-card stat-primary">
+                <span class="material-symbols-outlined stat-icon primary" style="font-variation-settings:'FILL' 1;">toll</span>
+                <p class="stat-label">Current Balance</p>
+                <p class="stat-value primary">42</p>
+                <p class="stat-unit">credits available</p>
+            </div>
+            <div class="stat-card stat-success">
+                <span class="material-symbols-outlined stat-icon success" style="font-variation-settings:'FILL' 1;">shopping_cart</span>
+                <p class="stat-label">Total Purchased</p>
+                <p class="stat-value success">75</p>
+                <p class="stat-unit">credits all-time</p>
+            </div>
+            <div class="stat-card stat-secondary">
+                <span class="material-symbols-outlined stat-icon secondary" style="font-variation-settings:'FILL' 1;">live_help</span>
+                <p class="stat-label">Sessions Remaining</p>
+                <p class="stat-value secondary">42</p>
+                <p class="stat-unit">interview sessions</p>
+            </div>
+        </div>
+
+
+        <!-- Transaction table card -->
+        <div class="card">
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-wrap">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" id="searchInput" class="search-input"
+                           placeholder="Search by order code..." />
+                </div>
+                <select id="statusFilter" class="filter-select" aria-label="Status filter">
+                    <option value="">All Status</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Failed">Failed</option>
+                    <option value="Pending">Pending</option>
+                </select>
+                <input type="date" id="dateFrom" class="date-input" title="From date" />
+                <input type="date" id="dateTo"   class="date-input" title="To date" />
+                <a class="btn btn-primary" href="/devprep/payment/">
+                    <span class="material-symbols-outlined">add</span>
+                    Buy Credits
+                </a>
+            </div>
+
+                <div style="overflow-x:auto;">
+                    <table class="tx-table" id="txTable">
+                        <thead>
+                            <tr>
+                                <th>Transaction Code</th>
+                                <th class="col-hide">Date</th>
+                                <th>Description</th>
+                                <th class="th-right">Amount</th>
+                                <th style="text-align:center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="txBody">
+                                <tr class="tx-row"
+                                    data-order="dp20261100"
+                                    data-status="Paid"
+                                    data-date="2026-11-16">
+                                    <td>
+                                        <div class="order-code">DP20261100</div>
+                                        <div class="order-method">VNPay</div>
+                                    </td>
+                                    <td class="col-hide">
+                                        <div class="tx-date">16 Nov 2026</div>
+                                        <div class="tx-time">06:30</div>
+                                    </td>
+                                    <td>
+                                        <div class="tx-desc">20 Credits Package</div>
+                                    </td>
+                                    <td class="td-right">
+                                        <div class="tx-amount">49.000</div>
+                                        <div class="tx-currency">VND</div>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span class="badge badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="tx-row"
+                                    data-order="dp20261109"
+                                    data-status="Failed"
+                                    data-date="2026-10-29">
+                                    <td>
+                                        <div class="order-code">DP20261109</div>
+                                        <div class="order-method">VNPay</div>
+                                    </td>
+                                    <td class="col-hide">
+                                        <div class="tx-date">29 Oct 2026</div>
+                                        <div class="tx-time">06:28</div>
+                                    </td>
+                                    <td>
+                                        <div class="tx-desc">20 Credits Package</div>
+                                    </td>
+                                    <td class="td-right">
+                                        <div class="tx-amount">49.000</div>
+                                        <div class="tx-currency">VND</div>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <span class="badge badge-failed">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">cancel</span>
+                                            Failed
+                                        </span>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- No filter result message -->
+                <div class="no-filter-result" id="noFilterResult">
+                    <span class="material-symbols-outlined" style="font-size:32px;display:block;margin-bottom:8px;opacity:0.3;">search_off</span>
+                    No transactions match your filters.
+                </div>
+                <!-- Pagination -->
+                    <div class="pagination" id="paginationBar">
+                        <span class="pagination-info">
+                            Showing 1–2 of 2 transaction(s)
+                        </span>
+                        
+                    </div>
+        </div>
+
+    </main>
+</div>
+
+<script>
+(function () {
+    const searchInput  = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const dateFrom     = document.getElementById('dateFrom');
+    const dateTo       = document.getElementById('dateTo');
+    const rows         = document.querySelectorAll('#txBody .tx-row');
+    const noResult     = document.getElementById('noFilterResult');
+    const pagination   = document.getElementById('paginationBar');
+
+    function applyFilters() {
+        const q      = searchInput.value.trim().toLowerCase();
+        const status = statusFilter.value;
+        const from   = dateFrom.value ? new Date(dateFrom.value) : null;
+        const to     = dateTo.value   ? new Date(dateTo.value + 'T23:59:59') : null;
+        let visible  = 0;
+
+        rows.forEach(row => {
+            const matchQ      = !q || row.dataset.order.includes(q);
+            const matchStatus = !status || row.dataset.status === status;
+            const rowDate     = new Date(row.dataset.date);
+            const matchFrom   = !from || rowDate >= from;
+            const matchTo     = !to   || rowDate <= to;
+            const show = matchQ && matchStatus && matchFrom && matchTo;
+            row.classList.toggle('hidden', !show);
+            if (show) visible++;
+        });
+
+        if (noResult) noResult.style.display = (visible === 0 && rows.length > 0) ? 'block' : 'none';
+        // Hide pagination when filters are active to avoid confusion
+        if (pagination) pagination.style.display = (q || status || dateFrom.value || dateTo.value) ? 'none' : 'flex';
+    }
+
+    searchInput.addEventListener('input',  applyFilters);
+    statusFilter.addEventListener('change', applyFilters);
+    dateFrom.addEventListener('change',    applyFilters);
+    dateTo.addEventListener('change',      applyFilters);
+})();
+</script>
+
+</body>
+</html>

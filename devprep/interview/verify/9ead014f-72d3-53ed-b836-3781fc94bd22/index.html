@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"candidate",page:"/Interview/Verify/9ead014f-72d3-53ed-b836-3781fc94bd22"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Identity check | DevPrep AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="stylesheet" href="/devprep/css/biometric-wizard.css?v=pKzxHSL3t46KmpIi-gPA8tmrj6yTio3Kab_We2WNDQk" />
+</head>
+<body class="bw-page">
+<!-- Biometric entry gate: one face-match check before the Room opens (no head-turn/liveness
+     requirement — see ai-service/biometrics/router.py for why liveness is disabled). Reuses
+     the biometric wizard's face-screen look; logic lives in entry-verify.js (face-only —
+     intentionally NOT the enroll wizard, which stays untouched). Full-screen immersive per
+     docs/design.md — no navbar/sidebar/footer, same pattern as the Room. -->
+<div class="stage" id="entry-verify"
+     data-session-id="9ead014f-72d3-53ed-b836-3781fc94bd22"
+     data-attempts-remaining="3"
+     data-challenge-url="/Verification/Challenge"
+     data-verify-face-url="/Verification/VerifyFace"
+     data-entry-gate-url="/Verification/EntryGate"
+     data-room-url="/Interview/Room/9ead014f-72d3-53ed-b836-3781fc94bd22"
+     data-integrity-policy-url="/Interview/IntegrityPolicy/9ead014f-72d3-53ed-b836-3781fc94bd22"
+     data-failed-url="/Interview/VerifyFailed">
+
+    <div class="ambient-blob ambient-blob-primary" aria-hidden="true"></div>
+    <div class="ambient-blob ambient-blob-secondary" aria-hidden="true"></div>
+
+    <section class="screen" id="screen-face">
+        <div class="face">
+            <div class="topbar">
+                <div class="stepper on-dark">
+                    <div class="dot"><span class="bead now">✓</span><span class="lbl">Identity check</span></div>
+                </div>
+                <span class="guide-pill" id="attempts-pill">Attempts left: 3</span>
+            </div>
+            <h1 class="sr-only" id="face-title" tabindex="-1">Identity check before the interview</h1>
+
+            <div class="camera">
+                <video id="bw-video" autoplay playsinline muted></video>
+                <div class="mask"></div>
+                <div class="oval" id="face-oval"></div>
+                <div class="scanline" id="face-scanline" hidden></div>
+                <div class="count" id="face-countdown" hidden>3</div>
+                <div class="cam-overlay" id="face-processing" hidden>
+                    <div class="spinner" aria-hidden="true"></div>
+                    <p>Analyzing…</p>
+                </div>
+                <div class="guide-pill" id="face-guidance" role="status" aria-live="polite">Preparing camera…</div>
+            </div>
+
+            <p class="err" id="face-error" role="alert" hidden></p>
+            <div class="cta-row">
+                <button type="button" class="btn" id="face-action-btn" disabled>I'm ready</button>
+            </div>
+            <p class="hint-dark">Verify it's you before entering the interview room — keep your face inside the oval and look straight at the camera</p>
+        </div>
+    </section>
+
+    <!-- ════════════ Verify Success Overlay — ported from verifyfacesuccessfull.html (UI only, hidden by default) ════════════ -->
+    <div id="screen-verify-success" hidden style="display: contents;">
+        <div class="verify-bg-orb orb-1" aria-hidden="true"></div>
+        <div class="verify-bg-orb orb-2" aria-hidden="true"></div>
+        <div class="verify-bg-orb orb-3" aria-hidden="true"></div>
+        <div class="verify-glass-card verify-animate-in">
+            <div class="verify-header-badge">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                Identity verified
+            </div>
+            <div class="verify-inner">
+                <div class="verify-success-wrapper">
+                    <div class="verify-ring verify-ring-1"></div>
+                    <div class="verify-ring verify-ring-2"></div>
+                    <div class="verify-ring verify-ring-3"></div>
+                    <div class="verify-success-circle">
+                        <span class="material-symbols-outlined">check</span>
+                    </div>
+                </div>
+                <h1 class="verify-title">Identity <strong>Verified</strong></h1>
+                <div class="verify-status-container">
+                    <div class="verify-status-text">
+                        <span>Entering the interview room</span>
+                        <span class="verify-loading-dots">
+                            <span>.</span><span>.</span><span>.</span>
+                        </span>
+                    </div>
+                    <div class="verify-progress-bg">
+                        <div class="verify-progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/devprep/js/pages/entry-verify.js?v=t2BTKjvAFBxFKhgRqpmlYas3ccO4wJHPa4O25Dp49Us"></script>
+</body>
+</html>

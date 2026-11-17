@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head><script>window.__DP={root:"/devprep",role:"admin",page:"/Admin/ReportedFeedback?page=1&feedbackType=All&status=All&reasonCode=All"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reported Feedback - DevPrep Admin</title>
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+    <link rel="stylesheet" href="/devprep/css/components/pagination.css?v=M4UFAnJj6vGhEF9H66VZXLMHxUzMETNEdKjlPhUQjfQ" />
+    <link rel="stylesheet" href="/devprep/css/components/safe-text.css?v=vF4FTX13Xo9ixUzo-_hfdjiH7SvKNn3SH_5mwM8CJYU" />
+    <link rel="stylesheet" href="/devprep/css/components/star-rating.css?v=BT2RlOl2f37V94S6NnR3Izd1uX7amAJ9Cer0k052PNU" />
+    <link rel="stylesheet" href="/devprep/css/pages/reported-feedback.css?v=Q7v9NRFEyLUgPnjBxG8IT1yh3sEAjqXB2i8hYp01WL0" />
+    <link rel="stylesheet" href="/devprep/css/pages/admin-reported-feedback.css?v=hhdJ0fM8oZBM8MKdJC3FISuWhsIiisisK4OjpqIz-iw" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+</head>
+<body class="reported-feedback-admin-page admin-reported-feedback-page">
+    <header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="ad-user">
+            <button class="ad-avatar" id="ad-avatar-btn" type="button" title="admin@devprep.demo" aria-haspopup="true" aria-expanded="false">A</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">A</span>
+                    <span class="ad-dropdown-email">admin@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmY8eSYahM-DwzywV864QP6ciGTrroGlCeBpn_Ahzcz66_ojM_uwrcMRGKo-rQ11zmoR7ErrGFVdEflvYozEKLPs63AVsu1Zq41Wp5IH8AptLGfOefZCJ68ZjMgRORpcpzsswcm7Gpd7C4e-dcNKWt6fW1GL_liulyAH31VdyoXeVQ" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('ad-avatar-btn');
+        const menu = document.getElementById('ad-user');
+        if (btn && menu) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const open = menu.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', function (e) {
+                if (!menu.contains(e.target)) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+            });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.classList.remove('open'); });
+        }
+    })();
+</script>
+
+    <aside class="ad-sidebar">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Admin Dashboard</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item" href="/devprep/admin/"><span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/questions/"><span class="material-symbols-outlined">quiz</span><span class="label">Question Bank</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/techstacks/"><span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/positions/"><span class="material-symbols-outlined">work</span><span class="label">Positions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/user/"><span class="material-symbols-outlined">group</span><span class="label">Users</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/interviewsessions/"><span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/payment/payments/"><span class="material-symbols-outlined">payments</span><span class="label">Payments</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/payment/packages/"><span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/credits/"><span class="material-symbols-outlined">price_change</span><span class="label">Credit Adjust</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/aifeedback/"><span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/systemfeedback/"><span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span></a>
+        <a class="ad-nav-item active" href="/devprep/admin/reportedfeedback/"><span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/news/"><span class="material-symbols-outlined">newspaper</span><span class="label">News</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/announcements/"><span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span></a>
+    </nav>
+</aside>
+
+
+    <main class="reported-feedback-main">
+        <header class="reported-feedback-page-header">
+            <div>
+                <p>Feedback management</p>
+                <h1>Reported Feedback</h1>
+                <span>Review community reports, dismiss invalid reports, or remove feedback that violates the standards.</span>
+            </div>
+        </header>
+
+
+        
+
+<form method="get" action="/devprep/admin/reportedfeedback/" class="reported-feedback-filters">
+    <label>
+        <span>Feedback type</span>
+        <select name="feedbackType">
+            <option value="All" selected="selected">All</option>
+            <option value="System">System</option>
+            <option value="Interview">AI Feedback</option>
+        </select>
+    </label>
+    <label>
+        <span>Status</span>
+        <select name="status">
+            <option value="All" selected="selected">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Dismissed">Dismissed</option>
+            <option value="ResolvedByFeedbackDeletion">Resolved by Feedback Deletion</option>
+        </select>
+    </label>
+    <label>
+        <span>Reason</span>
+        <select name="reasonCode">
+            <option value="All" selected="selected">All</option>
+                <option value="HarassmentOrPersonalAttack">Harassment or personal attack</option>
+                <option value="HateOrDiscrimination">Hate or discrimination</option>
+                <option value="ThreatsOrViolence">Threats or violent content</option>
+                <option value="SexualOrInappropriateContent">Sexual or inappropriate content</option>
+                <option value="SpamOrMisleading">Spam, scam, or misleading information</option>
+                <option value="PrivacyOrPersonalInformation">Privacy or personal information</option>
+                <option value="OffTopicOrIrrelevant">Off-topic or irrelevant content</option>
+                <option value="Other">Other</option>
+        </select>
+    </label>
+    <label class="reported-feedback-search">
+        <span>Keyword</span>
+        <span class="reported-feedback-search-control">
+            <input type="search" name="keyword" value="" placeholder="Search content or report details" />
+            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+        </span>
+    </label>
+    <button type="submit" class="reported-feedback-filter-submit">Apply filters</button>
+</form>
+
+<section class="reported-feedback-list-card" aria-labelledby="reported-feedback-list-title">
+    <header class="reported-feedback-list-header">
+        <div>
+            <p>Moderation queue</p>
+            <h2 id="reported-feedback-list-title">Feedback reports</h2>
+        </div>
+        <span>4 total</span>
+    </header>
+
+        <div class="reported-feedback-table-wrap">
+            <table class="reported-feedback-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Feedback</th>
+                        <th>Report details</th>
+                        <th>Date</th>
+                        <th>Reports</th>
+                        <th class="reported-feedback-actions-heading">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td data-label="Type">
+                                <span class="report-badge report-type-system">
+                                    System
+                                </span>
+                            </td>
+                            <td data-label="Reason">
+                                <strong class="report-reason safe-long-text">Spam or advertising</strong>
+                            </td>
+                            <td data-label="Status">
+                                <span class="report-badge report-status-pending">Pending</span>
+                                <small class="report-target-state">Public</small>
+                            </td>
+                            <td data-label="Feedback">
+                                <p class="report-content-preview safe-long-text">Giao di&#x1EC7;n d&#x1EC5; d&#xF9;ng, ph&#x1EA7;n b&#xE1;o c&#xE1;o sau ph&#x1ECF;ng v&#x1EA5;n r&#x1EA5;t chi ti&#x1EBF;t.</p>
+                            </td>
+                            <td data-label="Report details">
+                                <p class="report-content-preview safe-long-text">N&#x1ED9;i dung n&#xE0;y kh&#xF4;ng li&#xEA;n quan &#x111;&#x1EBF;n tr&#x1EA3;i nghi&#x1EC7;m s&#x1EED; d&#x1EE5;ng.</p>
+                            </td>
+                            <td data-label="Date"><time datetime="2026-11-15T09:30:00.0000000Z">Nov 15, 2026</time></td>
+                            <td data-label="Reports"><span class="report-count">1</span></td>
+                            <td data-label="Actions" class="reported-feedback-actions-cell">
+                                <div class="reported-feedback-row-actions">
+                                    <a class="report-icon-action report-view-action"
+                                       href="/devprep/admin/reportedfeedback/?page=1&amp;feedbackType=All&amp;status=All&amp;reasonCode=All&amp;reportId=59bb614e-3740-585c-906e-6f86ec296e79"
+                                       title="View Details"
+                                       aria-label="View details for report 59bb614e-3740-585c-906e-6f86ec296e79">
+                                        <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+                                    </a>
+                                        <button type="button"
+                                                class="report-icon-action report-dismiss-action"
+                                                data-report-dismiss
+                                                data-report-id="59bb614e-3740-585c-906e-6f86ec296e79"
+                                                data-report-reason="Spam or advertising"
+                                                title="Dismiss Report"
+                                                aria-label="Dismiss report 59bb614e-3740-585c-906e-6f86ec296e79">
+                                            <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                                        </button>
+                                        <button type="button"
+                                                class="report-icon-action report-delete-action"
+                                                data-report-delete
+                                                data-report-id="59bb614e-3740-585c-906e-6f86ec296e79"
+                                                data-report-reason="Spam or advertising"
+                                                title="Delete Feedback"
+                                                aria-label="Delete feedback reported by report 59bb614e-3740-585c-906e-6f86ec296e79">
+                                            <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+                                        </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Type">
+                                <span class="report-badge report-type-interview">
+                                    AI Feedback
+                                </span>
+                            </td>
+                            <td data-label="Reason">
+                                <strong class="report-reason safe-long-text">Offensive language</strong>
+                            </td>
+                            <td data-label="Status">
+                                <span class="report-badge report-status-pending">Pending</span>
+                                <small class="report-target-state">Public</small>
+                            </td>
+                            <td data-label="Feedback">
+                                <p class="report-content-preview safe-long-text">Ch&#x1EBF; &#x111;&#x1ED9; gi&#x1ECD;ng n&#xF3;i kh&#xE1; th&#x1EAD;t, mong c&#xF3; th&#xEA;m c&#xE2;u h&#x1ECF;i v&#x1EC1; Frontend.</p>
+                            </td>
+                            <td data-label="Report details">
+                                <p class="report-content-preview safe-long-text">No additional details.</p>
+                            </td>
+                            <td data-label="Date"><time datetime="2026-11-14T09:30:00.0000000Z">Nov 14, 2026</time></td>
+                            <td data-label="Reports"><span class="report-count">2</span></td>
+                            <td data-label="Actions" class="reported-feedback-actions-cell">
+                                <div class="reported-feedback-row-actions">
+                                    <a class="report-icon-action report-view-action"
+                                       href="/devprep/admin/reportedfeedback/?page=1&amp;feedbackType=All&amp;status=All&amp;reasonCode=All&amp;reportId=7f5e9a72-09c5-5d51-bbed-ac84ad7166b3"
+                                       title="View Details"
+                                       aria-label="View details for report 7f5e9a72-09c5-5d51-bbed-ac84ad7166b3">
+                                        <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+                                    </a>
+                                        <button type="button"
+                                                class="report-icon-action report-dismiss-action"
+                                                data-report-dismiss
+                                                data-report-id="7f5e9a72-09c5-5d51-bbed-ac84ad7166b3"
+                                                data-report-reason="Offensive language"
+                                                title="Dismiss Report"
+                                                aria-label="Dismiss report 7f5e9a72-09c5-5d51-bbed-ac84ad7166b3">
+                                            <span class="material-symbols-outlined" aria-hidden="true">check_circle</span>
+                                        </button>
+                                        <button type="button"
+                                                class="report-icon-action report-delete-action"
+                                                data-report-delete
+                                                data-report-id="7f5e9a72-09c5-5d51-bbed-ac84ad7166b3"
+                                                data-report-reason="Offensive language"
+                                                title="Delete Feedback"
+                                                aria-label="Delete feedback reported by report 7f5e9a72-09c5-5d51-bbed-ac84ad7166b3">
+                                            <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+                                        </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Type">
+                                <span class="report-badge report-type-system">
+                                    System
+                                </span>
+                            </td>
+                            <td data-label="Reason">
+                                <strong class="report-reason safe-long-text">Off-topic</strong>
+                            </td>
+                            <td data-label="Status">
+                                <span class="report-badge report-status-dismissed">Dismissed</span>
+                                <small class="report-target-state">Public</small>
+                            </td>
+                            <td data-label="Feedback">
+                                <p class="report-content-preview safe-long-text">Luy&#x1EC7;n v&#xE0;i bu&#x1ED5;i l&#xE0; th&#x1EA5;y t&#x1EF1; tin h&#x1A1;n h&#x1EB3;n khi &#x111;i ph&#x1ECF;ng v&#x1EA5;n th&#x1EAD;t.</p>
+                            </td>
+                            <td data-label="Report details">
+                                <p class="report-content-preview safe-long-text">N&#x1ED9;i dung n&#xE0;y kh&#xF4;ng li&#xEA;n quan &#x111;&#x1EBF;n tr&#x1EA3;i nghi&#x1EC7;m s&#x1EED; d&#x1EE5;ng.</p>
+                            </td>
+                            <td data-label="Date"><time datetime="2026-11-13T09:30:00.0000000Z">Nov 13, 2026</time></td>
+                            <td data-label="Reports"><span class="report-count">1</span></td>
+                            <td data-label="Actions" class="reported-feedback-actions-cell">
+                                <div class="reported-feedback-row-actions">
+                                    <a class="report-icon-action report-view-action"
+                                       href="/devprep/admin/reportedfeedback/?page=1&amp;feedbackType=All&amp;status=All&amp;reasonCode=All&amp;reportId=829b52c4-809e-5c50-a643-a1e5b5f8c3af"
+                                       title="View Details"
+                                       aria-label="View details for report 829b52c4-809e-5c50-a643-a1e5b5f8c3af">
+                                        <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="Type">
+                                <span class="report-badge report-type-interview">
+                                    AI Feedback
+                                </span>
+                            </td>
+                            <td data-label="Reason">
+                                <strong class="report-reason safe-long-text">Other</strong>
+                            </td>
+                            <td data-label="Status">
+                                <span class="report-badge report-status-resolved">Resolved</span>
+                                <small class="report-target-state">Deleted</small>
+                            </td>
+                            <td data-label="Feedback">
+                                <p class="report-content-preview safe-long-text">Thanh to&#xE1;n VNPay nhanh, nh&#x1EAD;n credit ngay.</p>
+                            </td>
+                            <td data-label="Report details">
+                                <p class="report-content-preview safe-long-text">No additional details.</p>
+                            </td>
+                            <td data-label="Date"><time datetime="2026-11-12T09:30:00.0000000Z">Nov 12, 2026</time></td>
+                            <td data-label="Reports"><span class="report-count">2</span></td>
+                            <td data-label="Actions" class="reported-feedback-actions-cell">
+                                <div class="reported-feedback-row-actions">
+                                    <a class="report-icon-action report-view-action"
+                                       href="/devprep/admin/reportedfeedback/?page=1&amp;feedbackType=All&amp;status=All&amp;reasonCode=All&amp;reportId=2b45aa4e-522c-5777-aaad-3d405985f473"
+                                       title="View Details"
+                                       aria-label="View details for report 2b45aa4e-522c-5777-aaad-3d405985f473">
+                                        <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+
+    <footer class="reported-feedback-list-footer">
+        <span>Page 1 of 1</span>
+        
+    </footer>
+</section>
+
+    </main>
+
+    
+
+
+        <div class="report-resolution-modal" data-resolution-modal="dismiss" hidden>
+            <div class="report-resolution-backdrop" data-resolution-close></div>
+            <section role="dialog" aria-modal="true" aria-labelledby="dismiss-resolution-title" class="report-resolution-dialog">
+                <header>
+                    <div>
+                        <p>Admin action</p>
+                        <h2 id="dismiss-resolution-title">Dismiss report</h2>
+                    </div>
+                    <button type="button" data-resolution-close aria-label="Close Dismiss report">
+                        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                    </button>
+                </header>
+                <p>The report will be marked as dismissed. The feedback will remain public.</p>
+                <div class="report-resolution-target safe-long-text" data-resolution-target></div>
+                <form method="post" data-resolution-form action="/devprep/admin/dismissfeedbackreport/">
+                    
+                    <input type="hidden" name="reportId" data-resolution-report-id />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="feedbackType" value="All" />
+                    <input type="hidden" name="status" value="All" />
+                    <input type="hidden" name="reasonCode" value="All" />
+                    <input type="hidden" name="keyword" value="" />
+                    <label for="dismiss-resolution-note">Resolution note <span>(optional)</span></label>
+                    <textarea id="dismiss-resolution-note" name="ResolutionNote" maxlength="1000" rows="4" data-resolution-note></textarea>
+                    <div class="feedback-field-meta">
+                        <span></span>
+                        <span class="feedback-character-counter" data-resolution-counter>0 / 1000</span>
+                    </div>
+                    <div class="report-resolution-actions">
+                        <button type="button" class="resolution-cancel" data-resolution-close>Cancel</button>
+                        <button type="submit" class="resolution-submit dismiss" data-resolution-submit data-pending-text="Working...">Dismiss Report</button>
+                    </div>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmY8eSYahM-DwzywV864QP6ciGTrroGlCeBpn_Ahzcz66_ojM_uwrcMRGKo-rQ11zmoR7ErrGFVdEflvYozEKLPs63AVsu1Zq41Wp5IH8AptLGfOefZCJ68ZjMgRORpcpzsswcm7Gpd7C4e-dcNKWt6fW1GL_liulyAH31VdyoXeVQ" /></form>
+            </section>
+        </div>
+        <div class="report-resolution-modal" data-resolution-modal="delete" hidden>
+            <div class="report-resolution-backdrop" data-resolution-close></div>
+            <section role="dialog" aria-modal="true" aria-labelledby="delete-resolution-title" class="report-resolution-dialog">
+                <header>
+                    <div>
+                        <p>Admin action</p>
+                        <h2 id="delete-resolution-title">Delete reported feedback</h2>
+                    </div>
+                    <button type="button" data-resolution-close aria-label="Close Delete reported feedback">
+                        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                    </button>
+                </header>
+                <p>The feedback will be removed from public view. Every Pending report for the same feedback will be resolved.</p>
+                <div class="report-resolution-target safe-long-text" data-resolution-target></div>
+                <form method="post" data-resolution-form action="/devprep/admin/deletereportedfeedback/">
+                    
+                    <input type="hidden" name="reportId" data-resolution-report-id />
+                    <input type="hidden" name="page" value="1" />
+                    <input type="hidden" name="feedbackType" value="All" />
+                    <input type="hidden" name="status" value="All" />
+                    <input type="hidden" name="reasonCode" value="All" />
+                    <input type="hidden" name="keyword" value="" />
+                    <label for="delete-resolution-note">Resolution note <span>(optional)</span></label>
+                    <textarea id="delete-resolution-note" name="ResolutionNote" maxlength="1000" rows="4" data-resolution-note></textarea>
+                    <div class="feedback-field-meta">
+                        <span></span>
+                        <span class="feedback-character-counter" data-resolution-counter>0 / 1000</span>
+                    </div>
+                    <div class="report-resolution-actions">
+                        <button type="button" class="resolution-cancel" data-resolution-close>Cancel</button>
+                        <button type="submit" class="resolution-submit delete" data-resolution-submit data-pending-text="Working...">Delete Feedback</button>
+                    </div>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmY8eSYahM-DwzywV864QP6ciGTrroGlCeBpn_Ahzcz66_ojM_uwrcMRGKo-rQ11zmoR7ErrGFVdEflvYozEKLPs63AVsu1Zq41Wp5IH8AptLGfOefZCJ68ZjMgRORpcpzsswcm7Gpd7C4e-dcNKWt6fW1GL_liulyAH31VdyoXeVQ" /></form>
+            </section>
+        </div>
+
+    <script src="/devprep/js/components/pagination.js?v=xrGZq72yiV_DXrHl7wwZhf11yIfFLL7Wc_1Ym04JDoc"></script>
+    <script src="/devprep/js/pages/admin-reported-feedback.js?v=bCEVReQoVYL_d89ZuFBJ7JspDJLAhxe_4cV4J8nHSNY"></script>
+</body>
+</html>

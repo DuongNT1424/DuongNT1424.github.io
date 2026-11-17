@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"guest",page:"/Auth/Register"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register | DevPrep AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/devprep/css/register.css?v=t7Igsxcq-VA-xF_PXRRr1IRok4p1G5nlRbppNyvGQPY" />
+</head>
+<body class="register-page d-flex align-items-center justify-content-center min-vh-100 p-3">
+    <!-- Ambient Background Decorations -->
+    <div class="ambient-blob blob-purple"></div>
+    <div class="ambient-blob blob-cyan"></div>
+
+    <!-- Registration Card -->
+    <main class="glass-card">
+        <!-- Logo & Header -->
+        <header class="reg-header text-center">
+            <h2 class="reg-title">Create Your Account</h2>
+            <p class="reg-subtitle">Start your journey to landing your dream engineering role.</p>
+        </header>
+
+        <!-- Form -->
+        <form method="post" class="reg-form" novalidate action="/devprep/auth/register/">
+            <!-- Server / model-level errors (e.g. email already registered, gateway down) -->
+            
+
+            <!-- Full Name -->
+            <div class="reg-field">
+                <label class="reg-label" for="FullName">Full Name</label>
+                <div class="reg-input-group">
+                    <span class="material-symbols-outlined reg-input-icon">person</span>
+                    <input class="form-control reg-input" placeholder="Linus Torvalds" type="text" autocomplete="name" data-val="true" data-val-length="Full name must be between 2 and 150 characters." data-val-length-max="150" data-val-length-min="2" data-val-required="Full name is required." id="FullName" maxlength="150" name="FullName" value="">
+                </div>
+                <span class="reg-field-error field-validation-valid" data-valmsg-for="FullName" data-valmsg-replace="true"></span>
+            </div>
+
+            <!-- Email -->
+            <div class="reg-field">
+                <label class="reg-label" for="Email">Email Address</label>
+                <div class="reg-input-group">
+                    <span class="material-symbols-outlined reg-input-icon">mail</span>
+                    <input class="form-control reg-input" placeholder="dev@example.com" type="email" autocomplete="email" data-val="true" data-val-email="Email is not a valid email address." data-val-length="Email must not exceed 256 characters." data-val-length-max="256" data-val-required="Email is required." id="Email" maxlength="256" name="Email" value="">
+                </div>
+                <span class="reg-field-error field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="reg-field">
+                <label class="reg-label" for="Password">Password</label>
+                <div class="reg-input-group">
+                    <span class="material-symbols-outlined reg-input-icon">lock</span>
+                    <input class="form-control reg-input has-eye" placeholder="••••••••" type="password" autocomplete="new-password" data-val="true" data-val-length="Password must be between 8 and 100 characters." data-val-length-max="100" data-val-length-min="8" data-val-regex="Password must contain at least one uppercase letter, one lowercase letter and one digit." data-val-regex-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).&#x2B;$" data-val-required="Password is required." id="Password" maxlength="100" name="Password">
+                    <button class="reg-eye-btn" onclick="togglePassword('Password')" type="button">
+                        <span class="material-symbols-outlined" id="eye-Password">visibility_off</span>
+                    </button>
+                </div>
+                <span class="reg-field-error field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                <!-- Password requirements checklist (hiện khi focus ô Password) -->
+                <div class="pw-reqs" id="pw-reqs">
+                    <p class="pw-reqs-title">Password must contain:</p>
+                    <ul class="pw-reqs-list">
+                        <li class="pw-req" data-rule="len"><span class="material-symbols-outlined pw-req-icon">radio_button_unchecked</span><span>At least 8 characters</span></li>
+                        <li class="pw-req" data-rule="upper"><span class="material-symbols-outlined pw-req-icon">radio_button_unchecked</span><span>One uppercase letter (A-Z)</span></li>
+                        <li class="pw-req" data-rule="lower"><span class="material-symbols-outlined pw-req-icon">radio_button_unchecked</span><span>One lowercase letter (a-z)</span></li>
+                        <li class="pw-req" data-rule="digit"><span class="material-symbols-outlined pw-req-icon">radio_button_unchecked</span><span>One number (0-9)</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="reg-field">
+                <label class="reg-label" for="ConfirmPassword">Confirm Password</label>
+                <div class="reg-input-group">
+                    <span class="material-symbols-outlined reg-input-icon ">lock_reset</span>
+                    <input class="form-control reg-input has-eye " type="password" autocomplete="new-password" data-val="true" data-val-equalto="Passwords do not match" data-val-equalto-other="*.Password" data-val-required="Confirm password is required." id="ConfirmPassword" name="ConfirmPassword">
+                    <button class="reg-eye-btn" onclick="togglePassword('ConfirmPassword')" type="button">
+                        <span class="material-symbols-outlined">visibility_off</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Primary Action -->
+            <button type="submit" class="reg-btn-primary">Create Account</button>
+
+            <!-- Divider -->
+            <div class="reg-divider">
+                <div class="line"></div>
+                <span class="txt">or continue with</span>
+                <div class="line"></div>
+            </div>
+
+            <!-- SSO Buttons -->
+            <div class="reg-sso-grid">
+                <button type="button" class="reg-sso-btn" id="btn-google">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"></path>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"></path>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="currentColor"></path>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor"></path>
+                    </svg>
+                    <span>Google</span>
+                </button>
+                <button type="button" class="reg-sso-btn" id="btn-github">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.24.73-.53v-1.84c-3.03.66-3.67-1.46-3.67-1.46-.5-1.24-1.21-1.58-1.21-1.58-1-.67.08-.65.08-.65 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.58 1.2 3.2 0.9.1-.7.38-1.2.69-1.48-2.42-.27-4.97-1.2-4.97-5.38 0-1.19.43-2.17 1.14-2.94-.12-.27-.5-1.38.1-2.9 0 0 .92-.29 3 1.12a10.4 10.4 0 015.5 0c2.1-1.4 3.02-1.12 3.02-1.12.6 1.52.22 2.63.1 2.9.71.77 1.14 1.75 1.14 2.94 0 4.19-2.55 5.1-4.98 5.37.4.34.75 1.02.75 2.06v3.06c0 .3.18.63.74.52a11 11 0 00-3.5-21.46z" fill="currentColor"></path>
+                    </svg>
+                    <span>GitHub</span>
+                </button>
+            </div>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmawnxWOgN9bW8_xysnb4fS7hdipsY_jLz7zBDPXH5R86UOXglIlqTlvo8OfoRyyjHnKA3vsaXkm3MwIYLhYwQoMYNUveUX0DGYtxvJLlYmOYV_8SdLZAOL5kqRpLVllwVo" /></form>
+
+        <!-- Footer -->
+        <footer class="reg-footer text-center">
+            <p>
+                Already have an account?
+                <a href="/devprep/auth/login/">Sign In</a>
+            </p>
+        </footer>
+    </main>
+
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('.material-symbols-outlined');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.innerText = "visibility";
+            } else {
+                input.type = "password";
+                icon.innerText = "visibility_off";
+            }
+        }
+
+        // Subtle parallax on ambient blobs following the cursor.
+        document.addEventListener('mousemove', (e) => {
+            const blobs = document.querySelectorAll('.ambient-blob');
+            const x = (e.clientX / window.innerWidth - 0.5) * 50;
+            const y = (e.clientY / window.innerHeight - 0.5) * 50;
+            blobs[0].style.transform = `translate(${x}px, ${y}px)`;
+            blobs[1].style.transform = `translate(${-x}px, ${-y}px)`;
+        });
+
+        // Password requirements checklist
+        (function () {
+            const pw = document.getElementById('Password');
+            const panel = document.getElementById('pw-reqs');
+            if (!pw || !panel) return;
+            const rules = {
+                len: v => v.length >= 8,
+                upper: v => /[A-Z]/.test(v),
+                lower: v => /[a-z]/.test(v),
+                digit: v => /[0-9]/.test(v)
+            };
+            function update() {
+                const v = pw.value;
+                panel.querySelectorAll('.pw-req').forEach(function (li) {
+                    const ok = rules[li.getAttribute('data-rule')](v);
+                    li.classList.toggle('met', ok);
+                    li.querySelector('.pw-req-icon').textContent = ok ? 'check_circle' : 'radio_button_unchecked';
+                });
+            }
+            pw.addEventListener('focus', function () { panel.classList.add('show'); });
+            pw.addEventListener('input', update);
+            pw.addEventListener('blur', function () { if (!pw.value) panel.classList.remove('show'); });
+            update();
+        })();
+    </script>
+
+    <form method="post" id="sso-form" class="d-none" action="/devprep/auth/ssofirebase/">
+    <input type="hidden" name="idToken" id="sso-idtoken" />
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmawnxWOgN9bW8_xysnb4fS7hdipsY_jLz7zBDPXH5R86UOXglIlqTlvo8OfoRyyjHnKA3vsaXkm3MwIYLhYwQoMYNUveUX0DGYtxvJLlYmOYV_8SdLZAOL5kqRpLVllwVo" /></form>
+
+<div class="sso-modal" id="sso-modal" role="dialog" aria-modal="true" aria-labelledby="sso-modal-title">
+    <div class="sso-modal-box">
+        <div class="sso-modal-icon" id="sso-modal-icon">
+            <span class="material-symbols-outlined">link</span>
+        </div>
+        <h3 class="sso-modal-title" id="sso-modal-title">Account already exists</h3>
+        <p class="sso-modal-text" id="sso-modal-text"></p>
+        <button type="button" class="sso-modal-btn" id="sso-modal-ok">Got it</button>
+    </div>
+</div>
+
+<style>
+    .sso-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        background: rgba(0, 0, 0, .65);
+        backdrop-filter: blur(4px);
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .sso-modal.open { display: flex; }
+    .sso-modal-box {
+        width: 100%;
+        max-width: 420px;
+        background: #171b2e;
+        border: 1px solid rgba(255, 255, 255, .08);
+        border-radius: 1rem;
+        padding: 28px 26px 24px;
+        text-align: center;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, .5);
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #e5e1e7;
+    }
+    .sso-modal-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(129, 140, 248, .12);
+        color: #818cf8;
+    }
+    .sso-modal-icon .material-symbols-outlined { font-size: 26px; }
+    .sso-modal-icon.is-error { background: rgba(248, 113, 113, .12); color: #f87171; }
+    .sso-modal-title { font-size: 18px; font-weight: 700; margin: 0 0 10px; color: #e5e1e7; }
+    .sso-modal-text { font-size: 14px; line-height: 21px; color: #9ca3af; margin: 0 0 22px; }
+    .sso-modal-text strong { color: #e5e1e7; font-weight: 600; }
+    .sso-modal-btn {
+        width: 100%;
+        padding: 11px 0;
+        border: none;
+        border-radius: .5rem;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity .15s;
+    }
+    .sso-modal-btn:hover { opacity: .88; }
+    .sso-modal-btn:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; }
+</style>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+        getAuth, GoogleAuthProvider, GithubAuthProvider, signInWithPopup,
+        fetchSignInMethodsForEmail, linkWithCredential
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const app = initializeApp({
+        apiKey: "REMOVED_GOOGLE_API_KEY",
+        authDomain: "devprep-6872e.firebaseapp.com",
+        projectId: "devprep-6872e",
+        appId: "1:5087839335:web:3c52a527f1fe746643c0c2"
+    });
+    const auth = getAuth(app);
+    const providers = { google: new GoogleAuthProvider(), github: new GithubAuthProvider() };
+    const providerByMethod = { "google.com": providers.google, "github.com": providers.github };
+    const niceName = { "google.com": "Google", "github.com": "GitHub" };
+
+    // Credential waiting to be linked, set when account-exists is raised. It has to survive
+    // between the two button presses, so it lives outside ssoLogin().
+    let pendingCred = null;
+
+    const modal = document.getElementById('sso-modal');
+    const modalIcon = document.getElementById('sso-modal-icon');
+    const modalTitle = document.getElementById('sso-modal-title');
+    const modalText = document.getElementById('sso-modal-text');
+    const modalOk = document.getElementById('sso-modal-ok');
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showModal(title, html, isError) {
+        modalTitle.textContent = title;
+        modalText.innerHTML = html;
+        modalIcon.classList.toggle('is-error', !!isError);
+        modalIcon.querySelector('.material-symbols-outlined').textContent = isError ? 'error' : 'link';
+        modal.classList.add('open');
+        modalOk.focus();
+    }
+    function closeModal() { modal.classList.remove('open'); }
+
+    modalOk.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function submitToken(idToken) {
+        document.getElementById('sso-idtoken').value = idToken;
+        document.getElementById('sso-form').submit();
+    }
+
+    function pendingCredentialFromError(error) {
+        return GithubAuthProvider.credentialFromError(error) || GoogleAuthProvider.credentialFromError(error);
+    }
+
+    // No popup is opened here on purpose: a popup not started by a user gesture is blocked.
+    // The credential is stored and the user is asked to press the original provider button.
+    async function handleAccountExists(error) {
+        const email = error.customData && error.customData.email;
+        pendingCred = pendingCredentialFromError(error);
+
+        let methods = [];
+        try { methods = await fetchSignInMethodsForEmail(auth, email); } catch (_) { }
+        const existingMethod = methods.find(m => providerByMethod[m]) || "google.com";
+        const nice = niceName[existingMethod] || existingMethod;
+
+        showModal(
+            'Account already exists',
+            'The email <strong>' + escapeHtml(email || '') + '</strong> is already registered with '
+            + '<strong>' + escapeHtml(nice) + '</strong>.<br><br>'
+            + 'Please sign in with ' + escapeHtml(nice) + ' — the other provider will be linked to '
+            + 'this account automatically.',
+            false
+        );
+    }
+
+    async function ssoLogin(key, button) {
+        const original = button ? button.innerHTML : null;
+        try {
+            if (button) button.disabled = true;
+            const result = await signInWithPopup(auth, providers[key]);
+
+            // Just signed in with the original provider and a credential is waiting -> link it.
+            if (pendingCred) {
+                try { await linkWithCredential(result.user, pendingCred); } catch (_) { }
+                pendingCred = null;
+            }
+
+            submitToken(await result.user.getIdToken());
+        } catch (e) {
+            if (button) { button.disabled = false; if (original) button.innerHTML = original; }
+            if (e && e.code === 'auth/popup-closed-by-user') return;
+            if (e && e.code === 'auth/account-exists-with-different-credential') {
+                await handleAccountExists(e);
+                return;
+            }
+            console.error('SSO error', e);
+            showModal('Sign-in failed', escapeHtml((e && (e.message || e.code)) || e), true);
+        }
+    }
+
+    const g = document.getElementById('btn-google');
+    const h = document.getElementById('btn-github');
+    if (g) g.addEventListener('click', () => ssoLogin('google', g));
+    if (h) h.addEventListener('click', () => ssoLogin('github', h));
+</script>
+
+</body>
+</html>

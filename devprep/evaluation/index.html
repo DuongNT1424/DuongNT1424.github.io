@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"candidate",page:"/Interview/History"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview History - DevPrep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/devprep/css/home.css?v=mcMqDn_6BfFP-pQrrZyhSiDAGj8l_ir2AicSDip3yWA" />
+    <link rel="stylesheet" href="/devprep/css/pages/interview-layout.css?v=7Lz9kwaSB-NlSvSwcuM2QPboEO2cflH2jYRpkjmWkxM" />
+    
+    <link rel="stylesheet" href="/devprep/css/theme.css?v=v58sQSQIuBX1WB8AW6xV6OXoSQ_iOrMUfkip2I3gNrQ" />
+    <link rel="stylesheet" href="/devprep/css/pages/dashboard.css?v=a8xmjhkeJrY8SwX8WLlXvnG0B8X29LpXW4S3OZxiUl0" />
+    <link rel="stylesheet" href="/devprep/css/pages/history.css?v=nlN_BfosHWoKxp_f7kTSA0d1CzUZptQEwUv7aSvOc4Q" />
+    <link rel="stylesheet" href="/devprep/css/components/safe-text.css?v=vF4FTX13Xo9ixUzo-_hfdjiH7SvKNn3SH_5mwM8CJYU" />
+    <link rel="stylesheet" href="/devprep/css/components/pagination.css?v=M4UFAnJj6vGhEF9H66VZXLMHxUzMETNEdKjlPhUQjfQ" />
+    <link rel="stylesheet" href="/devprep/css/components/feedback-report.css?v=nDN4Hwb5d_1gQkYGgzQswzTKvPbqGhenkqqta0gNY_s" />
+
+</head>
+<body class="interview-layout-page history-page history-list-page">
+    <nav class="hm-navbar" id="hm-navbar">
+    <div class="hm-navbar-inner">
+        <a class="hm-brand" href="/devprep/">DevPrep AI</a>
+
+        <div class="hm-nav-links">
+                <a class="" href="/devprep/">Home</a>
+                <a class="active" aria-current="page" href="/devprep/interview/">Interview</a>
+                <a class="" href="/devprep/payment/">Payment</a>
+                <a class="" href="/devprep/news/">News</a>
+                <a class="" href="/devprep/feedback/system/">System Feedback</a>
+                <a class="" href="/devprep/feedback/ai/">AI Feedback</a>
+        </div>
+
+        <div class="hm-nav-actions">
+                
+<div class="hm-user-menu" id="hm-user-menu">
+    <button class="hm-avatar"
+            id="hm-avatar-btn"
+            type="button"
+            aria-haspopup="menu"
+            aria-controls="hm-dropdown"
+            aria-expanded="false"
+            title="candidate@devprep.demo">
+        C
+    </button>
+    <div class="hm-dropdown" id="hm-dropdown" role="menu">
+        <div class="hm-dropdown-head">
+            <span class="hm-dropdown-avatar">
+                C
+            </span>
+            <span class="hm-dropdown-email">candidate@devprep.demo</span>
+        </div>
+            <a class="hm-dropdown-item hm-dropdown-credits" role="menuitem" href="/devprep/profile/credithistory/">
+                <span class="material-symbols-outlined" style="color:#F9D949; font-variation-settings:'FILL' 1;">toll</span>
+                Credits
+                <span class="hm-credit-value" id="hm-credit-value">&hellip;</span>
+            </a>
+        <a class="hm-dropdown-item" role="menuitem" href="/devprep/profile/">
+            <span class="material-symbols-outlined">person</span> View Profile
+        </a>
+        <form method="post" class="m-0" action="/devprep/auth/login/">
+            <button type="submit" class="hm-dropdown-item hm-dropdown-logout" role="menuitem">
+                <span class="material-symbols-outlined">logout</span> Logout
+            </button>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb_b1b9wMN-t66ubx496K5Zuw3PmIpOFqUx_P1zczpedkxh2C924ef4W6_Ch6ATtP_dSfiQiv4Doc_jubTsjsiy6mujLgBQpeUtEeTsm9eRCmStGnu4r8jl_7dSV5WggSC2fhFz7tKizQBTV2GcJL50eUHMSZOZayH_AenNtoJTBA" /></form>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const btn = document.getElementById('hm-avatar-btn');
+        const menu = document.getElementById('hm-user-menu');
+
+        if (!btn || !menu || menu.dataset.accountMenuInitialized === 'true') {
+            return;
+        }
+        menu.dataset.accountMenuInitialized = 'true';
+
+        const loadCredits = function () {
+            const creditValue = document.getElementById('hm-credit-value');
+            if (!creditValue) return;
+
+            fetch('/Profile/CreditBalance', { headers: { 'Accept': 'application/json' } })
+                .then(response => response.ok ? response.json() : Promise.reject())
+                .then(data => { creditValue.textContent = Number(data.balance).toLocaleString('en-US'); })
+                .catch(() => { creditValue.textContent = '-'; });
+        };
+
+        const closeMenu = function (restoreFocus) {
+            const wasOpen = menu.classList.contains('open');
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+
+            if (restoreFocus && wasOpen) {
+                btn.focus();
+            }
+        };
+
+        btn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) loadCredits();
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!menu.contains(event.target)) {
+                closeMenu(false);
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeMenu(true);
+            }
+        });
+
+        window.addEventListener('pagehide', function () {
+            closeMenu(false);
+        });
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) closeMenu(false);
+        });
+    })();
+</script>
+                    </div>
+    </div>
+</nav>
+
+<div id="devprep-ann-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(4,7,18,.62); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:16px;">
+    <div style="width:100%; max-width:460px; background:#1a1f30; border:1px solid rgba(255,255,255,.1); border-top:1px solid rgba(255,255,255,.18); border-radius:16px; box-shadow:0 30px 70px rgba(0,0,0,.6); overflow:hidden; font-family:Inter,system-ui,sans-serif; color:#e5e1e7;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px 12px;">
+            <div>
+                <p style="margin:0 0 2px; font:600 10px/1.2 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:#8b5cf6;">Announcement</p>
+                <h2 style="margin:0; font-size:18px; font-weight:800;">📢 DevPrep News</h2>
+            </div>
+            <button type="button" id="devprep-ann-x" aria-label="Close" style="background:none; border:none; color:#9ca3af; font-size:26px; line-height:1; cursor:pointer;">&times;</button>
+        </div>
+        <div id="devprep-ann-list" style="display:flex; flex-direction:column; gap:12px; max-height:48vh; overflow-y:auto; padding:0 20px 4px;"></div>
+        <div style="padding:14px 20px 18px;">
+            <label style="display:flex; align-items:center; gap:9px; margin-bottom:14px; cursor:pointer; font-size:13px; color:#c8c5d0;">
+                <input type="checkbox" id="devprep-ann-hide" style="width:16px; height:16px; accent-color:#6366f1; cursor:pointer;" />
+                Don't show this announcement again
+            </label>
+            <button type="button" id="devprep-ann-ok" style="width:100%; padding:11px; border:none; border-radius:10px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-weight:700; font-size:14px; cursor:pointer;">Got it</button>
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        var overlay = document.getElementById('devprep-ann-overlay');
+        if (!overlay || overlay.dataset.annInit === '1') return;
+        overlay.dataset.annInit = '1';
+
+        var HIDE_KEY = 'devprep-ann-hidden';   // sessionStorage: chỉ sống trong phiên trình duyệt
+        function esc(s) { return (s == null ? '' : String(s)).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+        // Đã tick "không hiển thị nữa" trong phiên này -> bỏ qua hoàn toàn (không cần fetch).
+        try { if (sessionStorage.getItem(HIDE_KEY) === '1') return; } catch (e) { }
+
+        function close() {
+            try { if (document.getElementById('devprep-ann-hide').checked) sessionStorage.setItem(HIDE_KEY, '1'); } catch (e) { }
+            overlay.style.display = 'none';
+        }
+
+        fetch('/Home/Announcements', { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (items) {
+                if (!items || !items.length) return;
+                document.getElementById('devprep-ann-list').innerHTML = items.map(function (a) {
+                    return '<div style="border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:13px 15px; background:rgba(255,255,255,.03);">'
+                        + '<div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:5px;">'
+                        + '<strong style="font-size:14.5px;">' + esc(a.title) + '</strong>'
+                        + '<span style="font-size:11px; opacity:.6; white-space:nowrap;">' + esc(a.createdAt) + '</span></div>'
+                        + '<p style="margin:0; font-size:13px; line-height:1.55; opacity:.85; white-space:pre-wrap;">' + esc(a.content) + '</p></div>';
+                }).join('');
+                overlay.style.display = 'flex';
+                document.getElementById('devprep-ann-ok').addEventListener('click', close);
+                document.getElementById('devprep-ann-x').addEventListener('click', close);
+            })
+            .catch(function () { /* best-effort: lỗi thì không hiện popup */ });
+    })();
+</script>
+
+
+<script>
+    (function () {
+        const nav = document.getElementById('hm-navbar');
+        if (!nav || nav.dataset.navbarInitialized === 'true') return;
+        nav.dataset.navbarInitialized = 'true';
+
+        const syncNavbar = function () {
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(14, 19, 35, 0.9)';
+                nav.style.boxShadow = '0 20px 25px -5px rgba(0,0,0,0.35)';
+            } else {
+                nav.style.backgroundColor = 'rgba(17, 24, 39, 0.6)';
+                nav.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.2)';
+            }
+        };
+
+        window.addEventListener('scroll', syncNavbar, { passive: true });
+        window.addEventListener('pageshow', syncNavbar);
+        syncNavbar();    })();
+</script>
+
+
+    <div class="interview-layout-root">
+        <div class="interview-page-region">
+            <div class="interview-shell-body">
+                
+
+
+    <div class="history-layout">
+        
+<nav class="dash-sidebar">
+    <a class="btn-gradient dash-new-btn" href="/devprep/interview/">
+        <span class="material-symbols-outlined">add</span>
+        <span>New Interview</span>
+    </a>
+
+    <a class="dash-nav-link active is-active" aria-current="page" href="/devprep/interview/history/">
+        <span class="material-symbols-outlined">history</span>
+        <span>Interview History</span>
+    </a>
+
+    <div class="dash-sidebar-label">Recent Sessions</div>
+
+    <div class="dash-session-list"
+         id="recent-session-list"
+         data-url="/devprep/interview/recentsessions/"
+         data-current-session-id=""
+         data-next-page="2"
+         data-has-more="true">
+                <a class="dash-session-item "
+                   href="/devprep/interview/details/79e3ebc2-9b30-5b01-a239-e1bdb8aacf8e/"
+                   data-session-id="79e3ebc2-9b30-5b01-a239-e1bdb8aacf8e">
+                    <span class="dash-session-title">Backend Developer</span>
+                    <span class="dash-session-meta">Junior &middot; Completed &middot; Yesterday</span>
+                </a>
+                <a class="dash-session-item "
+                   href="/devprep/interview/details/0e6910d4-c0ed-5845-9d0e-2a7b2102faac/"
+                   data-session-id="0e6910d4-c0ed-5845-9d0e-2a7b2102faac">
+                    <span class="dash-session-title">AI Engineer</span>
+                    <span class="dash-session-meta">Fresher &middot; Completed &middot; 4d ago</span>
+                </a>
+                <a class="dash-session-item "
+                   href="/devprep/interview/details/3278ce8b-3528-59bb-af66-f3f39fcc8225/"
+                   data-session-id="3278ce8b-3528-59bb-af66-f3f39fcc8225">
+                    <span class="dash-session-title">Backend Developer</span>
+                    <span class="dash-session-meta">Junior &middot; Completed &middot; Nov 10</span>
+                </a>
+                <a class="dash-session-item "
+                   href="/devprep/interview/details/2c9f0223-66fe-5d85-87fc-97eaa9bc0d5e/"
+                   data-session-id="2c9f0223-66fe-5d85-87fc-97eaa9bc0d5e">
+                    <span class="dash-session-title">Fullstack Developer</span>
+                    <span class="dash-session-meta">Junior &middot; Cancelled &middot; Nov 7</span>
+                </a>
+                <a class="dash-session-item "
+                   href="/devprep/interview/details/9acc0096-452f-55fb-8285-6d29c805eb9f/"
+                   data-session-id="9acc0096-452f-55fb-8285-6d29c805eb9f">
+                    <span class="dash-session-title">Data Engineer</span>
+                    <span class="dash-session-meta">Fresher &middot; Completed &middot; Nov 4</span>
+                </a>
+                <a class="dash-session-item "
+                   href="/devprep/interview/details/0005c672-6555-5802-bc27-a2f2505aea84/"
+                   data-session-id="0005c672-6555-5802-bc27-a2f2505aea84">
+                    <span class="dash-session-title">Backend Developer</span>
+                    <span class="dash-session-meta">Middle &middot; Expired &middot; Nov 1</span>
+                </a>
+    </div>
+
+    <div class="dash-recent-state" id="recent-session-state" aria-live="polite"></div>
+</nav>
+
+
+        <main class="history-main-list">
+            <header class="history-list-header">
+                <div>
+                    <p class="history-kicker">Session History</p>
+                    <h1>Completed, cancelled, and expired interviews</h1>
+                </div>
+                <a class="history-ghost-btn" href="/devprep/interview/">
+                    <span class="material-symbols-outlined">add</span> New Interview
+                </a>
+            </header>
+
+
+            <form method="get" class="history-filter-bar" action="/devprep/interview/history/">
+                <label>
+                    <span>Status</span>
+                    <select name="status">
+                        <option value="">All</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                        <option value="Expired">Expired</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Position</span>
+                    <select name="position">
+                        <option value="">All</option>
+                            <option value="AI Engineer">AI Engineer</option>
+                            <option value="Backend Developer">Backend Developer</option>
+                            <option value="Data Engineer">Data Engineer</option>
+                            <option value="DevOps Engineer">DevOps Engineer</option>
+                            <option value="Frontend Developer">Frontend Developer</option>
+                            <option value="Fullstack Developer">Fullstack Developer</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Keyword</span>
+                    <input name="keyword" placeholder="Search title or role" />
+                </label>
+                <input type="hidden" name="pageSize" value="5" />
+                <button type="submit" class="history-filter-btn">
+                    <span class="material-symbols-outlined">filter_alt</span> Apply
+                </button>
+            </form>
+
+                <section class="history-table-shell">
+                    <div class="history-table-head">
+                        <span>Session</span>
+                        <span>Level</span>
+                        <span>Status</span>
+                        <span>Questions</span>
+                        <span>Duration</span>
+                        <span>Timeline</span>
+                        <span class="history-actions-heading">Actions</span>
+                    </div>
+                        <article class="history-row" data-href="/devprep/interview/details/79e3ebc2-9b30-5b01-a239-e1bdb8aacf8e/">
+                            <a class="history-row-main" href="/devprep/interview/details/79e3ebc2-9b30-5b01-a239-e1bdb8aacf8e/">
+                                <strong>Backend Developer</strong>
+                            </a>
+                            <div class="history-cell-center">Junior</div>
+                            <div class="history-cell-center"><span class="history-status status-completed">Completed</span></div>
+                            <div class="history-cell-center">5/5</div>
+                            <div class="history-cell-center">30 min</div>
+                            <div class="history-date">
+                                <span>Created Yesterday</span>
+                                    <span>Ended Nov 16, 2026 07:57</span>
+                            </div>
+                            <div class="history-actions history-cell-center">
+                                <a class="history-action-btn history-icon-action history-view-btn"
+                                   href="/devprep/interview/details/79e3ebc2-9b30-5b01-a239-e1bdb8aacf8e/"
+                                   aria-label="View Details"
+                                   title="View Details">
+                                    <span class="material-symbols-outlined history-action-icon" aria-hidden="true">visibility</span>
+                                </a>
+                                <form method="post" action="/devprep/interview/deletesession/79e3ebc2-9b30-5b01-a239-e1bdb8aacf8e/">
+                                    
+                                    <input type="hidden" name="page" value="1" />
+                                    <input type="hidden" name="pageSize" value="5" />
+                                    <input type="hidden" name="status" />
+                                    <input type="hidden" name="position" />
+                                    <input type="hidden" name="questionType" />
+                                    <input type="hidden" name="keyword" />
+                                    <button type="button"
+                                            class="history-action-btn history-icon-action history-delete-btn"
+                                            data-delete-session-trigger
+                                            data-session-title="Backend Developer"
+                                            aria-label="Delete"
+                                            title="Delete">
+                                        <span class="material-symbols-outlined history-action-icon" aria-hidden="true">delete</span>
+                                    </button>
+                                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb_b1b9wMN-t66ubx496K5Zuw3PmIpOFqUx_P1zczpedkxh2C924ef4W6_Ch6ATtP_dSfiQiv4Doc_jubTsjsiy6mujLgBQpeUtEeTsm9eRCmStGnu4r8jl_7dSV5WggSC2fhFz7tKizQBTV2GcJL50eUHMSZOZayH_AenNtoJTBA" /></form>
+                            </div>
+                        </article>
+                        <article class="history-row" data-href="/devprep/interview/details/0e6910d4-c0ed-5845-9d0e-2a7b2102faac/">
+                            <a class="history-row-main" href="/devprep/interview/details/0e6910d4-c0ed-5845-9d0e-2a7b2102faac/">
+                                <strong>AI Engineer</strong>
+                            </a>
+                            <div class="history-cell-center">Fresher</div>
+                            <div class="history-cell-center"><span class="history-status status-completed">Completed</span></div>
+                            <div class="history-cell-center">4/4</div>
+                            <div class="history-cell-center">20 min</div>
+                            <div class="history-date">
+                                <span>Created 4d ago</span>
+                                    <span>Ended Nov 13, 2026 06:47</span>
+                            </div>
+                            <div class="history-actions history-cell-center">
+                                <a class="history-action-btn history-icon-action history-view-btn"
+                                   href="/devprep/interview/details/0e6910d4-c0ed-5845-9d0e-2a7b2102faac/"
+                                   aria-label="View Details"
+                                   title="View Details">
+                                    <span class="material-symbols-outlined history-action-icon" aria-hidden="true">visibility</span>
+                                </a>
+                                <form method="post" action="/devprep/interview/deletesession/0e6910d4-c0ed-5845-9d0e-2a7b2102faac/">
+                                    
+                                    <input type="hidden" name="page" value="1" />
+                                    <input type="hidden" name="pageSize" value="5" />
+                                    <input type="hidden" name="status" />
+                                    <input type="hidden" name="position" />
+                                    <input type="hidden" name="questionType" />
+                                    <input type="hidden" name="keyword" />
+                                    <button type="button"
+                                            class="history-action-btn history-icon-action history-delete-btn"
+                                            data-delete-session-trigger
+                                            data-session-title="AI Engineer"
+                                            aria-label="Delete"
+                                            title="Delete">
+                                        <span class="material-symbols-outlined history-action-icon" aria-hidden="true">delete</span>
+                                    </button>
+                                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb_b1b9wMN-t66ubx496K5Zuw3PmIpOFqUx_P1zczpedkxh2C924ef4W6_Ch6ATtP_dSfiQiv4Doc_jubTsjsiy6mujLgBQpeUtEeTsm9eRCmStGnu4r8jl_7dSV5WggSC2fhFz7tKizQBTV2GcJL50eUHMSZOZayH_AenNtoJTBA" /></form>
+                            </div>
+                        </article>
+                        <article class="history-row" data-href="/devprep/interview/details/3278ce8b-3528-59bb-af66-f3f39fcc8225/">
+                            <a class="history-row-main" href="/devprep/interview/details/3278ce8b-3528-59bb-af66-f3f39fcc8225/">
+                                <strong>Backend Developer</strong>
+                            </a>
+                            <div class="history-cell-center">Junior</div>
+                            <div class="history-cell-center"><span class="history-status status-completed">Completed</span></div>
+                            <div class="history-cell-center">4/5</div>
+                            <div class="history-cell-center">30 min</div>
+                            <div class="history-date">
+                                <span>Created Nov 10</span>
+                                    <span>Ended Nov 10, 2026 05:57</span>
+                            </div>
+                            <div class="history-actions history-cell-center">
+                                <a class="history-action-btn history-icon-action history-view-btn"
+                                   href="/devprep/interview/details/3278ce8b-3528-59bb-af66-f3f39fcc8225/"
+                                   aria-label="View Details"
+                                   title="View Details">
+                                    <span class="material-symbols-outlined history-action-icon" aria-hidden="true">visibility</span>
+                                </a>
+                                <form method="post" action="/devprep/interview/deletesession/3278ce8b-3528-59bb-af66-f3f39fcc8225/">
+                                    
+                                    <input type="hidden" name="page" value="1" />
+                                    <input type="hidden" name="pageSize" value="5" />
+                                    <input type="hidden" name="status" />
+                                    <input type="hidden" name="position" />
+                                    <input type="hidden" name="questionType" />
+                                    <input type="hidden" name="keyword" />
+                                    <button type="button"
+                                            class="history-action-btn history-icon-action history-delete-btn"
+                                            data-delete-session-trigger
+                                            data-session-title="Backend Developer"
+                                            aria-label="Delete"
+                                            title="Delete">
+                                        <span class="material-symbols-outlined history-action-icon" aria-hidden="true">delete</span>
+                                    </button>
+                                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb_b1b9wMN-t66ubx496K5Zuw3PmIpOFqUx_P1zczpedkxh2C924ef4W6_Ch6ATtP_dSfiQiv4Doc_jubTsjsiy6mujLgBQpeUtEeTsm9eRCmStGnu4r8jl_7dSV5WggSC2fhFz7tKizQBTV2GcJL50eUHMSZOZayH_AenNtoJTBA" /></form>
+                            </div>
+                        </article>
+                        <article class="history-row" data-href="/devprep/interview/details/2c9f0223-66fe-5d85-87fc-97eaa9bc0d5e/">
+                            <a class="history-row-main" href="/devprep/interview/details/2c9f0223-66fe-5d85-87fc-97eaa9bc0d5e/">
+                                <strong>Fullstack Developer</strong>
+                            </a>
+                            <div class="history-cell-center">Junior</div>
+                            <div class="history-cell-center"><span class="history-status status-cancelled">Cancelled</span></div>
+                            <div class="history-cell-center">1/3</div>
+                            <div class="history-cell-center">15 min</div>
+                            <div class="history-date">
+                                <span>Created Nov 7</span>
+                                    <span>Ended Nov 7, 2026 04:42</span>
+                            </div>
+                            <div class="history-actions history-cell-center">
+                                <a class="history-action-btn history-icon-action history-view-btn"
+                                   href="/devprep/interview/details/2c9f0223-66fe-5d85-87fc-97eaa9bc0d5e/"
+                                   aria-label="View Details"
+                                   title="View Details">
+                                    <span class="material-symbols-outlined history-action-icon" aria-hidden="true">visibility</span>
+                                </a>
+                                <form method="post" action="/devprep/interview/deletesession/2c9f0223-66fe-5d85-87fc-97eaa9bc0d5e/">
+                                    
+                                    <input type="hidden" name="page" value="1" />
+                                    <input type="hidden" name="pageSize" value="5" />
+                                    <input type="hidden" name="status" />
+                                    <input type="hidden" name="position" />
+                                    <input type="hidden" name="questionType" />
+                                    <input type="hidden" name="keyword" />
+                                    <button type="button"
+                                            class="history-action-btn history-icon-action history-delete-btn"
+                                            data-delete-session-trigger
+                                            data-session-title="Fullstack Developer"
+                                            aria-label="Delete"
+                                            title="Delete">
+                                        <span class="material-symbols-outlined history-action-icon" aria-hidden="true">delete</span>
+                                    </button>
+                                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb_b1b9wMN-t66ubx496K5Zuw3PmIpOFqUx_P1zczpedkxh2C924ef4W6_Ch6ATtP_dSfiQiv4Doc_jubTsjsiy6mujLgBQpeUtEeTsm9eRCmStGnu4r8jl_7dSV5WggSC2fhFz7tKizQBTV2GcJL50eUHMSZOZayH_AenNtoJTBA" /></form>
+                            </div>
+                        </article>
+                        <article class="history-row" data-href="/devprep/interview/details/9acc0096-452f-55fb-8285-6d29c805eb9f/">
+                            <a class="history-row-main" href="/devprep/interview/details/9acc0096-452f-55fb-8285-6d29c805eb9f/">
+                                <strong>Data Engineer</strong>
+                            </a>
+                            <div class="history-cell-center">Fresher</div>
+                            <div class="history-cell-center"><span class="history-status status-completed">Completed</span></div>
+                            <div class="history-cell-center">4/4</div>
+                            <div class="history-cell-center">20 min</div>
+                            <div class="history-date">
+                                <span>Created Nov 4</span>
+                                    <span>Ended Nov 4, 2026 03:47</span>
+                            </div>
+                            <div class="history-actions history-cell-center">
+                                <a class="history-action-btn history-icon-action history-view-btn"
+                                   href="/devprep/interview/details/9acc0096-452f-55fb-8285-6d29c805eb9f/"
+                                   aria-label="View Details"
+                                   title="View Details">
+                                    <span class="material-symbols-outlined history-action-icon" aria-hidden="true">visibility</span>
+                                </a>
+                                <form method="post" action="/devprep/interview/deletesession/9acc0096-452f-55fb-8285-6d29c805eb9f/">
+                                    
+                                    <input type="hidden" name="page" value="1" />
+                                    <input type="hidden" name="pageSize" value="5" />
+                                    <input type="hidden" name="status" />
+                                    <input type="hidden" name="position" />
+                                    <input type="hidden" name="questionType" />
+                                    <input type="hidden" name="keyword" />
+                                    <button type="button"
+                                            class="history-action-btn history-icon-action history-delete-btn"
+                                            data-delete-session-trigger
+                                            data-session-title="Data Engineer"
+                                            aria-label="Delete"
+                                            title="Delete">
+                                        <span class="material-symbols-outlined history-action-icon" aria-hidden="true">delete</span>
+                                    </button>
+                                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb_b1b9wMN-t66ubx496K5Zuw3PmIpOFqUx_P1zczpedkxh2C924ef4W6_Ch6ATtP_dSfiQiv4Doc_jubTsjsiy6mujLgBQpeUtEeTsm9eRCmStGnu4r8jl_7dSV5WggSC2fhFz7tKizQBTV2GcJL50eUHMSZOZayH_AenNtoJTBA" /></form>
+                            </div>
+                        </article>
+                </section>
+                <div class="history-pagination">
+                    <nav class="devprep-pagination" aria-label="Pagination">
+            <span class="devprep-page-link devprep-page-direction disabled" aria-disabled="true">Previous</span>
+
+
+            <a class="devprep-page-link active"
+               href="/devprep/interview/history/?page=1&amp;pageSize=5"
+               aria-label="Go to page 1"
+               aria-current="page">1</a>
+            <a class="devprep-page-link "
+               href="/devprep/interview/history/?page=2&amp;pageSize=5"
+               aria-label="Go to page 2">2</a>
+
+
+            <a class="devprep-page-link devprep-page-direction" href="/devprep/interview/history/?page=2&amp;pageSize=5" aria-label="Go to next page">Next</a>
+    </nav>
+
+                </div>
+        </main>
+    </div>
+<div class="feedback-report-modal" data-delete-session-modal hidden>
+    <div class="feedback-report-backdrop" data-delete-session-close></div>
+    <section class="feedback-report-dialog" role="dialog" aria-modal="true" aria-labelledby="delete-session-title" aria-describedby="delete-session-description">
+        <header class="feedback-report-dialog-header">
+            <div>
+                <p>Confirmation</p>
+                <h2 id="delete-session-title">Delete interview session?</h2>
+            </div>
+            <button type="button" class="feedback-report-close" data-delete-session-close aria-label="Close dialog">
+                <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
+        </header>
+        <p class="feedback-report-description" id="delete-session-description">
+            Are you sure you want to remove <strong data-delete-session-name>this interview session</strong> from your history? This action cannot be undone.
+        </p>
+        <div class="feedback-report-actions">
+            <button type="button" class="feedback-report-cancel" data-delete-session-close>Cancel</button>
+            <button type="button" class="feedback-report-submit feedback-report-submit-danger" data-delete-session-confirm>
+                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
+                Delete
+            </button>
+        </div>
+    </section>
+</div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="hm-footer">
+    <div class="hm-footer-intro">
+        <div class="hm-footer-brand">DevPrep AI</div>
+        <p class="hm-footer-about">
+            Sharpening the technical interview skills of Vietnamese engineers
+            with the power of next-generation AI.
+        </p>
+    </div>
+
+    <div class="hm-footer-bottom">
+        <span>© 2026 DevPrep AI. All rights reserved.</span>
+    </div>
+</footer>
+
+    
+    <script src="/devprep/js/pages/dashboard.js?v=BY4d4_PJPKAWGZ3cIPMu0iqhJNVDLcxxwVDKl7ZP6LA"></script>
+    <script src="/devprep/js/pages/interview-history.js?v=g0-F5OThubJoG-fumd-GLX2S68Jqgi4D_Vi9iXMBFXg"></script>
+
+</body>
+</html>

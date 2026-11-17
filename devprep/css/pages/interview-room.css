@@ -1,0 +1,1596 @@
+/* Interview Room — pixel-matched to source/ui_mockup/interviewroom.html.
+   Uses the shared palette/fonts from theme-session.css (identical values to the mockup :root).
+   Self-contained (view is Layout=null). JS-critical ids/classes are preserved; the AI message
+   avatar is drawn purely in CSS (::before) so interview-room.js is untouched. */
+
+* {
+    box-sizing: border-box;
+}
+
+/* JS toggles this to show/hide the camera feed. */
+.d-none {
+    display: none !important;
+}
+
+body.room-page {
+    margin: 0;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
+    /* Was overflow:hidden on both axes. The sidebar (260px) and camera panel (350px) both use
+       flex-shrink:0 while the chat column has min-width:0 (shrinks to nothing first) — on any
+       viewport narrower than the two fixed panels combined, the rightmost panel (camera —
+       Quick Actions incl. the End/Cancel Interview button) got pushed past the visible edge
+       and silently CLIPPED by overflow:hidden, cutting off button text instead of wrapping or
+       scrolling to it. overflow-x:auto turns that into a horizontal scrollbar (everything
+       stays fully visible/reachable); overflow-y stays hidden — the chat/panels handle their
+       own internal vertical scrolling. */
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--color-text-primary);
+    background: var(--color-background);
+}
+
+.room-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    /* Sidebar (260) + camera panel (350) never shrink; guarantee the chat column a sane
+       minimum too (400) instead of the 0 its own min-width:0 would otherwise allow, so the
+       whole row's natural minimum is always fully visible/scrollable rather than the camera
+       panel getting clipped off-canvas. */
+    min-width: 1010px;
+    min-height: 0;
+}
+
+/* ---------- Left panel: sidebar ---------- */
+.room-sidebar {
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--color-border);
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    /* No justify-content:space-between — same reasoning as .room-camera: .room-sidebar-top
+       flexes/scrolls to fill whatever space is left above .room-progress (fixed size) instead
+       of the two ends just being pushed apart. The cheating-warning block below can add height
+       on short notice (a strike fires mid-interview), so this panel needs the same overflow
+       protection .room-camera got in the Room-layout fix, applied preventively here. */
+}
+
+.room-sidebar-top {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.room-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-primary);
+}
+
+.room-brand .material-symbols-outlined {
+    font-size: 20px;
+    font-variation-settings: 'FILL' 1;
+}
+
+.room-brand-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+}
+
+.timer-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: var(--color-surface-container);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+}
+
+.timer-label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+}
+
+.timer-value {
+    font-family: var(--font-display);
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.session-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(17, 24, 39, 0.6);
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+    border-right: 0.5px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+}
+
+.session-info-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+}
+
+.info-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.info-block-role {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.session-info-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    background: rgba(7, 11, 24, 0.34);
+}
+
+.info-block-meta {
+    min-height: 46px;
+    padding: 9px 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.session-info-meta > .info-block.info-block-meta {
+    display: grid !important;
+    grid-template-columns: minmax(52px, auto) minmax(0, 1fr);
+    align-items: center;
+    justify-items: start;
+    width: 100%;
+}
+
+.session-info-meta > .info-block.info-block-meta > :last-child {
+    justify-self: end;
+}
+
+.session-info-meta .info-status {
+    max-width: 100%;
+    padding-inline: 8px;
+    font-size: 10px;
+    letter-spacing: 0.035em;
+}
+
+.info-block-meta + .info-block-meta {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.info-block-meta .info-key {
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.info-key {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.info-val {
+    max-width: 100%;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    overflow-wrap: anywhere;
+}
+
+.info-chip,
+.info-status {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    min-height: 26px;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.info-chip {
+    background: rgba(195, 192, 255, 0.1);
+    border: 1px solid rgba(195, 192, 255, 0.2);
+    color: var(--color-primary);
+}
+
+.info-status {
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: var(--color-success);
+}
+
+.info-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 9999px;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+/* In-session cheating check warning — same error-tint pattern as .content-warning/
+   .camera-status-warning (--color-destructive at 10%/20%). Hidden until a check flags something. */
+.cheating-warning {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: rgba(255, 180, 171, 0.1);
+    border: 1px solid rgba(255, 180, 171, 0.2);
+    color: var(--color-destructive);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+/* Three severity tones for the in-session cheating check (set via JS setCheatingWarning's tone
+   argument) — Strictness="Strict" means strike 3 ends the interview with no refund, so a real
+   strike (warning/critical) must read as visibly more serious than a no-face reminder (notice)
+   that hasn't cost anything yet. */
+.cheating-warning--notice {
+    background: rgba(249, 217, 73, 0.12);
+    border-color: rgba(249, 217, 73, 0.28);
+    color: var(--color-warning);
+}
+
+.cheating-warning--warning {
+    background: rgba(255, 180, 171, 0.12);
+    border-color: rgba(255, 180, 171, 0.3);
+    color: var(--color-destructive);
+    font-weight: 600;
+}
+
+.cheating-warning--critical {
+    background: rgba(255, 180, 171, 0.22);
+    border-color: var(--color-destructive);
+    color: var(--color-destructive);
+    font-weight: 700;
+}
+
+.cheating-warning--critical::before {
+    content: "⚠ ";
+}
+
+.integrity-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid rgba(255, 180, 171, 0.4);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(255, 180, 171, 0.15), rgba(17, 24, 39, 0.62));
+    color: var(--color-destructive);
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.integrity-alert-icon {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: rgba(255, 180, 171, 0.16);
+    color: var(--color-destructive);
+    font-size: 18px;
+}
+
+.integrity-alert--notice .integrity-alert-icon {
+    background: rgba(249, 217, 73, 0.16);
+    color: var(--color-warning);
+}
+
+.integrity-alert--warning .integrity-alert-icon,
+.integrity-alert--critical .integrity-alert-icon {
+    background: rgba(255, 180, 171, 0.18);
+    color: var(--color-destructive);
+}
+
+.integrity-alert-content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.integrity-alert-title {
+    font-size: 13px;
+    line-height: 18px;
+    color: currentColor;
+}
+
+.integrity-alert-message {
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--color-text-secondary);
+    overflow-wrap: anywhere;
+}
+
+.integrity-alert--notice {
+    color: var(--color-warning);
+    border-color: rgba(249, 217, 73, 0.34);
+    background: linear-gradient(145deg, rgba(249, 217, 73, 0.13), rgba(17, 24, 39, 0.6));
+}
+
+.integrity-alert--warning,
+.integrity-alert--critical {
+    color: var(--color-destructive);
+    border-color: rgba(255, 180, 171, 0.4);
+    background: linear-gradient(145deg, rgba(255, 180, 171, 0.15), rgba(17, 24, 39, 0.62));
+}
+
+.integrity-alert--critical {
+    border-color: var(--color-destructive);
+    box-shadow: 0 0 0 1px rgba(255, 180, 171, 0.12), 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+.room-progress {
+    padding: 24px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-container-lowest);
+    /* Fixed size, never shrinks — mirrors .room-camera-actions in the Room-layout fix. */
+    flex-shrink: 0;
+}
+
+.room-progress-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 500;
+}
+
+.room-progress-head .k {
+    color: var(--color-text-secondary);
+}
+
+.room-progress-head .v {
+    color: var(--color-primary);
+}
+
+.progress-track {
+    height: 6px;
+    width: 100%;
+    background: var(--color-surface-container-high);
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 9999px;
+}
+
+/* ---------- Center panel: chat ---------- */
+.room-chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: var(--color-background);
+    min-width: 0;
+}
+
+.room-chat-header {
+    height: 64px;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(17, 17, 24, 0.8);
+    backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.chat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-on-primary-container);
+}
+
+.avatar .material-symbols-outlined {
+    font-size: 14px;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+}
+
+.subtitle {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+}
+
+/* animated "active" ping dot */
+.status-dot {
+    position: relative;
+    display: inline-flex;
+    height: 8px;
+    width: 8px;
+}
+
+.status-dot::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-success);
+    opacity: 0.75;
+    animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.status-dot::after {
+    content: "";
+    position: relative;
+    display: inline-flex;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    background: var(--color-success);
+}
+
+@keyframes ping {
+    75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+.chat-header-actions button {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+}
+
+.chat-header-actions button:hover {
+    color: var(--color-text-primary);
+}
+
+.chat-header-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    /* On wide viewports keep the chat as a centered reading column aligned with the
+       input (max-width 896px), instead of letting bubbles sprawl edge-to-edge. */
+    width: 100%;
+    max-width: 896px;
+    margin-inline: auto;
+}
+
+/* Custom scrollbar for every scrolling region in the Room (default browser scrollbar renders
+   white, clashing with the dark theme). Firefox: scrollbar-color/-width. Chromium/Safari/Edge:
+   ::-webkit-scrollbar. Tokens reused from theme-session.css, no new colors introduced. */
+.chat-messages,
+.room-camera-top,
+.room-sidebar-top {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-surface-container-high) transparent;
+}
+
+.chat-messages::-webkit-scrollbar,
+.room-camera-top::-webkit-scrollbar,
+.room-sidebar-top::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track,
+.room-camera-top::-webkit-scrollbar-track,
+.room-sidebar-top::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.room-camera-top::-webkit-scrollbar-thumb,
+.room-sidebar-top::-webkit-scrollbar-thumb {
+    background: var(--color-surface-container-high);
+    border-radius: 9999px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover,
+.room-camera-top::-webkit-scrollbar-thumb:hover,
+.room-sidebar-top::-webkit-scrollbar-thumb:hover {
+    background: var(--color-surface-bright);
+}
+
+.ai-glow {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 384px;
+    height: 384px;
+    background: var(--color-primary);
+    opacity: 0.03;
+    border-radius: 50%;
+    filter: blur(64px);
+    pointer-events: none;
+}
+
+.chat-row {
+    display: flex;
+    gap: 16px;
+    max-width: 85%;
+    position: relative;
+    z-index: 1;
+}
+
+.chat-row-user {
+    margin-left: auto;
+    justify-content: flex-end;
+}
+
+/* AI avatar drawn in CSS so appendBubble (JS) needs no change. */
+.chat-row-ai::before {
+    content: "auto_awesome";
+    font-family: 'Material Symbols Outlined';
+    font-variation-settings: 'FILL' 1;
+    font-size: 14px;
+    color: var(--color-primary);
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.chat-bubble {
+    padding: 16px;
+    border-radius: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    font-size: 14px;
+    /* Flex items default to min-width:auto, so an unbroken run of characters
+       (no spaces) refuses to shrink below its own width and overflows the
+       bubble/.chat-row instead of wrapping. break-word lets long unbreakable
+       runs wrap; min-width:0 lets the flex item actually shrink to allow it. */
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
+}
+
+.chat-bubble-ai {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-top-left-radius: 2px;
+    color: var(--color-text-primary);
+}
+
+.chat-bubble-user {
+    background: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+    border: none;
+    border-top-right-radius: 2px;
+}
+
+.chat-skip-note {
+    text-align: center;
+    color: var(--color-text-tertiary);
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* "AI is typing" indicator shown briefly before the next question is revealed. */
+.chat-bubble-typing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    padding: 14px 16px;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-text-tertiary);
+    animation: typing-bounce 1.2s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+@keyframes typing-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Neutral info toast (e.g. TempData["InfoMessage"] shown once on page load, such as
+   "Resuming your session in progress"). position: fixed on purpose — this used to sit directly
+   in <body class="room-page">, which is the flex container for the 3-column layout, so as a
+   flex item it stretched into its own left column and broke the layout. Fixed positioning takes
+   it out of flow entirely; #room-app and the 3-column layout are untouched.
+   Colors reuse the same neutral surface/border/text tokens as .idle-banner.tier1 below, plus a
+   --color-primary accent so it still reads as a notice — on purpose NOT the destructive/warning
+   tones used by .integrity-alert, .camera-status-warning, and .content-warning elsewhere in this
+   file, since this is not an error.
+   z-index: 150 — below .idle-banner.tier1 (200) and its backdrop (199), the highest explicit
+   z-index in this file; native <dialog> elements (.cancel-interview-dialog) render in the
+   browser's top-layer regardless of z-index, so nothing more is needed to stay under those. */
+.room-info-banner {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 150;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    background: var(--color-surface-container);
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+}
+
+/* Toggled by the inline script in Room.cshtml after a few seconds, then the element is removed
+   once this finishes (animationend) — see that script for the exact timing. */
+.room-info-banner.fade-out {
+    animation: room-info-banner-fade-out 0.4s ease forwards;
+}
+
+@keyframes room-info-banner-fade-out {
+    from { opacity: 1; transform: translateX(-50%) translateY(0); }
+    to   { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+}
+
+/* Idle reminder / auto-advance banner (Room UX Phase 1) */
+.idle-banner {
+    max-width: 896px;
+    margin: 0 auto 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+/* Tier 1 (reminder, ~90s idle) is a centered modal popup instead of an inline banner —
+   dismissed only via its own OK button. Tier 2 (auto-advance warning, ~180s idle) is
+   UNCHANGED below: still the inline banner + inline "I'm still answering" button. */
+.idle-banner.tier1 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    width: calc(100% - 48px);
+    max-width: 380px;
+    margin: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 16px;
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+    color: var(--color-text-secondary);
+    text-align: center;
+}
+
+.idle-banner-message { margin: 0; line-height: 1.5; }
+
+.idle-banner-ok {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    background: var(--color-primary-container);
+    border: none;
+    border-radius: 8px;
+    color: var(--color-on-primary-container);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.idle-banner-ok:hover { opacity: 0.9; }
+
+/* Dims the Room behind the tier1 popup. Toggled by JS alongside .idle-banner.tier1
+   (see hideIdleBanner/showTier1Banner) — tier2 never shows this. */
+.idle-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+}
+
+.idle-banner.tier2 {
+    background: rgba(255, 180, 171, 0.1);
+    border: 1px solid rgba(255, 180, 171, 0.2);
+    color: var(--color-destructive);
+    font-weight: 500;
+}
+
+.idle-banner-cancel {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.idle-banner-cancel:hover {
+    background: var(--color-surface-container-high);
+}
+
+/* Cheating strike popup (#cheating-banner) — reuses .idle-banner.tier1's popup shell as-is (see
+   interview-room.js showCheatingBanner). Both tones this popup can show for ("warning"/"critical"
+   in the sidebar, Nhóm 2) already read as red there, so the title keeps that same severity color
+   rather than introducing a second color scheme just for the popup. */
+.cheating-banner-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--color-destructive);
+}
+
+/* Strike 2 of 3: the next one ends the interview with no refund — a plain border isn't enough
+   to separate "one more strike is fatal" from a routine reminder. */
+.idle-banner.tier1.cheating-banner--final {
+    border-color: var(--color-destructive);
+    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6), 0 0 0 2px var(--color-destructive);
+}
+
+/* Pause overlay (Room UX Phase 2) — covers the whole chat panel (.room-chat has position:
+   relative already) so the current question and history can't be read/looked-up while paused. */
+.pause-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(17, 17, 24, 0.92);
+    backdrop-filter: blur(8px);
+}
+
+.pause-overlay-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 32px;
+    text-align: center;
+}
+
+.pause-overlay-icon {
+    font-size: 48px;
+    color: var(--color-primary);
+}
+
+.pause-overlay-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.pause-overlay-sub {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+/* input bar */
+.chat-input-bar {
+    padding: 24px;
+    background: linear-gradient(to top, var(--color-background), var(--color-background) 50%, transparent);
+    z-index: 20;
+}
+
+.chat-input-inner {
+    position: relative;
+    max-width: 896px;
+    margin: 0 auto;
+    display: block;
+    min-height: 72px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 10px 4px 10px 20px;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+}
+
+.chat-input-inner:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 1px var(--color-primary), 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.chat-input {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: 16px;
+    line-height: 24px;
+    resize: none;
+    padding: 13px 112px 13px 0;
+    outline: none;
+    /* Auto-grows via JS (autoResizeInput) up to this cap, then scrolls — same "grow, then
+       scroll" pattern as Claude/ChatGPT's input box. line-height is inherited from
+       body.room-page (24px); 200px covers ~7 lines of wrapped text plus the 24px of vertical
+       padding above, landing in the middle of a 6-8 line comfort range before scrolling kicks
+       in. Keep MAX_INPUT_HEIGHT_PX in interview-room.js equal to this value. */
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-surface-container-high) transparent;
+}
+
+.chat-input::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-input::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-input::-webkit-scrollbar-thumb {
+    background: var(--color-surface-container-high);
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+}
+
+.chat-input::-webkit-scrollbar-thumb:hover {
+    background: var(--color-surface-bright);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.chat-input::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.btn-mic {
+    position: absolute;
+    right: 70px;
+    bottom: 12px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    background: var(--color-surface-container);
+    color: var(--color-text-secondary);
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-mic .material-symbols-outlined,
+.btn-send .material-symbols-outlined {
+    font-size: 23px;
+}
+
+.btn-mic:hover {
+    background: var(--color-surface-container-high);
+    color: var(--color-text-primary);
+    transform: translateY(-1px);
+}
+
+.btn-mic.is-recording {
+    background: var(--color-destructive);
+    color: #fff;
+    animation: mic-pulse 1.2s infinite;
+}
+
+@keyframes mic-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.btn-send {
+    position: absolute;
+    right: 20px;
+    bottom: 12px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-send:hover {
+    background: var(--color-inverse-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(139, 124, 246, 0.24);
+}
+
+.btn-mic:active,
+.btn-send:active {
+    transform: translateY(0);
+}
+
+.btn-mic:disabled,
+.btn-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.input-hint {
+    text-align: center;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--color-text-tertiary);
+}
+
+/* ---------- Right panel: camera + controls ---------- */
+.room-camera {
+    width: 350px;
+    min-width: 350px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--color-border);
+    background: var(--color-surface);
+    display: flex;
+    flex-direction: column;
+    /* No justify-content:space-between: .room-camera-top now flexes to fill whatever space is
+       left after .room-camera-actions (fixed size, see below) instead of the two ends just being
+       pushed apart — on short viewports the CONTENT of top+actions combined can exceed 100vh
+       (measured ~776px total vs ~650-720px usable on common laptop screens), which used to push
+       End Interview (in .room-camera-actions) off-screen with no way to scroll to it. */
+}
+
+.room-camera-top {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    /* Scrolls independently when camera preview + AI Voice section don't fit; .room-camera-actions
+       (Quick Actions incl. End Interview) is a flex-shrink:0 sibling below, so it always keeps its
+       full natural size and is never pushed past the viewport — no scrolling needed to reach it. */
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.camera-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.camera-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+}
+
+.camera-box {
+    aspect-ratio: 16 / 9;
+    background: var(--color-surface-container-highest);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+}
+
+.camera-feed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 5;
+}
+
+.camera-placeholder {
+    color: var(--color-text-secondary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    position: relative;
+    z-index: 3;
+}
+
+.camera-placeholder .material-symbols-outlined {
+    font-size: 36px;
+}
+
+.camera-controls {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+    z-index: 20;
+}
+
+.cam-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(17, 17, 24, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.cam-btn:hover {
+    background: var(--color-surface);
+}
+
+.cam-btn .material-symbols-outlined {
+    font-size: 16px;
+}
+
+/* Status overlay, not a control — camera is mandatory, there is nothing to click here. */
+.camera-status {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 5px 10px;
+    background: rgba(10, 14, 28, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 16px;
+    white-space: nowrap;
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+}
+
+.camera-status.camera-status-warning {
+    background: rgba(65, 15, 20, 0.86);
+    border-color: rgba(255, 180, 171, 0.45);
+    color: var(--color-destructive);
+}
+
+/* AI Voice section */
+.ai-voice-section {
+    background: var(--color-surface-container);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.ai-voice-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle-switch {
+    width: 40px;
+    height: 20px;
+    background: var(--color-surface-container-highest);
+    border-radius: 9999px;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.toggle-switch.is-on {
+    background: var(--color-primary);
+}
+
+.toggle-knob {
+    width: 16px;
+    height: 16px;
+    background: var(--color-background);
+    border-radius: 50%;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-switch.is-on .toggle-knob {
+    left: 22px;
+}
+
+.visualizer {
+    height: 48px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0.8;
+}
+
+.waveform-bar {
+    width: 6px;
+    border-radius: 9999px;
+    animation: pulse-wave 1.5s infinite ease-in-out;
+}
+
+.waveform-bar:nth-child(1) { background: var(--color-primary); animation-delay: 0.1s; }
+.waveform-bar:nth-child(2) { background: var(--color-secondary); animation-delay: 0.3s; }
+.waveform-bar:nth-child(3) { background: var(--color-primary-container); animation-delay: 0.5s; }
+.waveform-bar:nth-child(4) { background: var(--color-primary); animation-delay: 0.2s; }
+.waveform-bar:nth-child(5) { background: var(--color-secondary); animation-delay: 0.4s; }
+.waveform-bar:nth-child(6) { background: var(--color-primary-container); animation-delay: 0.6s; }
+
+.visualizer.paused .waveform-bar {
+    animation: none;
+    height: 8px;
+}
+
+@keyframes pulse-wave {
+    0%, 100% { height: 8px; }
+    50% { height: 32px; }
+}
+
+.ai-voice-caption {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 18px;
+    color: var(--color-text-secondary);
+}
+
+/* Quick actions */
+.room-camera-actions {
+    padding: 24px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--color-surface-container-lowest);
+    /* Fixed size, never shrinks — keeps End Interview always visible at the bottom of the panel
+       regardless of viewport height (see .room-camera-top above for the scrolling counterpart). */
+    flex-shrink: 0;
+}
+
+.quick-actions-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: -4px;
+}
+
+.btn-secondary {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.btn-secondary:hover {
+    background: var(--color-surface-container);
+    border-color: var(--color-text-secondary);
+}
+
+.btn-secondary .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.btn-secondary .icon-hint {
+    color: var(--color-primary);
+}
+
+.btn-secondary .icon-skip {
+    color: var(--color-text-secondary);
+}
+
+.btn-secondary .icon-pause {
+    color: var(--color-primary);
+}
+
+.quick-actions-note {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--color-text-tertiary);
+    text-align: center;
+    margin-top: -6px;
+}
+
+.btn-cancel-interview {
+    width: 100%;
+    /* Room's fixed 350px camera panel has plenty of room for this label even at "Cancel
+       Interview" length (~185px needed vs ~300px available inside the panel's padding) — the
+       clipping bug was the PANEL getting pushed off-canvas on narrow viewports (fixed above),
+       not this button being internally too narrow. min-width/flex-wrap here are extra
+       insurance: if the button is ever squeezed further than today, the label wraps onto a
+       second line instead of being cut off.
+       */
+    min-width: 200px;
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 180, 171, 0.1);
+    color: var(--color-destructive);
+    border: 1px solid rgba(255, 180, 171, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.btn-cancel-interview:hover {
+    background: rgba(255, 180, 171, 0.2);
+}
+
+.btn-cancel-interview .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.btn-secondary:disabled,
+.btn-cancel-interview:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.cancel-interview-dialog {
+    width: min(520px, calc(100% - 32px));
+    padding: 0;
+    color: var(--color-text-primary);
+    background: var(--color-surface-container-lowest);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+.cancel-interview-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(4px);
+}
+
+.cancel-interview-dialog-content {
+    padding: 28px;
+}
+
+.cancel-interview-dialog h2 {
+    margin: 0 0 12px;
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 30px;
+}
+
+.cancel-interview-dialog p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.cancel-interview-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.btn-continue-interview,
+.btn-confirm-cancel {
+    min-height: 42px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-continue-interview {
+    color: var(--color-text-primary);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-border);
+}
+
+.btn-confirm-cancel {
+    color: #fff;
+    background: var(--color-destructive);
+    border: 1px solid var(--color-destructive);
+}
+
+.btn-continue-interview:focus-visible,
+.btn-confirm-cancel:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+    .cancel-interview-dialog-content {
+        padding: 22px;
+    }
+
+    .cancel-interview-dialog-actions {
+        flex-direction: column;
+    }
+
+    .btn-continue-interview,
+    .btn-confirm-cancel {
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    body.room-page {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        display: block;
+    }
+
+    .room-layout {
+        height: auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .room-sidebar,
+    .room-camera {
+        width: 100%;
+        flex-shrink: 1;
+        border-right: 0;
+        border-left: 0;
+    }
+
+    .room-sidebar {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .room-sidebar-top {
+        display: grid;
+        grid-template-columns: minmax(180px, 0.8fr) minmax(220px, 1.2fr);
+        align-items: center;
+        padding: 16px;
+    }
+
+    .room-progress {
+        padding: 16px;
+    }
+
+    .room-chat {
+        min-height: 70vh;
+    }
+
+    .room-camera {
+        border-top: 1px solid var(--color-border);
+    }
+
+    .room-camera-top {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+    }
+}
+
+@media (max-width: 640px) {
+    .room-sidebar-top,
+    .room-camera-top {
+        display: flex;
+    }
+
+    .room-chat {
+        min-height: 80vh;
+    }
+
+    .room-chat-header,
+    .chat-input-bar,
+    .room-camera-top,
+    .room-camera-actions {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+.room-ended-note {
+    margin: 12px 24px;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: 14px;
+}
+
+/* Content-filter warning under the input bar (client mirror of the server check). Same
+   error-tint pattern as .idle-banner.tier2 / .btn-end (--color-error at 10%/20%). */
+.content-warning {
+    max-width: 896px;
+    margin: 8px auto 0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: rgba(255, 180, 171, 0.1);
+    border: 1px solid rgba(255, 180, 171, 0.2);
+    color: var(--color-destructive);
+    font-size: 13px;
+    line-height: 18px;
+}
+
+/* design.md: "Respect prefers-reduced-motion: disable all animations." Covers the 4 looping
+   animations in this file (online-status ping, typing-bounce dots, mic recording pulse,
+   voice waveform bars) — static end states only, no id/class changes, JS untouched. This is
+   correct accessibility behavior (the OS/browser asked for no motion), NOT a bug — the fix
+   below only stops the bars from disappearing while reduced-motion is on, it does not make
+   them animate again. */
+@media (prefers-reduced-motion: reduce) {
+    .status-dot::before,
+    .typing-dot,
+    .btn-mic.is-recording,
+    .waveform-bar {
+        animation: none !important;
+    }
+
+    /* .waveform-bar's height only exists inside the pulse-wave keyframes (see above) — with the
+       animation off, it has no height at all and disappears. .visualizer.paused already has this
+       same static-height fallback; mirror it here for the reduced-motion case. */
+    .waveform-bar {
+        height: 8px;
+    }
+}

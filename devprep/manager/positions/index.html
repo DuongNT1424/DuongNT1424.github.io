@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"manager",page:"/Manager/Positions"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Position Management - DevPrep Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+    <link rel="stylesheet" href="/devprep/css/pages/tech-stack-list.css?v=y6cyHlxR9bihjA24crX0FNILiYmyx8J8dd3R2UnxK30" />
+    <link rel="stylesheet" href="/devprep/css/pages/admin-tech-stacks.css?v=C5-ZCAmDr8lZGX6A7-SuJ3aJtkOSu7MYWhPZPekHQqs" />
+</head>
+<body class="admin-page">
+    <header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="manager-user">
+            <button class="ad-avatar" id="manager-avatar-btn" type="button" title="manager@devprep.demo" aria-haspopup="true" aria-expanded="false">M</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">M</span>
+                    <span class="ad-dropdown-email">manager@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmZ8_ZRgA5ODYvc3SFGP914vSAZXVyUxVvl9hd8VGl48IvJ-hZ9tHW3PCKaDWpDVHaPM-8BXEt9dqtfWrSBgWarJBW_VD2LkHcfl9uSBs_TjRX9WOPhyeYHGpsosj1iOP6okuw8_rVY09FOurYUhRHI3MZ0uQ7wlvSUd2yxvqeZR4g" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('manager-avatar-btn');
+        const menu = document.getElementById('manager-user');
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!menu.contains(event.target)) {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+</script>
+
+    <aside class="ad-sidebar manager-sidebar" style="overflow-y: auto; overscroll-behavior: contain;">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Manager Console</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item " href="/devprep/manager/">
+            <span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/questionbank/">
+            <span class="material-symbols-outlined">database</span><span class="label">Question Bank</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/techstacks/">
+            <span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span>
+        </a>
+        <a class="ad-nav-item active" href="/devprep/manager/positions/">
+            <span class="material-symbols-outlined">work</span><span class="label">Positions</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/users/">
+            <span class="material-symbols-outlined">group</span><span class="label">Users</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/interviewsessions/">
+            <span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/payments/">
+            <span class="material-symbols-outlined">payments</span><span class="label">Payments</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/creditpackages/">
+            <span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/aifeedback/">
+            <span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/feedback/">
+            <span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/reportedfeedback/">
+            <span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/news/">
+            <span class="material-symbols-outlined">newspaper</span><span class="label">News</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/announcements/">
+            <span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span>
+        </a>    </nav>
+</aside>
+
+
+    <main class="ad-main tech-stacks-page">
+        <header class="tech-stacks-header">
+            <div>
+                <p class="tech-stacks-eyebrow">Question Administration</p>
+                <h1 class="ad-page-title">Position Management</h1>
+                <p class="tech-stacks-subtitle">Manage the job positions available for question classification.</p>
+            </div>
+        </header>
+
+        <section class="tech-stacks-card tech-stacks-filters" aria-label="Position filters">
+            <div class="tech-stacks-filter-form">
+                <div class="tech-stacks-filter-field">
+                    <label for="pos-search">Search</label>
+                    <div class="tech-stacks-search">
+                        <button type="button" class="tech-stacks-search-button" aria-label="Search" title="Search">
+                            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+                        </button>
+                        <input id="pos-search" type="search" maxlength="50" placeholder="Search by name" />
+                    </div>
+                </div>
+                <div class="tech-stacks-filter-field tech-stacks-status-filter">
+                    <label for="pos-status">Status</label>
+                    <select id="pos-status">
+                        <option value="Active" selected>Active</option>
+                        <option value="Deleted">Deleted</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech-stacks-card tech-stacks-results">
+            <div class="tech-stacks-card-header">
+                <div><h2>Positions</h2><p id="pos-count">Loading...</p></div>
+                <span class="tech-stacks-page-count" id="pos-page-count"></span>
+            </div>
+            <div class="table-responsive">
+                <table class="tech-stacks-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Position Name</th>
+                            <th scope="col" class="tech-stack-status-column">Questions</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col" class="tech-stack-status-column">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pos-table-body">
+                        <tr><td colspan="4" class="text-center" style="padding:40px; color:var(--ts-muted);">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav class="tech-stacks-pagination" id="pos-pages" aria-label="Position pages" style="display:none;"></nav>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE = 'http://localhost:7000/api/admin/manager/positions';
+        const token = 'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJzdWIiOiAiOWI1MGRlMDQtMzM0OS01NmJjLThlNGQtZTQzMjgxYTgyYjMzIiwgImVtYWlsIjogIm1hbmFnZXJAZGV2cHJlcC5kZW1vIiwgInJvbGUiOiAiTWFuYWdlciIsICJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiAiTWFuYWdlciIsICJleHAiOiAxNzk3NDk5ODk0LCAiaWF0IjogMTc5NDkwNzg5NH0.demo-signature';
+        let currentPage = 1;
+        const pageSize = 10;
+        let totalPages = 1;
+        let searchTimer = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('pos-status').addEventListener('change', () => {
+                currentPage = 1;
+                fetchList();
+            });
+            document.getElementById('pos-search').addEventListener('input', () => {
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(() => {
+                    currentPage = 1;
+                    fetchList();
+                }, 300);
+            });
+            fetchList();
+        });
+
+        async function fetchList() {
+            const tbody = document.getElementById('pos-table-body');
+            const status = document.getElementById('pos-status').value;
+            try {
+                const query = new URLSearchParams({ pageIndex: currentPage, pageSize, status });
+                const search = document.getElementById('pos-search').value.trim();
+                if (search) query.set('search', search);
+
+                const response = await fetch(`${API_BASE}?${query}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (response.status === 401 || response.status === 403) {
+                    window.location.href = '/Auth/Login';
+                    return;
+                }
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const json = await response.json();
+                if (!json.success) throw new Error(json.message || 'Failed');
+                renderTable(json.data.items || []);
+                renderPagination(json.data);
+            } catch (error) {
+                console.error(error);
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center" style="padding:40px; color:var(--ts-danger);">Positions are temporarily unavailable.</td></tr>';
+                renderPagination({ totalRecords: 0, totalPages: 1, pageIndex: 1 });
+            }
+        }
+
+        function renderTable(items) {
+            const tbody = document.getElementById('pos-table-body');
+            if (!items.length) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center" style="padding:48px; color:var(--ts-muted);">No positions found.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(item => `
+                <tr>
+                    <td><span class="tech-stack-name">${escapeHtml(item.name)}</span></td>
+                    <td class="tech-stack-status-column">${item.questionCount}</td>
+                    <td>${fmtDate(item.createdAt)}</td>
+                    <td class="tech-stack-status-column">
+                        <span class="tech-stack-status ${item.isDeleted ? 'is-inactive' : 'is-active'}">
+                            <span class="material-symbols-outlined">${item.isDeleted ? 'pause_circle' : 'check_circle'}</span>
+                            ${item.isDeleted ? 'Deleted' : 'Active'}
+                        </span>
+                    </td>
+                </tr>`).join('');
+        }
+
+        function renderPagination(data) {
+            totalPages = Math.max(1, data.totalPages || 1);
+            currentPage = data.pageIndex || currentPage;
+            const totalRecords = data.totalRecords || 0;
+            document.getElementById('pos-count').innerText = `${totalRecords} result${totalRecords === 1 ? '' : 's'}`;
+            document.getElementById('pos-page-count').innerText = totalRecords > 0 ? `Page ${currentPage} of ${totalPages}` : '';
+
+            const nav = document.getElementById('pos-pages');
+            if (totalPages <= 1) {
+                nav.style.display = 'none';
+                nav.innerHTML = '';
+                return;
+            }
+
+            nav.style.display = 'flex';
+            let html = `<a class="tech-stacks-page-link ${currentPage <= 1 ? 'disabled' : ''}" onclick="gotoPage(${currentPage - 1})">Previous</a>`;
+            for (let page = 1; page <= totalPages; page++) {
+                html += `<a class="tech-stacks-page-link ${page === currentPage ? 'active' : ''}" onclick="gotoPage(${page})">${page}</a>`;
+            }
+            html += `<a class="tech-stacks-page-link ${currentPage >= totalPages ? 'disabled' : ''}" onclick="gotoPage(${currentPage + 1})">Next</a>`;
+            nav.innerHTML = html;
+        }
+
+        function gotoPage(page) {
+            if (page < 1 || page > totalPages || page === currentPage) return;
+            currentPage = page;
+            fetchList();
+        }
+
+        function fmtDate(value) {
+            if (!value) return '-';
+            const date = new Date(value);
+            return `<time>${date.toLocaleDateString('en-GB')}<br><span>${date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span></time>`;
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>

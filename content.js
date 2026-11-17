@@ -30,11 +30,13 @@ window.SITE = {
         en: "Capstone project, FPT University · Team leader, team of 6 · May–Aug 2026"
       },
       stack: [".NET 8", "YARP", "Python", "SQL Server", "Docker", "QLoRA"],
-      status: "soon",
-      demo: null,
+      status: "ui",
+      demo: "devprep/",
+      demoLabel: { vi: "Demo ứng viên", en: "Candidate demo" },
+      demoAdmin: "devprep/admin/",
       demoNote: {
-        vi: "Xem video demo toàn bộ luồng phỏng vấn. Bản CV parser chạy thật đang được chuẩn bị.",
-        en: "Watch the demo video of the full interview flow. A working CV parser demo is on the way."
+        vi: "Bản demo giao diện với dữ liệu mẫu, đủ 3 vai trò: ứng viên (phỏng vấn thử với AI, báo cáo, phân tích CV–JD), Admin và Manager. Có thêm video demo toàn bộ luồng.",
+        en: "UI demo with sample data covering all three roles: candidate (AI mock interview, report, CV–JD analysis), admin and manager. A full walkthrough video is included."
       },
       video: {
         view: "https://drive.google.com/file/d/1QXv3oB12b5_Utb4H8kIim9D806Wrsh0k/view?usp=sharing",

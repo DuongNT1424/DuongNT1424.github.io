@@ -1,0 +1,157 @@
+/* ============================================================
+   DevPrep session theme — re-tokenized to docs/design.md (dark-mode-only
+   design system) so Room/Report/History match Dashboard/Identity/Verify
+   instead of the old mockup-extracted palette (was #0A0A0F background vs
+   md's #0e1323, etc.). Shared by the Room / Report / History pages.
+
+   Variable NAMES are kept as-is (History/Report/Room CSS reference them)
+   even where design.md has no token of that exact name — those values are
+   mapped to the closest legitimate md token (see inline notes) rather than
+   invented. A handful of M3 "fixed"/"inverse" role variables from the old
+   mockup extraction are UNUSED anywhere in this app (verified by grep across
+   Views + the 3 pages' CSS) and are left as harmless dead tokens rather than
+   removed, to avoid any risk of breaking an unchecked consumer.
+   ============================================================ */
+
+:root {
+    /* ---- colors — md exact-name matches ---- */
+    --color-background: #0e1323;
+    --color-surface: #0e1323;
+    --color-surface-container-low: #161b2b;
+    --color-surface-container: #1a1f30;
+    --color-surface-container-high: #25293a;
+    --color-surface-container-highest: #2f3446;
+    --color-surface-bright: #34394a;
+
+    --color-primary: #c3c0ff;
+    --color-primary-container: #4f46e5;
+    --color-on-primary: #1d00a5;
+    --color-on-primary-container: #dad7ff;
+
+    --color-secondary: #4cd7f6;
+    --color-secondary-container: #03b5d3;
+    --color-on-secondary: #003640;
+
+    --color-tertiary: #d0bcff;
+    --color-tertiary-container: #6f3dd9;
+    --color-on-tertiary: #3c0091;
+
+    --color-on-surface: #dee1f9;
+    --color-on-surface-variant: #c7c4d8;
+
+    --color-success: #10B981;
+    --color-warning: #F9D949;
+    --color-error: #ffb4ab;
+    --color-error-container: #93000a;
+
+    --color-outline: #918fa1;
+    --color-outline-variant: #464555;
+
+    /* ---- colors — no exact md name, mapped to the closest md token/value ---- */
+    --color-border: rgba(255, 255, 255, 0.08);              /* md --color-border-subtle */
+    --color-destructive: #ffb4ab;                            /* md --color-error (Status Chip "Failed" pattern) */
+    --color-inverse-primary: #4f46e5;                        /* md --color-primary-container (button hover shade) */
+    --color-surface-container-lowest: #0e1323;                /* md has no "-lowest" tier; alias to --color-background */
+    --color-surface-variant: #25293a;                         /* md --color-surface-container-high */
+    --color-text-primary: #dee1f9;                            /* md --color-on-surface */
+    --color-text-secondary: #c7c4d8;                          /* md --color-on-surface-variant */
+    --color-text-tertiary: #918fa1;                           /* md --color-outline (most muted text tier) */
+
+    /* ---- colors — UNUSED anywhere (verified by grep); left as dead tokens, values untouched ---- */
+    --color-on-primary-fixed-variant: #3622ca;
+    --color-on-tertiary-fixed: #301400;
+    --color-on-secondary-fixed-variant: #5516be;
+    --color-on-secondary-container: #c4abff;
+    --color-on-error: #690005;
+    --color-primary-fixed-dim: #c4c0ff;
+    --color-tertiary-fixed-dim: #ffb785;
+    --color-secondary-fixed-dim: #d0bcff;
+    --color-secondary-fixed: #e9ddff;
+    --color-primary-fixed: #e3dfff;
+    --color-tertiary-fixed: #ffdcc6;
+    --color-surface-tint: #c4c0ff;
+    --color-inverse-surface: #e4e1eb;
+    --color-surface-dim: #13131a;
+    --color-on-error-container: #ffdad6;
+    --color-on-background: #e4e1eb;
+    --color-on-tertiary-fixed-variant: #713700;
+    --color-on-primary-fixed: #100069;
+    --color-on-tertiary-container: #461f00;
+    --color-inverse-on-surface: #303037;
+    --color-on-secondary-fixed: #23005c;
+
+    /* ---- borderRadius ---- */
+    --radius-default: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-full: 9999px;
+
+    /* ---- spacing ---- */
+    --spacing-margin-mobile: 16px;
+    --spacing-gutter: 24px;
+    --spacing-margin-desktop: 40px;
+    --spacing-unit: 8px;
+    --spacing-container-max: 1280px;
+
+    /* ---- fontFamily — design.md: display/body face = Inter, code/label = JetBrains Mono ---- */
+    --font-display: "Inter", sans-serif;
+    --font-headline: "Inter", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+
+    /* ---- fontSize (size / lineHeight / letterSpacing / weight) ---- */
+    --text-mono-label-size: 13px;
+    --text-mono-label-line: 18px;
+    --text-mono-label-weight: 500;
+
+    --text-display-lg-size: 48px;
+    --text-display-lg-line: 56px;
+    --text-display-lg-spacing: -0.04em;
+    --text-display-lg-weight: 700;
+
+    --text-headline-md-size: 20px;
+    --text-headline-md-line: 28px;
+    --text-headline-md-weight: 600;
+
+    --text-body-lg-size: 16px;
+    --text-body-lg-line: 24px;
+    --text-body-lg-weight: 400;
+
+    --text-headline-lg-size: 32px;
+    --text-headline-lg-line: 40px;
+    --text-headline-lg-spacing: -0.02em;
+    --text-headline-lg-weight: 600;
+
+    --text-label-caps-size: 12px;
+    --text-label-caps-line: 16px;
+    --text-label-caps-spacing: 0.1em;
+    --text-label-caps-weight: 600;
+
+    --text-headline-lg-mobile-size: 24px;
+    --text-headline-lg-mobile-line: 32px;
+    --text-headline-lg-mobile-spacing: -0.02em;
+    --text-headline-lg-mobile-weight: 600;
+
+    --text-body-md-size: 14px;
+    --text-body-md-line: 20px;
+    --text-body-md-weight: 400;
+}
+
+/* Material Symbols icon base (shared by session pages). */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+}

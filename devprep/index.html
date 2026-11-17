@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"candidate",page:"/"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevPrep | AI-Powered Engineering Prep</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:wght@100..900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/devprep/css/home.css?v=mcMqDn_6BfFP-pQrrZyhSiDAGj8l_ir2AicSDip3yWA" />
+    <link rel="stylesheet" href="/devprep/css/components/safe-text.css?v=vF4FTX13Xo9ixUzo-_hfdjiH7SvKNn3SH_5mwM8CJYU" />
+    <link rel="stylesheet" href="/devprep/css/components/star-rating.css?v=BT2RlOl2f37V94S6NnR3Izd1uX7amAJ9Cer0k052PNU" />
+</head>
+<body class="home-page">
+    <!-- Ambient Background -->
+    <div class="hm-ambient">
+        <div class="hm-blob hm-blob-1"></div>
+        <div class="hm-blob hm-blob-2"></div>
+    </div>
+
+    <nav class="hm-navbar" id="hm-navbar">
+    <div class="hm-navbar-inner">
+        <a class="hm-brand" href="/devprep/">DevPrep AI</a>
+
+        <div class="hm-nav-links">
+                <a class="active" aria-current="page" href="/devprep/">Home</a>
+                <a class="" href="/devprep/interview/">Interview</a>
+                <a class="" href="/devprep/payment/">Payment</a>
+                <a class="" href="/devprep/news/">News</a>
+                <a class="" href="/devprep/feedback/system/">System Feedback</a>
+                <a class="" href="/devprep/feedback/ai/">AI Feedback</a>
+        </div>
+
+        <div class="hm-nav-actions">
+                
+<div class="hm-user-menu" id="hm-user-menu">
+    <button class="hm-avatar"
+            id="hm-avatar-btn"
+            type="button"
+            aria-haspopup="menu"
+            aria-controls="hm-dropdown"
+            aria-expanded="false"
+            title="candidate@devprep.demo">
+        C
+    </button>
+    <div class="hm-dropdown" id="hm-dropdown" role="menu">
+        <div class="hm-dropdown-head">
+            <span class="hm-dropdown-avatar">
+                C
+            </span>
+            <span class="hm-dropdown-email">candidate@devprep.demo</span>
+        </div>
+            <a class="hm-dropdown-item hm-dropdown-credits" role="menuitem" href="/devprep/profile/credithistory/">
+                <span class="material-symbols-outlined" style="color:#F9D949; font-variation-settings:'FILL' 1;">toll</span>
+                Credits
+                <span class="hm-credit-value" id="hm-credit-value">&hellip;</span>
+            </a>
+        <a class="hm-dropdown-item" role="menuitem" href="/devprep/profile/">
+            <span class="material-symbols-outlined">person</span> View Profile
+        </a>
+        <form method="post" class="m-0" action="/devprep/auth/login/">
+            <button type="submit" class="hm-dropdown-item hm-dropdown-logout" role="menuitem">
+                <span class="material-symbols-outlined">logout</span> Logout
+            </button>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmZq59Z6U8ez842SHKqeHjkJ-Rg3fUCIfQPDVX94QH4HzbQw9z-NzblGVVXJ9dHSAzVDnm18uNllJH0G2CFrBglPmkhRVPY4SXcKheYFx1kKWaZJSAk3ZUp5lqNOtycWNMVzO1h52DgaLThKCV6WQeKLuaS5ztB3ywt5sLAA7llsaw" /></form>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const btn = document.getElementById('hm-avatar-btn');
+        const menu = document.getElementById('hm-user-menu');
+
+        if (!btn || !menu || menu.dataset.accountMenuInitialized === 'true') {
+            return;
+        }
+        menu.dataset.accountMenuInitialized = 'true';
+
+        const loadCredits = function () {
+            const creditValue = document.getElementById('hm-credit-value');
+            if (!creditValue) return;
+
+            fetch('/Profile/CreditBalance', { headers: { 'Accept': 'application/json' } })
+                .then(response => response.ok ? response.json() : Promise.reject())
+                .then(data => { creditValue.textContent = Number(data.balance).toLocaleString('en-US'); })
+                .catch(() => { creditValue.textContent = '-'; });
+        };
+
+        const closeMenu = function (restoreFocus) {
+            const wasOpen = menu.classList.contains('open');
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+
+            if (restoreFocus && wasOpen) {
+                btn.focus();
+            }
+        };
+
+        btn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) loadCredits();
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!menu.contains(event.target)) {
+                closeMenu(false);
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeMenu(true);
+            }
+        });
+
+        window.addEventListener('pagehide', function () {
+            closeMenu(false);
+        });
+
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) closeMenu(false);
+        });
+    })();
+</script>
+                    </div>
+    </div>
+</nav>
+
+<div id="devprep-ann-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(4,7,18,.62); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:16px;">
+    <div style="width:100%; max-width:460px; background:#1a1f30; border:1px solid rgba(255,255,255,.1); border-top:1px solid rgba(255,255,255,.18); border-radius:16px; box-shadow:0 30px 70px rgba(0,0,0,.6); overflow:hidden; font-family:Inter,system-ui,sans-serif; color:#e5e1e7;">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 20px 12px;">
+            <div>
+                <p style="margin:0 0 2px; font:600 10px/1.2 'JetBrains Mono',monospace; letter-spacing:.14em; text-transform:uppercase; color:#8b5cf6;">Announcement</p>
+                <h2 style="margin:0; font-size:18px; font-weight:800;">📢 DevPrep News</h2>
+            </div>
+            <button type="button" id="devprep-ann-x" aria-label="Close" style="background:none; border:none; color:#9ca3af; font-size:26px; line-height:1; cursor:pointer;">&times;</button>
+        </div>
+        <div id="devprep-ann-list" style="display:flex; flex-direction:column; gap:12px; max-height:48vh; overflow-y:auto; padding:0 20px 4px;"></div>
+        <div style="padding:14px 20px 18px;">
+            <label style="display:flex; align-items:center; gap:9px; margin-bottom:14px; cursor:pointer; font-size:13px; color:#c8c5d0;">
+                <input type="checkbox" id="devprep-ann-hide" style="width:16px; height:16px; accent-color:#6366f1; cursor:pointer;" />
+                Don't show this announcement again
+            </label>
+            <button type="button" id="devprep-ann-ok" style="width:100%; padding:11px; border:none; border-radius:10px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; font-weight:700; font-size:14px; cursor:pointer;">Got it</button>
+        </div>
+    </div>
+</div>
+<script>
+    (function () {
+        var overlay = document.getElementById('devprep-ann-overlay');
+        if (!overlay || overlay.dataset.annInit === '1') return;
+        overlay.dataset.annInit = '1';
+
+        var HIDE_KEY = 'devprep-ann-hidden';   // sessionStorage: chỉ sống trong phiên trình duyệt
+        function esc(s) { return (s == null ? '' : String(s)).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+        // Đã tick "không hiển thị nữa" trong phiên này -> bỏ qua hoàn toàn (không cần fetch).
+        try { if (sessionStorage.getItem(HIDE_KEY) === '1') return; } catch (e) { }
+
+        function close() {
+            try { if (document.getElementById('devprep-ann-hide').checked) sessionStorage.setItem(HIDE_KEY, '1'); } catch (e) { }
+            overlay.style.display = 'none';
+        }
+
+        fetch('/Home/Announcements', { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (items) {
+                if (!items || !items.length) return;
+                document.getElementById('devprep-ann-list').innerHTML = items.map(function (a) {
+                    return '<div style="border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:13px 15px; background:rgba(255,255,255,.03);">'
+                        + '<div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:5px;">'
+                        + '<strong style="font-size:14.5px;">' + esc(a.title) + '</strong>'
+                        + '<span style="font-size:11px; opacity:.6; white-space:nowrap;">' + esc(a.createdAt) + '</span></div>'
+                        + '<p style="margin:0; font-size:13px; line-height:1.55; opacity:.85; white-space:pre-wrap;">' + esc(a.content) + '</p></div>';
+                }).join('');
+                overlay.style.display = 'flex';
+                document.getElementById('devprep-ann-ok').addEventListener('click', close);
+                document.getElementById('devprep-ann-x').addEventListener('click', close);
+            })
+            .catch(function () { /* best-effort: lỗi thì không hiện popup */ });
+    })();
+</script>
+
+
+<script>
+    (function () {
+        const nav = document.getElementById('hm-navbar');
+        if (!nav || nav.dataset.navbarInitialized === 'true') return;
+        nav.dataset.navbarInitialized = 'true';
+
+        const syncNavbar = function () {
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(14, 19, 35, 0.9)';
+                nav.style.boxShadow = '0 20px 25px -5px rgba(0,0,0,0.35)';
+            } else {
+                nav.style.backgroundColor = 'rgba(17, 24, 39, 0.6)';
+                nav.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.2)';
+            }
+        };
+
+        window.addEventListener('scroll', syncNavbar, { passive: true });
+        window.addEventListener('pageshow', syncNavbar);
+        syncNavbar();    })();
+</script>
+
+
+
+
+    <main class="hm-main">
+        <!-- Hero -->
+        <section class="hm-hero-v2">
+            <div class="row g-5 align-items-center">
+                <!-- Hero Left -->
+                <div class="col-lg-6">
+                    <div class="hm-badge-inline">
+                        <span class="material-symbols-outlined">bolt</span>
+                        <span>AI-Powered Engineering Prep</span>
+                    </div>
+                    <h1 class="hm-hero-title">Master Technical Interviews with <span class="hm-text-gradient">AI</span></h1>
+                    <p class="hm-hero-lead">
+                        The only high-performance platform designed by elite engineers to help you conquer coding,
+                        system design, and behavioral interviews through real-time AI feedback.
+                    </p>
+                    <div class="hm-hero-actions-v2">
+                        <a class="hm-btn primary-btn-gradient" href="/devprep/interview/">
+                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">rocket_launch</span>
+                            Start Interview Session
+                        </a>
+                        <a class="hm-btn hm-btn-outline" href="/devprep/payment/">View Pricing Plans</a>
+                    </div>
+                    <div class="hm-flow">Register -> Login -> Purchase Credits -> Start Interview</div>
+                    <div class="hm-trust">
+                        <div class="hm-trust-avatars">
+                            <img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALh24lwdLGbyyHz4qjKqHHR0jL15udqM-5oqEvWhXfmX7ruT2CmAE5TfptxEg5-SlNL93WrQoRfJdzc0TCKZpg6m8gFAA70HqH22igMUcCo9_H-VzRjaxQX9OrM-oBPle7uHhHUgvrNA5Nkt6bP6vkTqvIN362WC6sbX8wSPkPXaPspEBhKDP7DnoM5WbLjMb626_WS9qHOmKTJUyUJIYhoNcs0IRGyscE1ndjfRR7Ef4FK-E2MxKZcVOJY7jdRRWF1qRvMz3T49E">
+                            <img alt="User" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNoJDM321kRCgej1mIPS3NkKE3zrCeV9R_UV6HcthJ0jsL_VtTmKXvzxEDosSS928f0RHnh12dp9kWquxJS4jRkKB_PfDC03haTr0Bn1tpSxdFRMmTRw5JuaJ5EdnhpcKH9PDnolcJfvbTlWRtUQwQEM3kB4RyMSeAjuLKLh5kt-6GgUpaWoQnhb0b534d3Aot3TTfe4ticIzUpv7XKQHgNAEsDwqKuRWmE1P1Zms3O6BIoTY4rjh4C7KMlc1vkOqi8eOYgFis0sE">
+                            <div class="hm-trust-more">+2k</div>
+                        </div>
+                        <span>Trusted by 2,000+ engineers</span>
+                    </div>
+                </div>
+                <!-- Hero Right -->
+                <div class="col-lg-6">
+                    <div class="hm-hero-visual">
+                        <div class="hm-glow-purple"></div>
+                        <div class="glass-card hm-hero-card">
+                            <img alt="Dashboard Screenshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwTqYUSeX9BYW2slzry9YaM8WezcKkVPjXs218bhuyN62P7IbQu0Eqrm2icW24Oshg0i4P0sHuEYBLs_v9JmLB7AfEOGmHcye_0tjl25qN7sLjg1DrC3m1YnncAgcDR10CNAtXvMCXo5dbDgiQQ2n8bSwecEIb6nuahXlK07C6qbW71HZyIiSQz9c3RAv7Sdki8a8gdxBCj-5WpTEqwhwATQzb-IXtbIOodnpeghlCcmxSHrcD1JWXHTnf_X729lJj-eIUEIrRKM8">
+                            <div class="hm-hero-badge">
+                                <span class="hm-pulse-dot"></span>
+                                <span>AI Listening...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Bar (full width) -->
+        <section class="hm-stats-bar">
+            <div class="hm-stats-inner">
+                <div class="hm-stat">
+                    <span class="hm-stat-num">98%</span>
+                    <span class="hm-stat-label">Success Rate</span>
+                </div>
+                <div class="hm-stat-div"></div>
+                <div class="hm-stat">
+                    <span class="hm-stat-num">50k+</span>
+                    <span class="hm-stat-label">Sessions</span>
+                </div>
+                <div class="hm-stat-div"></div>
+                <div class="hm-stat">
+                    <span class="hm-stat-num">150+</span>
+                    <span class="hm-stat-label">Role Types</span>
+                </div>
+                <div class="hm-stat-div"></div>
+                <div class="hm-stat">
+                    <span class="hm-stat-num">12ms</span>
+                    <span class="hm-stat-label">AI Latency</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Bento Grid -->
+        <section class="hm-section">
+            <div class="hm-section-head">
+                <h2>Why Choose DevPrep AI</h2>
+                <p>Explore all features on the <a href="/devprep/news/">News page</a>.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card hm-feature">
+                        <div class="hm-feature-icon" style="background:rgba(79,70,229,.2);">
+                            <span class="material-symbols-outlined" style="color:#e2dfff;">search_check</span>
+                        </div>
+                        <h3>CV Semantic Analyzer</h3>
+                        <p>AI-powered parsing that maps your experience to target role competencies for perfect alignment.</p>
+                        <a class="hm-link" href="#">Learn More <span class="material-symbols-outlined">arrow_forward</span></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card hm-feature">
+                        <div class="hm-feature-icon" style="background:rgba(76,215,246,.2);">
+                            <span class="material-symbols-outlined" style="color:#4cd7f6;">mic</span>
+                        </div>
+                        <h3>Immersive Mock Interviews</h3>
+                        <p>Voice-activated real-time sessions that simulate actual high-pressure tech interview environments.</p>
+                        <a class="hm-link" href="#">Learn More <span class="material-symbols-outlined">arrow_forward</span></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card hm-feature">
+                        <div class="hm-feature-icon" style="background:rgba(208,188,255,.2);">
+                            <span class="material-symbols-outlined" style="color:#d0bcff;">shield</span>
+                        </div>
+                        <h3>Interview Integrity System</h3>
+                        <p>Advanced anti-cheat and verification protocols ensuring a fair and credible preparation cycle.</p>
+                        <a class="hm-link" href="#">Learn More <span class="material-symbols-outlined">arrow_forward</span></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Timeline -->
+        <section class="hm-section">
+            <div class="hm-timeline">
+                <div class="hm-timeline-line"></div>
+                <div class="hm-step">
+                    <div class="hm-step-num active">1</div>
+                    <div class="hm-step-title">Register &amp; Login</div>
+                    <p>Create your dev profile in seconds.</p>
+                </div>
+                <div class="hm-step">
+                    <div class="hm-step-num">2</div>
+                    <div class="hm-step-title">Purchase Credits</div>
+                    <p>Flexible pay-as-you-prep model.</p>
+                </div>
+                <div class="hm-step">
+                    <div class="hm-step-num">3</div>
+                    <div class="hm-step-title">Select Role</div>
+                    <p>Target specific FAANG/Startup roles.</p>
+                </div>
+                <div class="hm-step">
+                    <div class="hm-step-num">4</div>
+                    <div class="hm-step-title">Start Interview</div>
+                    <p>Engage with our lifelike AI interviewer.</p>
+                </div>
+                <div class="hm-step">
+                    <div class="hm-step-num">5</div>
+                    <div class="hm-step-title">Review &amp; Improve</div>
+                    <p>Get actionable behavioral feedback.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Banner -->
+        <section class="hm-section">
+            <div class="glass-card hm-cta">
+                <h2>Ready to Ace Your Next Interview?</h2>
+                <p>
+                    Join thousands of engineers who used DevPrep to secure offers at world-class technology companies.
+                    Your dream career starts with a single session.
+                </p>
+                <a class="hm-btn primary-btn-gradient" href="/devprep/interview/">
+                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">rocket_launch</span>
+                    Start Interview Session
+                </a>
+            </div>
+        </section>
+    </main>
+
+
+    <script src="/devprep/js/components/star-rating.js?v=_v943NCAJ1H-gFEpfZPTn_xAXJbrt6yuG98VA9IoMW0"></script>
+    <footer class="hm-footer">
+    <div class="hm-footer-intro">
+        <div class="hm-footer-brand">DevPrep AI</div>
+        <p class="hm-footer-about">
+            Sharpening the technical interview skills of Vietnamese engineers
+            with the power of next-generation AI.
+        </p>
+    </div>
+
+    <div class="hm-footer-bottom">
+        <span>© 2026 DevPrep AI. All rights reserved.</span>
+    </div>
+</footer>
+
+    <script src="/devprep/js/components/feedback-content.js?v=b1Y0CtyUCA6Yz-qQ-0l5cLKqQtYhdaEXZ4iVrU0dMRg"></script>
+</body>
+</html>

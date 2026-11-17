@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"admin",page:"/Admin/Payment/Packages"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Credit Packages – DevPrep Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+        /* ── Page-specific only — structural layout handled by admin.css ── */
+        :root {
+            --bg-alt:       #0e1323;
+            --surface-h:    rgba(255,255,255,.05);
+            --border:       rgba(255,255,255,.08);
+            --border-m:     rgba(255,255,255,.04);
+            --primary:      #818cf8; --primary-dim:  rgba(129,140,248,.12);
+            --success:      #10B981; --success-dim:  rgba(16,185,129,.12);
+            --error:        #f87171; --error-dim:    rgba(248,113,113,.12);
+            --warning:      #fbbf24; --warning-dim:  rgba(251,191,36,.12);
+            --text:         #e5e1e7; --text-muted:   #9ca3af; --text-dim: #6b7280;
+            --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+        }
+
+        .page-head       { display: flex; align-items: center; justify-content: space-between;
+                           margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
+        .page-label      { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+                           letter-spacing: .12em; text-transform: uppercase; color: var(--primary); margin-bottom: 6px; }
+
+        /* Alert banners */
+        .alert-banner { display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+                        border-radius: var(--r-md); margin-bottom: 20px; font-size: 14px; font-weight: 500; }
+        .alert-banner .material-symbols-outlined { font-size: 18px; flex-shrink: 0; }
+        .alert-success { background: var(--success-dim); border: 1px solid rgba(16,185,129,.2);  color: var(--success); }
+        .alert-error   { background: var(--error-dim);   border: 1px solid rgba(248,113,113,.2); color: var(--error); }
+
+        /* Data card (renamed from .card to avoid Bootstrap conflict) */
+        .data-card      { background: rgba(17,24,39,.4); backdrop-filter: blur(12px);
+                          border-top: 1px solid rgba(255,255,255,.1); border-left: 1px solid rgba(255,255,255,.1);
+                          border-right: .5px solid rgba(255,255,255,.05); border-bottom: .5px solid rgba(255,255,255,.05);
+                          border-radius: var(--r-lg); overflow: hidden; }
+        .data-card-head { display: flex; align-items: center; justify-content: space-between;
+                          padding: 16px 20px; border-bottom: 1px solid var(--border); gap: 12px; flex-wrap: wrap; }
+        .data-card-title { font-size: 15px; font-weight: 600; color: var(--text); }
+
+        /* Buttons (override Bootstrap .btn) */
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+               border-radius: var(--r-sm); font-family: 'Inter', sans-serif;
+               font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+               text-decoration: none; transition: opacity .15s, background .15s; }
+        .btn .material-symbols-outlined { font-size: 16px; }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #a855f7); color: #fff; }
+        .btn-primary:hover { opacity: .88; color: #fff; }
+        .btn-ghost   { background: var(--surface-h); border: 1px solid var(--border); color: var(--text-muted); }
+        .btn-ghost:hover { color: var(--text); background: var(--border); }
+        .btn-sm  { padding: 5px 12px; font-size: 12px; }
+        .btn-success { background: var(--success-dim); border: 1px solid rgba(16,185,129,.2); color: var(--success); }
+        .btn-success:hover { background: rgba(16,185,129,.2); color: var(--success); }
+        .btn-danger  { background: var(--error-dim);   border: 1px solid rgba(248,113,113,.2); color: var(--error); }
+        .btn-danger:hover  { background: rgba(248,113,113,.2); color: var(--error); }
+
+        /* Icon-only action buttons (table row actions) */
+        .icon-btn { display: inline-flex; align-items: center; justify-content: center;
+                    width: 30px; height: 30px; border-radius: var(--r-sm);
+                    background: var(--surface-h); border: 1px solid var(--border);
+                    color: var(--text-muted); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+        .icon-btn .material-symbols-outlined { font-size: 17px; }
+        .icon-btn:hover { background: var(--border); color: var(--text); }
+        .icon-btn-danger:hover { background: var(--error-dim); color: var(--error); border-color: rgba(248,113,113,.3); }
+        .icon-btn-success:hover { background: var(--success-dim); color: var(--success); border-color: rgba(16,185,129,.3); }
+
+        /* Hidden by default; revealed by the "Show Deleted" toggle */
+        .pkg-table tbody tr[data-active="false"] { display: none; }
+        .pkg-table.show-deleted tbody tr[data-active="false"] { display: table-row; }
+        #btnShowDeleted.active-toggle { background: var(--error-dim); border-color: rgba(248,113,113,.3); color: var(--error); }
+
+        /* Table */
+        .pkg-table { width: 100%; border-collapse: collapse; }
+        .pkg-table th { text-align: left; padding: 13px 20px; font-family: 'JetBrains Mono', monospace;
+                        font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+                        color: var(--text-dim); border-bottom: 1px solid var(--border); white-space: nowrap; }
+        .pkg-table td { padding: 16px 20px; border-bottom: 1px solid var(--border-m); font-size: 14px; vertical-align: middle; }
+        .pkg-table tbody tr:hover { background: var(--surface-h); }
+        .pkg-table tbody tr:last-child td { border-bottom: none; }
+        .pkg-table .th-r { text-align: right; }
+        .pkg-table .td-r { text-align: right; }
+        .pkg-name          { font-weight: 600; color: var(--text); }
+        .pkg-desc          { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+        .pkg-credits-total { font-size: 15px; font-weight: 700; color: var(--primary); }
+        .pkg-credits-break { font-size: 12px; color: var(--text-dim); margin-top: 1px; }
+        .pkg-price    { font-weight: 600; color: var(--text); }
+        .pkg-currency { font-size: 12px; color: var(--text-dim); }
+        .pkg-sort     { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-muted); }
+
+        /* Status badges */
+        .badge-active   { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px;
+                          border-radius: 20px; font-family: 'JetBrains Mono', monospace;
+                          font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+                          background: var(--success-dim); color: var(--success); }
+        .badge-inactive { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px;
+                          border-radius: 20px; font-family: 'JetBrains Mono', monospace;
+                          font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+                          background: rgba(107,114,128,.15); color: var(--text-dim); }
+        .badge-active .material-symbols-outlined,
+        .badge-inactive .material-symbols-outlined { font-size: 13px; }
+
+        .action-btns { display: flex; align-items: center; gap: 6px; }
+
+        /* Empty state */
+        .table-empty { text-align: center; padding: 48px 24px; color: var(--text-muted); }
+        .table-empty .material-symbols-outlined { font-size: 40px; opacity: .2; display: block; margin-bottom: 10px; }
+
+        /* ── Modals ─────────────────────────────────────────── */
+        .modal-overlay { display: none; position: fixed; inset: 0; z-index: 500;
+                         background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+                         align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .pm-modal { background: #0e1323; border: 1px solid var(--border); border-radius: var(--r-lg);
+                 padding: 28px; width: 100%; max-width: 500px;
+                 max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+        .pm-modal-title  { font-size: 18px; font-weight: 700; margin-bottom: 20px; color: var(--text); }
+        .form-row     { margin-bottom: 16px; }
+        .form-row label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .form-ctrl { width: 100%; background: #11121a !important; border: 1px solid #292c3d !important;
+                     border-radius: var(--r-sm); color: #ffffff !important; font-family: 'Inter', sans-serif;
+                     font-size: 13px; padding: 9px 12px; outline: none; transition: border-color .15s; }
+        .form-ctrl option { background-color: #11121a !important; color: #ffffff !important; }
+        .form-ctrl::placeholder { color: var(--text-dim); }
+        .form-ctrl:focus { border-color: rgba(129,140,248,.5); }
+        textarea.form-ctrl { resize: vertical; min-height: 70px; }
+        .form-grid    { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .pm-modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+
+        /* Delete confirm modal */
+        .del-modal { text-align: center; }
+        .del-modal .del-icon  { font-size: 40px; color: var(--error); margin-bottom: 12px; }
+        .del-modal .del-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        .del-modal .del-desc  { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    </style>
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+</head>
+<body class="admin-page">
+
+<header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="ad-user">
+            <button class="ad-avatar" id="ad-avatar-btn" type="button" title="admin@devprep.demo" aria-haspopup="true" aria-expanded="false">A</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">A</span>
+                    <span class="ad-dropdown-email">admin@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmbTr242FrkK9BLJ_Ff55jwFY0ZexRLe3xGmnCRHi_tXjAOqDYfKyeGHdkkLW9RVq6tQc9D0fXgJcrUdolx4GASv02o4Tdw6CoWwe4fhNKD80BuH8OHoDTuNbqKgr2Y4RU7nSr53ABpJ0_51zU384FKM_UWLy5P_1LwL732HvL8arA" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('ad-avatar-btn');
+        const menu = document.getElementById('ad-user');
+        if (btn && menu) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const open = menu.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', function (e) {
+                if (!menu.contains(e.target)) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+            });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.classList.remove('open'); });
+        }
+    })();
+</script>
+
+<aside class="ad-sidebar">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Admin Dashboard</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item" href="/devprep/admin/"><span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/questions/"><span class="material-symbols-outlined">quiz</span><span class="label">Question Bank</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/techstacks/"><span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/positions/"><span class="material-symbols-outlined">work</span><span class="label">Positions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/user/"><span class="material-symbols-outlined">group</span><span class="label">Users</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/interviewsessions/"><span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/payment/payments/"><span class="material-symbols-outlined">payments</span><span class="label">Payments</span></a>
+        <a class="ad-nav-item active" href="/devprep/admin/payment/packages/"><span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/credits/"><span class="material-symbols-outlined">price_change</span><span class="label">Credit Adjust</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/aifeedback/"><span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/systemfeedback/"><span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/reportedfeedback/"><span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/news/"><span class="material-symbols-outlined">newspaper</span><span class="label">News</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/announcements/"><span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span></a>
+    </nav>
+</aside>
+
+
+<main class="ad-main">
+    <div class="page-head">
+        <div>
+            <p class="page-label">Payment Admin</p>
+            <h1 class="ad-page-title">Credit Package Management</h1>
+        </div>
+        <button class="btn btn-primary" onclick="openCreateModal()">
+            <span class="material-symbols-outlined">add</span>
+            New Package
+        </button>
+    </div>
+
+
+
+    <!-- Stat bar — same glass-card ad-stat structure as Dashboard -->
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        <div class="col">
+            <div class="glass-card ad-stat">
+                <div class="ad-stat-top">
+                    <span class="ad-stat-label">Total Packages</span>
+                    <span class="material-symbols-outlined" style="color:var(--ad-primary);opacity:.6;font-variation-settings:'FILL' 1;">package_2</span>
+                </div>
+                <div><div class="ad-stat-value">4</div></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="glass-card ad-stat">
+                <div class="ad-stat-top">
+                    <span class="ad-stat-label">Active</span>
+                    <span class="material-symbols-outlined" style="color:var(--ad-success);opacity:.6;font-variation-settings:'FILL' 1;">check_circle</span>
+                </div>
+                <div><div class="ad-stat-value" style="color:var(--ad-success);">3</div></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="glass-card ad-stat">
+                <div class="ad-stat-top">
+                    <span class="ad-stat-label">Deactivated</span>
+                    <span class="material-symbols-outlined" style="color:var(--ad-warning);opacity:.6;font-variation-settings:'FILL' 1;">cancel</span>
+                </div>
+                <div><div class="ad-stat-value" style="color:var(--ad-warning);">1</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table card -->
+    <div class="data-card">
+        <div class="data-card-head">
+            <span class="data-card-title">All Packages</span>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:13px;color:var(--text-muted);">Sorted by display order</span>
+                <button type="button" id="btnShowDeleted" class="btn btn-ghost btn-sm" onclick="toggleShowDeleted()" title="Show deactivated packages (to restore)">
+                    <span class="material-symbols-outlined">history</span>
+                    Show deleted
+                </button>
+            </div>
+        </div>
+
+            <div style="overflow-x:auto;">
+                <table class="pkg-table" id="pkgTable">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th class="th-r">Credits</th>
+                            <th class="th-r">Price</th>
+                            <th style="text-align:center;">Status</th>
+                            <th style="text-align:center;">Order</th>
+                            <th style="text-align:right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr data-active="true">
+                                <td>
+                                    <div class="pkg-name">Starter</div>
+                                        <div class="pkg-desc">G&#xF3;i Starter: 20 credit</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-credits-total">20 CR</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-price">49.000</div>
+                                    <div class="pkg-currency">VND</div>
+                                </td>
+                                <td style="text-align:center;">
+                                        <span class="badge-active">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">circle</span>
+                                            Active
+                                        </span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span class="pkg-sort">0</span>
+                                </td>
+                                <td>
+                                    <div class="action-btns" style="justify-content:flex-end;">
+                                        <button class="icon-btn" title="Edit"
+                                                onclick='openEditModal({"packageId":"0812a250-5bfa-52c2-aa19-d274442600cd","name":"Starter","description":"G\u00F3i Starter: 20 credit","credits":20,"bonusCredits":0,"totalCredits":20,"price":49000,"currency":"VND","isActive":true,"sortOrder":0,"createdAt":"2026-08-08T09:30:00Z","updatedAt":"2026-11-09T09:30:00Z"})'>
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                            <button class="icon-btn icon-btn-danger" title="Deactivate"
+                                                    onclick='openDeleteModal("0812a250-5bfa-52c2-aa19-d274442600cd","Starter")'>
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-active="true">
+                                <td>
+                                    <div class="pkg-name">Standard</div>
+                                        <div class="pkg-desc">G&#xF3;i Standard: 50 credit &#x2B; 5 credit th&#x1B0;&#x1EDF;ng</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-credits-total">55 CR</div>
+                                        <div class="pkg-credits-break">50 + 5 bonus</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-price">99.000</div>
+                                    <div class="pkg-currency">VND</div>
+                                </td>
+                                <td style="text-align:center;">
+                                        <span class="badge-active">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">circle</span>
+                                            Active
+                                        </span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span class="pkg-sort">1</span>
+                                </td>
+                                <td>
+                                    <div class="action-btns" style="justify-content:flex-end;">
+                                        <button class="icon-btn" title="Edit"
+                                                onclick='openEditModal({"packageId":"7ca09a7f-90f3-5706-8833-62f65e61920f","name":"Standard","description":"G\u00F3i Standard: 50 credit \u002B 5 credit th\u01B0\u1EDFng","credits":50,"bonusCredits":5,"totalCredits":55,"price":99000,"currency":"VND","isActive":true,"sortOrder":1,"createdAt":"2026-08-08T09:30:00Z","updatedAt":"2026-11-09T09:30:00Z"})'>
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                            <button class="icon-btn icon-btn-danger" title="Deactivate"
+                                                    onclick='openDeleteModal("7ca09a7f-90f3-5706-8833-62f65e61920f","Standard")'>
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-active="true">
+                                <td>
+                                    <div class="pkg-name">Pro</div>
+                                        <div class="pkg-desc">G&#xF3;i Pro: 120 credit &#x2B; 20 credit th&#x1B0;&#x1EDF;ng</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-credits-total">140 CR</div>
+                                        <div class="pkg-credits-break">120 + 20 bonus</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-price">199.000</div>
+                                    <div class="pkg-currency">VND</div>
+                                </td>
+                                <td style="text-align:center;">
+                                        <span class="badge-active">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">circle</span>
+                                            Active
+                                        </span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span class="pkg-sort">2</span>
+                                </td>
+                                <td>
+                                    <div class="action-btns" style="justify-content:flex-end;">
+                                        <button class="icon-btn" title="Edit"
+                                                onclick='openEditModal({"packageId":"6055c53d-ab49-5c77-9ae1-b5ab48ec749d","name":"Pro","description":"G\u00F3i Pro: 120 credit \u002B 20 credit th\u01B0\u1EDFng","credits":120,"bonusCredits":20,"totalCredits":140,"price":199000,"currency":"VND","isActive":true,"sortOrder":2,"createdAt":"2026-08-08T09:30:00Z","updatedAt":"2026-11-09T09:30:00Z"})'>
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                            <button class="icon-btn icon-btn-danger" title="Deactivate"
+                                                    onclick='openDeleteModal("6055c53d-ab49-5c77-9ae1-b5ab48ec749d","Pro")'>
+                                                <span class="material-symbols-outlined">delete</span>
+                                            </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr data-active="false">
+                                <td>
+                                    <div class="pkg-name">Team</div>
+                                        <div class="pkg-desc">G&#xF3;i Team: 300 credit &#x2B; 60 credit th&#x1B0;&#x1EDF;ng</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-credits-total">360 CR</div>
+                                        <div class="pkg-credits-break">300 + 60 bonus</div>
+                                </td>
+                                <td class="td-r">
+                                    <div class="pkg-price">449.000</div>
+                                    <div class="pkg-currency">VND</div>
+                                </td>
+                                <td style="text-align:center;">
+                                        <span class="badge-inactive">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">circle</span>
+                                            Inactive
+                                        </span>
+                                </td>
+                                <td style="text-align:center;">
+                                    <span class="pkg-sort">3</span>
+                                </td>
+                                <td>
+                                    <div class="action-btns" style="justify-content:flex-end;">
+                                        <button class="icon-btn" title="Edit"
+                                                onclick='openEditModal({"packageId":"34918028-e012-5aef-9c7a-e9a7a69b9620","name":"Team","description":"G\u00F3i Team: 300 credit \u002B 60 credit th\u01B0\u1EDFng","credits":300,"bonusCredits":60,"totalCredits":360,"price":449000,"currency":"VND","isActive":false,"sortOrder":3,"createdAt":"2026-08-08T09:30:00Z","updatedAt":"2026-11-09T09:30:00Z"})'>
+                                            <span class="material-symbols-outlined">edit</span>
+                                        </button>
+                                            <button class="icon-btn icon-btn-success" title="Restore"
+                                                    onclick='restorePackage("34918028-e012-5aef-9c7a-e9a7a69b9620","Team")'>
+                                                <span class="material-symbols-outlined">restore_from_trash</span>
+                                            </button>
+                                    </div>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</main>
+
+<!-- ── Create / Edit Modal ────────────────────────────────── -->
+<div class="modal-overlay" id="pkgModal">
+    <div class="pm-modal">
+        <h2 class="pm-modal-title" id="modalTitle">New Package</h2>
+        <form method="post" id="pkgForm">
+            
+            <div class="form-row">
+                <label>Package Name *</label>
+                <input type="text" name="name" id="f-name" class="form-ctrl" required placeholder="e.g. Starter Pack" maxlength="100" />
+            </div>
+            <div class="form-row">
+                <label>Description</label>
+                <textarea name="description" id="f-desc" class="form-ctrl" placeholder="Short description (optional)"></textarea>
+            </div>
+            <div class="form-grid">
+                <div class="form-row">
+                    <label>Base Credits *</label>
+                    <input type="number" name="credits" id="f-credits" class="form-ctrl" required min="1" placeholder="10" />
+                </div>
+                <div class="form-row">
+                    <label>Bonus Credits</label>
+                    <input type="number" name="bonusCredits" id="f-bonus" class="form-ctrl" min="0" value="0" placeholder="0" />
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-row">
+                    <label>Price (VND) *</label>
+                    <input type="number" name="price" id="f-price" class="form-ctrl" required min="0" step="1000" placeholder="50000" />
+                </div>
+                <div class="form-row">
+                    <label>Sort Order</label>
+                    <input type="number" name="sortOrder" id="f-sort" class="form-ctrl" min="0" value="0" placeholder="0" />
+                </div>
+            </div>
+            <div class="pm-modal-footer">
+                <button type="button" class="btn btn-ghost" onclick="closeModal('pkgModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="pkgSubmitBtn">
+                    <span class="material-symbols-outlined">save</span>
+                    Save Package
+                </button>
+            </div>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmbTr242FrkK9BLJ_Ff55jwFY0ZexRLe3xGmnCRHi_tXjAOqDYfKyeGHdkkLW9RVq6tQc9D0fXgJcrUdolx4GASv02o4Tdw6CoWwe4fhNKD80BuH8OHoDTuNbqKgr2Y4RU7nSr53ABpJ0_51zU384FKM_UWLy5P_1LwL732HvL8arA" /></form>
+    </div>
+</div>
+
+<!-- ── Delete Confirm Modal ───────────────────────────────── -->
+<div class="modal-overlay" id="delModal">
+    <div class="pm-modal del-modal">
+        <span class="material-symbols-outlined del-icon" style="font-variation-settings:'FILL' 1;">warning</span>
+        <p class="del-title">Deactivate Package?</p>
+        <p class="del-desc">
+            Package <strong id="delPkgName"></strong> will be hidden from users but existing transactions are preserved.
+        </p>
+        <form method="post" id="delForm">
+            
+            <input type="hidden" name="name" id="delPkgNameHidden" />
+            <div class="pm-modal-footer" style="justify-content:center;">
+                <button type="button" class="btn btn-ghost" onclick="closeModal('delModal')">Cancel</button>
+                <button type="submit" class="btn btn-danger">
+                    <span class="material-symbols-outlined">delete</span>
+                    Deactivate
+                </button>
+            </div>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmbTr242FrkK9BLJ_Ff55jwFY0ZexRLe3xGmnCRHi_tXjAOqDYfKyeGHdkkLW9RVq6tQc9D0fXgJcrUdolx4GASv02o4Tdw6CoWwe4fhNKD80BuH8OHoDTuNbqKgr2Y4RU7nSr53ABpJ0_51zU384FKM_UWLy5P_1LwL732HvL8arA" /></form>
+    </div>
+</div>
+
+<!-- ── Restore confirmation — same modal pattern as delModal above ────── -->
+<div class="modal-overlay" id="restoreModal">
+    <div class="pm-modal del-modal">
+        <span class="material-symbols-outlined del-icon"
+              style="font-variation-settings:'FILL' 1; color: var(--success);">restore_from_trash</span>
+        <p class="del-title">Restore Package?</p>
+        <p class="del-desc">
+            Package <strong id="restorePkgName"></strong> will become active and visible to users again.
+        </p>
+        <form method="post" id="restoreForm">
+            
+            <input type="hidden" name="name" id="restorePkgNameHidden" />
+            <div class="pm-modal-footer" style="justify-content:center;">
+                <button type="button" class="btn btn-ghost" onclick="closeModal('restoreModal')">Cancel</button>
+                <button type="submit" class="btn btn-success">
+                    <span class="material-symbols-outlined">restore_from_trash</span>
+                    Restore
+                </button>
+            </div>
+        <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmbTr242FrkK9BLJ_Ff55jwFY0ZexRLe3xGmnCRHi_tXjAOqDYfKyeGHdkkLW9RVq6tQc9D0fXgJcrUdolx4GASv02o4Tdw6CoWwe4fhNKD80BuH8OHoDTuNbqKgr2Y4RU7nSr53ABpJ0_51zU384FKM_UWLy5P_1LwL732HvL8arA" /></form>
+    </div>
+</div>
+
+<script>
+    function openCreateModal() {
+        document.getElementById('modalTitle').textContent = 'New Package';
+        document.getElementById('pkgForm').action = '/Admin/Payment/Packages/Create';
+        document.getElementById('f-name').value    = '';
+        document.getElementById('f-desc').value    = '';
+        document.getElementById('f-credits').value = '';
+        document.getElementById('f-bonus').value   = '0';
+        document.getElementById('f-price').value   = '';
+        document.getElementById('f-sort').value    = '0';
+        document.getElementById('pkgModal').classList.add('open');
+    }
+
+    function openEditModal(pkg) {
+        document.getElementById('modalTitle').textContent = 'Edit Package';
+        document.getElementById('pkgForm').action = '/Admin/Payment/Packages/Edit/' + pkg.packageId;
+        document.getElementById('f-name').value    = pkg.name;
+        document.getElementById('f-desc').value    = pkg.description || '';
+        document.getElementById('f-credits').value = pkg.credits;
+        document.getElementById('f-bonus').value   = pkg.bonusCredits;
+        document.getElementById('f-price').value   = pkg.price;
+        document.getElementById('f-sort').value    = pkg.sortOrder;
+        document.getElementById('pkgModal').classList.add('open');
+    }
+
+    function openDeleteModal(id, name) {
+        document.getElementById('delPkgName').textContent = name;
+        document.getElementById('delPkgNameHidden').value = name;
+        document.getElementById('delForm').action = '/Admin/Payment/Packages/Delete/' + id;
+        document.getElementById('delModal').classList.add('open');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('open');
+    }
+
+    let showDeleted = false;
+    function toggleShowDeleted() {
+        showDeleted = !showDeleted;
+        document.getElementById('pkgTable').classList.toggle('show-deleted', showDeleted);
+        document.getElementById('btnShowDeleted').classList.toggle('active-toggle', showDeleted);
+    }
+
+    function restorePackage(id, name) {
+        document.getElementById('restorePkgName').textContent = name;
+        document.getElementById('restorePkgNameHidden').value = name;
+        document.getElementById('restoreForm').action = '/Admin/Payment/Packages/Restore/' + id;
+        document.getElementById('restoreModal').classList.add('open');
+    }
+
+    document.querySelectorAll('.modal-overlay').forEach(el => {
+        el.addEventListener('click', e => { if (e.target === el) closeModal(el.id); });
+    });
+
+    document.querySelectorAll('.alert-banner').forEach(el => {
+        setTimeout(() => el.style.transition = 'opacity .5s', 4500);
+        setTimeout(() => el.style.opacity = '0', 5000);
+        setTimeout(() => el.remove(), 5500);
+    });
+</script>
+
+</body>
+</html>

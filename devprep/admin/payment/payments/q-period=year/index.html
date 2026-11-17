@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"admin",page:"/Admin/Payment/Payments?period=year"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Audit – DevPrep Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+        /* ── Page-specific only — structural layout handled by admin.css ── */
+        :root {
+            --border-m: rgba(255,255,255,.04);
+            --primary:  #818cf8; --primary-dim:  rgba(129,140,248,.12);
+            --success:  #10B981; --success-dim:  rgba(16,185,129,.12);
+            --error:    #f87171; --error-dim:    rgba(248,113,113,.12);
+            --warning:  #fbbf24; --warning-dim:  rgba(251,191,36,.12);
+            --text:     #e5e1e7; --text-muted:   #9ca3af; --text-dim: #6b7280;
+            --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+        }
+        .page-head  { margin-bottom: 28px; }
+        .page-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+                      letter-spacing: .12em; text-transform: uppercase; color: var(--primary); margin-bottom: 6px; }
+
+        /* Card (renamed to avoid Bootstrap .card conflict) */
+        .data-card      { background: rgba(17,24,39,.4); backdrop-filter: blur(12px);
+                          border-top: 1px solid rgba(255,255,255,.1); border-left: 1px solid rgba(255,255,255,.1);
+                          border-right: .5px solid rgba(255,255,255,.05); border-bottom: .5px solid rgba(255,255,255,.05);
+                          border-radius: var(--r-lg); overflow: hidden; }
+        .data-card-head { display: flex; align-items: center; justify-content: space-between;
+                          padding: 16px 20px; border-bottom: 1px solid var(--ad-border); }
+        .data-card-title { font-size: 15px; font-weight: 600; color: var(--text); }
+
+        /* Status badges */
+        .badge-pill { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px;
+                      border-radius: 20px; font-family: 'JetBrains Mono', monospace;
+                      font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+        .badge-pill .material-symbols-outlined { font-size: 13px; }
+        .badge-paid    { background: var(--success-dim); color: var(--success); }
+        .badge-failed  { background: var(--error-dim);   color: var(--error); }
+        .badge-pending { background: var(--warning-dim); color: var(--warning); }
+
+        /* Table */
+        .tx-table { width: 100%; border-collapse: collapse; }
+        .tx-table th { text-align: left; padding: 12px 18px;
+                       font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+                       letter-spacing: .1em; text-transform: uppercase;
+                       color: var(--text-dim); border-bottom: 1px solid var(--ad-border); }
+        .tx-table td { padding: 15px 18px; border-bottom: 1px solid var(--border-m);
+                       font-size: 14px; vertical-align: middle; color: var(--text); }
+        .tx-table tbody tr:hover { background: rgba(255,255,255,.03); }
+        .tx-table tbody tr:last-child td { border-bottom: none; }
+        .mono  { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .muted { color: var(--text-muted); }
+        .order-code { display: inline-block; max-width: 180px; overflow: hidden;
+                      text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+
+        /* Pagination */
+        .pager      { display: flex; align-items: center; justify-content: space-between;
+                      padding: 14px 20px; border-top: 1px solid var(--ad-border); }
+        .pager-info { font-size: 13px; color: var(--text-muted); }
+        .pager-nav  { display: flex; gap: 5px; }
+        .pager-btn  { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px;
+                      border-radius: var(--r-sm); border: 1px solid var(--ad-border);
+                      background: rgba(255,255,255,.03); color: var(--text-muted);
+                      font-size: 13px; font-weight: 600; text-decoration: none;
+                      transition: background .15s, color .15s; }
+        .pager-btn:hover { background: rgba(255,255,255,.06); color: var(--text); }
+        .pager-btn.now   { background: var(--primary-dim); color: var(--primary);
+                           border-color: rgba(129,140,248,.25); }
+        .pager-btn .material-symbols-outlined { font-size: 13px; }
+
+        .empty-msg { text-align: center; padding: 48px; color: var(--text-muted); font-size: 14px; }
+        .err-box   { margin-bottom: 20px; background: var(--error-dim);
+                     border: 1px solid rgba(248,113,113,.2); border-radius: var(--r-md);
+                     padding: 14px 18px; font-size: 14px; color: var(--error); }
+
+        /* Filter toolbar */
+        .filter-bar   { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
+                        padding: 16px 20px; margin-bottom: 20px; }
+        .filter-field { display: flex; flex-direction: column; gap: 4px; }
+        .filter-field label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+                               letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); }
+        .filter-field input, .filter-field select {
+            background: #11121a !important; border: 1px solid #292c3d !important; border-radius: var(--r-sm);
+            color: #ffffff !important; font-size: 13px; padding: 7px 10px; min-width: 130px;
+        }
+        .filter-field select option { background-color: #11121a !important; color: #ffffff !important; }
+        input[type="date"] { color-scheme: dark !important; }
+        .filter-field input:focus, .filter-field select:focus { outline: none; border-color: var(--primary); background: #161824 !important; }
+        .filter-actions { display: flex; gap: 8px; }
+        .btn-filter   { background: var(--primary-dim); color: var(--primary); border: 1px solid rgba(129,140,248,.25);
+                        border-radius: var(--r-sm); padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .btn-filter:hover { background: rgba(129,140,248,.2); }
+        .btn-clear    { background: rgba(255,255,255,.03); color: var(--text-muted); border: 1px solid var(--ad-border);
+                        border-radius: var(--r-sm); padding: 8px 16px; font-size: 13px; font-weight: 600;
+                        text-decoration: none; display: inline-flex; align-items: center; }
+        .btn-clear:hover { background: rgba(255,255,255,.06); color: var(--text); }
+
+        /* Revenue report card */
+        .revenue-card  { padding: 18px 20px; margin-bottom: 20px; }
+        .revenue-head  { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+        .period-tabs   { display: flex; gap: 6px; }
+        .period-tab    { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--ad-border);
+                          background: rgba(255,255,255,.03); color: var(--text-muted);
+                          font-size: 12px; font-weight: 600; text-decoration: none; }
+        .period-tab:hover { color: var(--text); }
+        .period-tab.now { background: var(--primary-dim); color: var(--primary); border-color: rgba(129,140,248,.25); }
+        .custom-range  { display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap; }
+        .revenue-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+        .revenue-stat-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+        .revenue-stat-value { font-size: 22px; font-weight: 700; color: var(--text); }
+        .revenue-range { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+        /* Row action + transaction detail modal */
+        .icon-btn { display: inline-flex; align-items: center; justify-content: center;
+                    width: 30px; height: 30px; border-radius: var(--r-sm);
+                    background: rgba(255,255,255,.05); border: 1px solid var(--ad-border);
+                    color: var(--text-muted); cursor: pointer;
+                    transition: background .15s, color .15s, border-color .15s; }
+        .icon-btn .material-symbols-outlined { font-size: 17px; }
+        .icon-btn:hover { background: var(--primary-dim); color: var(--primary);
+                          border-color: rgba(129,140,248,.3); }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; z-index: 500;
+                         background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+                         align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.open { display: flex; }
+        .tx-modal { background: #0e1323; border: 1px solid var(--ad-border); border-radius: var(--r-lg);
+                    width: 100%; max-width: 620px; max-height: 88vh; overflow-y: auto;
+                    box-shadow: 0 24px 64px rgba(0,0,0,.5); }
+        .tx-modal-head { display: flex; align-items: center; justify-content: space-between;
+                         padding: 18px 22px; border-bottom: 1px solid var(--ad-border); }
+        .tx-modal-title { font-size: 16px; font-weight: 700; color: var(--text); }
+        .tx-modal-body { padding: 18px 22px 24px; }
+        .tx-section-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+                            letter-spacing: .1em; text-transform: uppercase; color: var(--primary);
+                            margin: 18px 0 8px; }
+        .tx-section-label:first-child { margin-top: 0; }
+        .tx-row { display: flex; justify-content: space-between; gap: 16px; padding: 7px 0;
+                  border-bottom: 1px solid var(--border-m); font-size: 13px; }
+        .tx-row:last-child { border-bottom: none; }
+        .tx-row .k { color: var(--text-dim); flex-shrink: 0; }
+        .tx-row .v { color: var(--text); text-align: right; word-break: break-all; }
+        .tx-empty { padding: 14px; border-radius: var(--r-sm); background: rgba(255,255,255,.03);
+                    border: 1px dashed var(--ad-border); color: var(--text-muted); font-size: 13px; }
+        .tx-raw { margin-top: 6px; background: #11121a; border: 1px solid #292c3d;
+                  border-radius: var(--r-sm); padding: 10px 12px; max-height: 190px; overflow: auto;
+                  font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted);
+                  white-space: pre-wrap; word-break: break-all; }
+    </style>
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+    <link rel="stylesheet" href="/devprep/css/components/pagination.css?v=M4UFAnJj6vGhEF9H66VZXLMHxUzMETNEdKjlPhUQjfQ" />
+</head>
+<body class="admin-page">
+<header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="ad-user">
+            <button class="ad-avatar" id="ad-avatar-btn" type="button" title="admin@devprep.demo" aria-haspopup="true" aria-expanded="false">A</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">A</span>
+                    <span class="ad-dropdown-email">admin@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmbR0YfnOyDYGg5BjhDBrt_HOgd98W01fRzwxokWfmfjdFMotX7_uISUi_DdjLB9-zEEkCIQErgyMFzUk5fOhFSoS-vS5BZYaUJXP-VmRSvfgm8CMD9GJ-OAzNnxn6_CnltrqAQoUDMhGo1QAL2aWwpqTT6R78VeyX95Hr4OGhKcqQ" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('ad-avatar-btn');
+        const menu = document.getElementById('ad-user');
+        if (btn && menu) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const open = menu.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', function (e) {
+                if (!menu.contains(e.target)) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+            });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.classList.remove('open'); });
+        }
+    })();
+</script>
+
+<aside class="ad-sidebar">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Admin Dashboard</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item" href="/devprep/admin/"><span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/questions/"><span class="material-symbols-outlined">quiz</span><span class="label">Question Bank</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/techstacks/"><span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/positions/"><span class="material-symbols-outlined">work</span><span class="label">Positions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/user/"><span class="material-symbols-outlined">group</span><span class="label">Users</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/interviewsessions/"><span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span></a>
+        <a class="ad-nav-item active" href="/devprep/admin/payment/payments/"><span class="material-symbols-outlined">payments</span><span class="label">Payments</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/payment/packages/"><span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/credits/"><span class="material-symbols-outlined">price_change</span><span class="label">Credit Adjust</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/aifeedback/"><span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/systemfeedback/"><span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/reportedfeedback/"><span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/news/"><span class="material-symbols-outlined">newspaper</span><span class="label">News</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/announcements/"><span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span></a>
+    </nav>
+</aside>
+
+
+<main class="ad-main">
+    <header class="page-head">
+        <div>
+            <p class="page-label">Payment Admin</p>
+            <h1 class="ad-page-title">Transaction Audit</h1>
+        </div>
+    </header>
+
+    <!-- Filter & search toolbar -->
+    <form class="data-card filter-bar" method="get" action="/devprep/admin/payment/payments/">
+        <input type="hidden" name="period" value="year" />
+        <div class="filter-field">
+            <label>Search order code</label>
+            <input type="text" name="keyword" placeholder="ORD-..." />
+        </div>
+        <div class="filter-field">
+            <label>Status</label>
+            <select name="status">
+                <option value="">All</option>
+                <option value="Paid">Paid</option>
+                <option value="Pending">Pending</option>
+                <option value="Failed">Failed</option>
+            </select>
+        </div>
+        <div class="filter-field">
+            <label>Method</label>
+            <select name="paymentMethod">
+                <option value="">All</option>
+                <option value="VNPay">VNPay</option>
+            </select>
+        </div>
+        <div class="filter-field">
+            <label>From date</label>
+            <input type="date" name="dateFrom" />
+        </div>
+        <div class="filter-field">
+            <label>To date</label>
+            <input type="date" name="dateTo" />
+        </div>
+        <div class="filter-field">
+            <label>Min amount</label>
+            <input type="number" name="minAmount" placeholder="0" min="0" />
+        </div>
+        <div class="filter-field">
+            <label>Max amount</label>
+            <input type="number" name="maxAmount" placeholder="0" min="0" />
+        </div>
+        <div class="filter-actions">
+            <button type="submit" class="btn-filter">Apply</button>
+            <a class="btn-clear" href="/devprep/admin/payment/payments/q-period=year/">Clear</a>
+        </div>
+    </form>
+
+        <!-- Revenue report -->
+        <div class="data-card revenue-card">
+            <div class="revenue-head">
+                <span class="data-card-title">Revenue Report</span>
+                <div class="period-tabs">
+                    <a class="period-tab " href="/devprep/admin/payment/payments/q-period=today/">Today</a>
+                    <a class="period-tab " href="/devprep/admin/payment/payments/q-period=month/">This Month</a>
+                    <a class="period-tab now" href="/devprep/admin/payment/payments/q-period=year/">This Year</a>
+                </div>
+                <form class="custom-range" method="get" action="/devprep/admin/payment/payments/">
+                    <input type="hidden" name="period" value="custom" />
+                    <input type="hidden" name="keyword" />
+                    <input type="hidden" name="status" />
+                    <input type="hidden" name="paymentMethod" />
+                    <input type="hidden" name="dateFrom" />
+                    <input type="hidden" name="dateTo" />
+                    <input type="hidden" name="minAmount" />
+                    <input type="hidden" name="maxAmount" />
+                    <div class="filter-field">
+                        <label>From</label>
+                        <input type="date" name="from" />
+                    </div>
+                    <div class="filter-field">
+                        <label>To</label>
+                        <input type="date" name="to" />
+                    </div>
+                    <button type="submit" class="btn-filter">View</button>
+                </form>
+            </div>
+                <div class="revenue-stats">
+                    <div>
+                        <div class="revenue-stat-label">Packages Sold</div>
+                        <div class="revenue-stat-value">37</div>
+                    </div>
+                    <div>
+                        <div class="revenue-stat-label">Total Revenue</div>
+                        <div class="revenue-stat-value" style="color:var(--success);">4.382.000 VND</div>
+                    </div>
+                    <div>
+                        <div class="revenue-stat-label">Total Credits</div>
+                        <div class="revenue-stat-value">2410</div>
+                    </div>
+                </div>
+                <div class="revenue-range">17/10/2026 &ndash; 15/11/2026</div>
+        </div>
+        <!-- Stat bar — same glass-card ad-stat structure as Dashboard -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
+            <div class="col">
+                <div class="glass-card ad-stat">
+                    <div class="ad-stat-top">
+                        <span class="ad-stat-label">Total Transactions</span>
+                        <span class="material-symbols-outlined" style="color:var(--ad-primary);opacity:.6;font-variation-settings:'FILL' 1;">receipt_long</span>
+                    </div>
+                    <div><div class="ad-stat-value">14</div></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="glass-card ad-stat">
+                    <div class="ad-stat-top">
+                        <span class="ad-stat-label">Paid Transactions</span>
+                        <span class="material-symbols-outlined" style="color:var(--ad-success);opacity:.6;font-variation-settings:'FILL' 1;">check_circle</span>
+                    </div>
+                    <div><div class="ad-stat-value" style="color:var(--ad-success);">9</div></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="glass-card ad-stat">
+                    <div class="ad-stat-top">
+                        <span class="ad-stat-label">Total Amount</span>
+                        <span class="material-symbols-outlined" style="color:var(--ad-primary);opacity:.6;font-variation-settings:'FILL' 1;">payments</span>
+                    </div>
+                    <div><div class="ad-stat-value">1.536.000</div></div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="glass-card ad-stat">
+                    <div class="ad-stat-top">
+                        <span class="ad-stat-label">Paid Amount</span>
+                        <span class="material-symbols-outlined" style="color:var(--ad-success);opacity:.6;font-variation-settings:'FILL' 1;">account_balance_wallet</span>
+                    </div>
+                    <div><div class="ad-stat-value" style="color:var(--ad-success);">1.041.000</div></div>
+                </div>
+            </div>
+        </div>
+        <!-- Transactions table -->
+        <div class="data-card">
+            <div class="data-card-head">
+                <span class="data-card-title">All Transactions</span>
+                <span style="font-size:13px;color:var(--text-muted);">Page 1 of 1 · 14 total</span>
+            </div>
+
+                <div style="overflow-x:auto;">
+                    <table class="tx-table">
+                        <colgroup>
+                            <col style="width:200px;" />
+                            <col style="width:120px;" />
+                            <col style="width:90px;" />
+                            <col style="width:150px;" />
+                            <col style="width:90px;" />
+                            <col style="width:130px;" />
+                            <col style="width:100px;" />
+                            <col style="width:70px;" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Order Code</th>
+                                <th>User</th>
+                                <th style="text-align:right;">Credits</th>
+                                <th style="text-align:right;">Amount</th>
+                                <th>Method</th>
+                                <th>Date</th>
+                                <th style="text-align:center;">Status</th>
+                                <th style="text-align:center;">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261100">DP20261100</span></td>
+                                    <td>
+                                            <span title="368454b5-54ab-56ef-a2ac-666bb17bc283">Nguy&#x1EC5;n Minh Anh</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>20</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">49.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">16/11/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('94608fce-a522-5ccc-b726-05ad1dc364c2')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261101">DP20261101</span></td>
+                                    <td>
+                                            <span title="37e64bd0-474b-597d-bebb-f09cd5d54bf0">Tr&#x1EA7;n Gia Huy</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>55</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">99.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">14/11/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('88ed1530-cc81-5ef8-a441-7dc0c24a36b2')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261102">DP20261102</span></td>
+                                    <td>
+                                            <span title="c3eaef21-6d5e-5f20-9543-dd78f57b8b38">L&#xEA; Th&#x1EA3;o Vy</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>140</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">199.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">12/11/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('c917dde5-521b-5150-8e9c-836cb8a7a829')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261103">DP20261103</span></td>
+                                    <td>
+                                            <span title="dca10504-e0f4-517b-9c98-e62eca6a937a">Ph&#x1EA1;m Qu&#x1ED1;c B&#x1EA3;o</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>20</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">49.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">10/11/26 06:28</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-pending">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">schedule</span>
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('afd9cbb4-4785-5177-9bf5-6e7fed4d1bb7')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261104">DP20261104</span></td>
+                                    <td>
+                                            <span title="c7c37816-6858-507b-befb-ccf7c4207675">V&#xF5; Ng&#x1ECD;c H&#xE2;n</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>55</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">99.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">08/11/26 06:28</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-failed">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">cancel</span>
+                                            Failed
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('98d72ea4-7b35-55fc-abae-8dd4ede00e1f')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261105">DP20261105</span></td>
+                                    <td>
+                                            <span title="a912f51f-c989-5c6c-bc78-f14556b2947f">&#x110;&#x1ED7; Th&#xE0;nh Nam</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>140</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">199.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">06/11/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('160735d7-9b8c-5086-8210-3769ce2b5e38')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261106">DP20261106</span></td>
+                                    <td>
+                                            <span title="406650e1-3a6b-51a6-be11-c979b342aa4e">B&#xF9;i Kh&#xE1;nh Linh</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>20</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">49.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">04/11/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('64ef1bf3-8934-5473-95fd-34cacba97216')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261107">DP20261107</span></td>
+                                    <td>
+                                            <span title="0334d53e-bcc9-5950-8c2e-562c7273d03a">Ho&#xE0;ng &#x110;&#x1EE9;c Minh</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>55</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">99.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">02/11/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('5bfc6095-2daf-548e-acbe-8d36598c7c93')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261108">DP20261108</span></td>
+                                    <td>
+                                            <span title="6a8284db-c106-564e-b7dc-957bde87085f">&#x110;&#x1EB7;ng Mai Ph&#x1B0;&#x1A1;ng</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>140</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">199.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">31/10/26 06:28</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-pending">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">schedule</span>
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('1afbd8f2-32c0-5071-b1c3-45a7a452d377')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261109">DP20261109</span></td>
+                                    <td>
+                                            <span title="368454b5-54ab-56ef-a2ac-666bb17bc283">Nguy&#x1EC5;n Minh Anh</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>20</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">49.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">29/10/26 06:28</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-failed">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">cancel</span>
+                                            Failed
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('b4984b21-815b-51c0-8d64-f5d89e1c1058')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261110">DP20261110</span></td>
+                                    <td>
+                                            <span title="37e64bd0-474b-597d-bebb-f09cd5d54bf0">Tr&#x1EA7;n Gia Huy</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>55</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">99.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">27/10/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('791292f1-b450-527f-a075-9101722a4589')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261111">DP20261111</span></td>
+                                    <td>
+                                            <span title="c3eaef21-6d5e-5f20-9543-dd78f57b8b38">L&#xEA; Th&#x1EA3;o Vy</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>140</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">199.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">25/10/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('cf296102-df60-51d3-99f6-e146f730ef12')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261112">DP20261112</span></td>
+                                    <td>
+                                            <span title="dca10504-e0f4-517b-9c98-e62eca6a937a">Ph&#x1EA1;m Qu&#x1ED1;c B&#x1EA3;o</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>20</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">49.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">23/10/26 06:30</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-paid">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span>
+                                            Paid
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('e6979ed8-36b3-551c-a5c7-17d2105803a1')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="mono order-code" title="DP20261113">DP20261113</span></td>
+                                    <td>
+                                            <span title="c7c37816-6858-507b-befb-ccf7c4207675">V&#xF5; Ng&#x1ECD;c H&#xE2;n</span>
+                                    </td>
+                                    <td style="text-align:right;"><strong>55</strong></td>
+                                    <td style="text-align:right;">
+                                        <span class="mono">99.000</span>
+                                        <span class="muted" style="font-size:11px;"> VND</span>
+                                    </td>
+                                    <td class="muted">VNPay</td>
+                                    <td><span class="mono muted">21/10/26 06:28</span></td>
+                                    <td style="text-align:center;">
+                                        <span class="badge-pill badge-pending">
+                                            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">schedule</span>
+                                            Pending
+                                        </span>
+                                    </td>
+                                    <td style="text-align:center;">
+                                        <button type="button" class="icon-btn" title="View detail"
+                                                onclick="openDetail('fde3c208-e021-561f-978e-d312493d6050')">
+                                            <span class="material-symbols-outlined">visibility</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+</main>
+
+<!-- ── Transaction detail modal (GET /Admin/Payment/Payments/Detail/{id}) ── -->
+<div class="modal-overlay" id="txModal">
+    <div class="tx-modal">
+        <div class="tx-modal-head">
+            <span class="tx-modal-title">Transaction Detail</span>
+            <button type="button" class="icon-btn" onclick="closeDetail()" title="Close">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="tx-modal-body" id="txModalBody">
+            <div class="tx-empty">Loading…</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const txModal = document.getElementById('txModal');
+    const txBody  = document.getElementById('txModalBody');
+
+    function closeDetail() { txModal.classList.remove('open'); }
+
+    txModal.addEventListener('click', e => { if (e.target === txModal) closeDetail(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+
+    function esc(v) {
+        return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                              .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function row(k, v)   { return `<div class="tx-row"><span class="k">${esc(k)}</span><span class="v">${esc(v)}</span></div>`; }
+    function dash(v)     { return (v === null || v === undefined || v === '') ? '—' : v; }
+    function money(n, c) { return n === null || n === undefined ? '—' : Number(n).toLocaleString('en-US') + ' ' + (c || ''); }
+    function when(s) {
+        if (!s) return '—';
+        const d = new Date(s);
+        return isNaN(d) ? s : d.toLocaleString('en-GB', { day: '2-digit', month: '2-digit',
+            year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    async function openDetail(id) {
+        txBody.innerHTML = '<div class="tx-empty">Loading…</div>';
+        txModal.classList.add('open');
+        try {
+            const res = await fetch(`/Admin/Payment/Payments/Detail/${id}`);
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                txBody.innerHTML = `<div class="tx-empty">${esc(err.error || `Request failed (HTTP ${res.status}).`)}</div>`;
+                return;
+            }
+            renderDetail(await res.json());
+        } catch (e) {
+            txBody.innerHTML = `<div class="tx-empty">Could not load the transaction: ${esc(e.message)}</div>`;
+        }
+    }
+
+    function renderDetail(data) {
+        const o = data.order, t = data.transaction;
+        let html = '<div class="tx-section-label">Order</div>'
+            + row('Order code',     dash(o.orderCode))
+            + row('Order ID',       dash(o.orderId))
+            + row('User ID',        dash(o.userId))
+            + row('Package ID',     dash(o.packageId))
+            + row('Amount',         money(o.amount, o.currency))
+            + row('Credits',        dash(o.credits))
+            + row('Payment method', dash(o.paymentMethod))
+            + row('Status',         dash(o.status))
+            + row('Created at',     when(o.createdAt))
+            + row('Expires at',     when(o.expiredAt))
+            + row('Paid at',        when(o.paidAt))
+            + row('Updated at',     when(o.updatedAt));
+
+        html += '<div class="tx-section-label">VNPay callback</div>';
+        if (!t) {
+            // An order only gets a PaymentTransaction row once ProcessReturnAsync succeeds, so
+            // Pending and Failed orders legitimately have nothing to show here.
+            html += '<div class="tx-empty">No VNPay callback recorded for this order yet '
+                  + '(the payment was never completed).</div>';
+        } else {
+            html += row('Transaction ID',    dash(t.transactionId))
+                 +  row('VNPay transaction', dash(t.vnpTransactionNo))
+                 +  row('Bank code',         dash(t.vnpBankCode))
+                 +  row('Response code',     dash(t.vnpResponseCode))
+                 +  row('VNPay pay date',    dash(t.vnpPayDate))
+                 +  row('Secure hash valid', t.secureHashValid === null ? '—' : (t.secureHashValid ? 'Yes' : 'No'))
+                 +  row('Amount',            money(t.amount, o.currency))
+                 +  row('Status',            dash(t.status))
+                 +  row('Recorded at',       when(t.createdAt));
+            if (t.rawCallbackJson) {
+                let pretty = t.rawCallbackJson;
+                try { pretty = JSON.stringify(JSON.parse(t.rawCallbackJson), null, 2); } catch { }
+                html += '<div class="tx-section-label">Raw callback payload</div>'
+                     +  `<div class="tx-raw">${esc(pretty)}</div>`;
+            }
+        }
+        txBody.innerHTML = html;
+    }
+</script>
+</body>
+</html>

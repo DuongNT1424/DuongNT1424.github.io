@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"guest",page:"/Auth/Login"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | DevPrep AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/devprep/css/login.css?v=-VhYFnrMpYRaAaLQ0OKkLea-bTueuflT1KRJ-OlsxL0" />
+</head>
+<body class="login-page">
+    <!-- Ambient Background Elements -->
+    <div class="ambient-blob blob-primary"></div>
+    <div class="ambient-blob blob-secondary"></div>
+
+    <!-- Main Content Shell -->
+    <main class="login-shell">
+        <div class="glass-card">
+            <!-- Header -->
+            <header class="login-header">
+                <div class="login-title-group">
+                    <h2 class="login-welcome">Welcome Back</h2>
+                    <p class="login-title">Login</p>
+                </div>
+            </header>
+
+
+            <!-- Login Form -->
+            <form method="post" class="login-form" novalidate action="/devprep/auth/login/">
+                <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="" />
+                <!-- Email -->
+                <div class="login-field">
+                    <label class="login-label" for="Email">Email Address</label>
+                    <div class="login-input-group">
+                        <span class="material-symbols-outlined login-input-icon">mail</span>
+                        <input class="login-input" placeholder="name@company.com" type="email" autocomplete="email" data-val="true" data-val-email="Email is not a valid email address." data-val-required="Email is required." id="Email" name="Email" value="">
+                    </div>
+                    <span class="login-field-error field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                </div>
+
+                <!-- Password -->
+                <div class="login-field">
+                    <label class="login-label" for="Password">Password</label>
+                    <div class="login-input-group">
+                        <span class="material-symbols-outlined login-input-icon">lock</span>
+                        <input class="login-input has-eye" id="password-input" placeholder="••••••••" type="password" autocomplete="current-password" data-val="true" data-val-required="Password is required." name="Password">
+                        <button class="login-eye-btn" onclick="togglePassword()" type="button">
+                            <span class="material-symbols-outlined" id="password-toggle-icon">visibility</span>
+                        </button>
+                    </div>
+                    <span class="login-field-error field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                    <div class="login-forgot">
+                        <a href="/devprep/auth/forgotpassword/">Forgot Password?</a>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button class="login-btn inner-light" type="submit">Login</button>
+            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmZsOyFMEMl0dLQMtufDeECoNBfHN6P-XLVbI_sn6BBCm-j3GE2cw2-eW699RIvmegucWcExb-SmsH-xDGRxEDhmuDmst37crqa5RdoSyIW9wRRmSVGcQN7_jcuiMLscZHc" /></form>
+
+            <!-- SSO Divider -->
+            <div class="login-divider">
+                <div class="line"></div>
+                <span class="txt">or continue with</span>
+                <div class="line"></div>
+            </div>
+
+            <!-- SSO Buttons (Google / GitHub via Firebase) -->
+            <div class="login-sso-grid">
+                <button type="button" class="login-sso-btn" id="btn-google">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"></path>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"></path>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="currentColor"></path>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor"></path>
+                    </svg>
+                    <span>Google</span>
+                </button>
+                <button type="button" class="login-sso-btn" id="btn-github">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 1.27a11 11 0 00-3.48 21.46c.55.1.75-.24.75-.53v-1.87c-3.06.66-3.7-1.47-3.7-1.47-.5-1.27-1.23-1.6-1.23-1.6-1-1.68.08-1.65.08-1.65 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.58 1.2 3.21.92.1-.72.39-1.2.71-1.48-2.44-.27-5-1.22-5-5.43 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.9 0 0 .92-.3 3.03 1.13a10.53 10.53 0 015.5 0c2.1-1.43 3.03-1.13 3.03-1.13.6 1.5.22 2.62.11 2.9.71.77 1.13 1.75 1.13 2.95 0 4.22-2.56 5.15-5 5.42.39.34.75 1 .75 2.03v3c0 .29.19.64.76.53A11 11 0 0012 1.27z" fill="currentColor"></path>
+                    </svg>
+                    <span>GitHub</span>
+                </button>
+            </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                <p>
+                    Don't have an account?
+                    <a href="/devprep/auth/register/">Register</a>
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password-input');
+            const toggleIcon = document.getElementById('password-toggle-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = 'visibility';
+            }
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            const primaryBlob = document.querySelector('.blob-primary');
+            const secondaryBlob = document.querySelector('.blob-secondary');
+            primaryBlob.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
+            secondaryBlob.style.transform = `translate(${-(x * 30)}px, ${-(y * 30)}px)`;
+        });
+    </script>
+
+    <form method="post" id="sso-form" class="d-none" action="/devprep/auth/ssofirebase/">
+    <input type="hidden" name="idToken" id="sso-idtoken" />
+<input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmZsOyFMEMl0dLQMtufDeECoNBfHN6P-XLVbI_sn6BBCm-j3GE2cw2-eW699RIvmegucWcExb-SmsH-xDGRxEDhmuDmst37crqa5RdoSyIW9wRRmSVGcQN7_jcuiMLscZHc" /></form>
+
+<div class="sso-modal" id="sso-modal" role="dialog" aria-modal="true" aria-labelledby="sso-modal-title">
+    <div class="sso-modal-box">
+        <div class="sso-modal-icon" id="sso-modal-icon">
+            <span class="material-symbols-outlined">link</span>
+        </div>
+        <h3 class="sso-modal-title" id="sso-modal-title">Account already exists</h3>
+        <p class="sso-modal-text" id="sso-modal-text"></p>
+        <button type="button" class="sso-modal-btn" id="sso-modal-ok">Got it</button>
+    </div>
+</div>
+
+<style>
+    .sso-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 900;
+        background: rgba(0, 0, 0, .65);
+        backdrop-filter: blur(4px);
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+    .sso-modal.open { display: flex; }
+    .sso-modal-box {
+        width: 100%;
+        max-width: 420px;
+        background: #171b2e;
+        border: 1px solid rgba(255, 255, 255, .08);
+        border-radius: 1rem;
+        padding: 28px 26px 24px;
+        text-align: center;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, .5);
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #e5e1e7;
+    }
+    .sso-modal-icon {
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(129, 140, 248, .12);
+        color: #818cf8;
+    }
+    .sso-modal-icon .material-symbols-outlined { font-size: 26px; }
+    .sso-modal-icon.is-error { background: rgba(248, 113, 113, .12); color: #f87171; }
+    .sso-modal-title { font-size: 18px; font-weight: 700; margin: 0 0 10px; color: #e5e1e7; }
+    .sso-modal-text { font-size: 14px; line-height: 21px; color: #9ca3af; margin: 0 0 22px; }
+    .sso-modal-text strong { color: #e5e1e7; font-weight: 600; }
+    .sso-modal-btn {
+        width: 100%;
+        padding: 11px 0;
+        border: none;
+        border-radius: .5rem;
+        background: linear-gradient(135deg, #6366f1, #a855f7);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity .15s;
+    }
+    .sso-modal-btn:hover { opacity: .88; }
+    .sso-modal-btn:focus-visible { outline: 2px solid #a855f7; outline-offset: 2px; }
+</style>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+        getAuth, GoogleAuthProvider, GithubAuthProvider, signInWithPopup,
+        fetchSignInMethodsForEmail, linkWithCredential
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const app = initializeApp({
+        apiKey: "REMOVED_GOOGLE_API_KEY",
+        authDomain: "devprep-6872e.firebaseapp.com",
+        projectId: "devprep-6872e",
+        appId: "1:5087839335:web:3c52a527f1fe746643c0c2"
+    });
+    const auth = getAuth(app);
+    const providers = { google: new GoogleAuthProvider(), github: new GithubAuthProvider() };
+    const providerByMethod = { "google.com": providers.google, "github.com": providers.github };
+    const niceName = { "google.com": "Google", "github.com": "GitHub" };
+
+    // Credential waiting to be linked, set when account-exists is raised. It has to survive
+    // between the two button presses, so it lives outside ssoLogin().
+    let pendingCred = null;
+
+    const modal = document.getElementById('sso-modal');
+    const modalIcon = document.getElementById('sso-modal-icon');
+    const modalTitle = document.getElementById('sso-modal-title');
+    const modalText = document.getElementById('sso-modal-text');
+    const modalOk = document.getElementById('sso-modal-ok');
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showModal(title, html, isError) {
+        modalTitle.textContent = title;
+        modalText.innerHTML = html;
+        modalIcon.classList.toggle('is-error', !!isError);
+        modalIcon.querySelector('.material-symbols-outlined').textContent = isError ? 'error' : 'link';
+        modal.classList.add('open');
+        modalOk.focus();
+    }
+    function closeModal() { modal.classList.remove('open'); }
+
+    modalOk.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function submitToken(idToken) {
+        document.getElementById('sso-idtoken').value = idToken;
+        document.getElementById('sso-form').submit();
+    }
+
+    function pendingCredentialFromError(error) {
+        return GithubAuthProvider.credentialFromError(error) || GoogleAuthProvider.credentialFromError(error);
+    }
+
+    // No popup is opened here on purpose: a popup not started by a user gesture is blocked.
+    // The credential is stored and the user is asked to press the original provider button.
+    async function handleAccountExists(error) {
+        const email = error.customData && error.customData.email;
+        pendingCred = pendingCredentialFromError(error);
+
+        let methods = [];
+        try { methods = await fetchSignInMethodsForEmail(auth, email); } catch (_) { }
+        const existingMethod = methods.find(m => providerByMethod[m]) || "google.com";
+        const nice = niceName[existingMethod] || existingMethod;
+
+        showModal(
+            'Account already exists',
+            'The email <strong>' + escapeHtml(email || '') + '</strong> is already registered with '
+            + '<strong>' + escapeHtml(nice) + '</strong>.<br><br>'
+            + 'Please sign in with ' + escapeHtml(nice) + ' — the other provider will be linked to '
+            + 'this account automatically.',
+            false
+        );
+    }
+
+    async function ssoLogin(key, button) {
+        const original = button ? button.innerHTML : null;
+        try {
+            if (button) button.disabled = true;
+            const result = await signInWithPopup(auth, providers[key]);
+
+            // Just signed in with the original provider and a credential is waiting -> link it.
+            if (pendingCred) {
+                try { await linkWithCredential(result.user, pendingCred); } catch (_) { }
+                pendingCred = null;
+            }
+
+            submitToken(await result.user.getIdToken());
+        } catch (e) {
+            if (button) { button.disabled = false; if (original) button.innerHTML = original; }
+            if (e && e.code === 'auth/popup-closed-by-user') return;
+            if (e && e.code === 'auth/account-exists-with-different-credential') {
+                await handleAccountExists(e);
+                return;
+            }
+            console.error('SSO error', e);
+            showModal('Sign-in failed', escapeHtml((e && (e.message || e.code)) || e), true);
+        }
+    }
+
+    const g = document.getElementById('btn-google');
+    const h = document.getElementById('btn-github');
+    if (g) g.addEventListener('click', () => ssoLogin('google', g));
+    if (h) h.addEventListener('click', () => ssoLogin('github', h));
+</script>
+
+</body>
+</html>

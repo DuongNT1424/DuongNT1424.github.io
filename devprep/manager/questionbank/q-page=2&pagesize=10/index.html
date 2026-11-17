@@ -1,0 +1,805 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"manager",page:"/Manager/QuestionBank?page=2&pageSize=10"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question Repository - DevPrep AI Manager Console</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+    <style>
+        :root {
+            --bg-main: #0f1424;
+            --bg-panel: #111827;
+            --bg-panel-2: #151f36;
+            --bg-head: #171a24;
+            --border-main: #252b3d;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --text-blue: #93c5fd;
+            --primary: #6366f1;
+            --danger: #ff5d7a;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .admin-main-wrapper {
+            margin-left: 260px;
+            padding-top: 78px;
+            min-height: 100vh;
+            background: var(--bg-main);
+        }
+
+        .admin-content {
+            padding: 28px 28px 60px;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: var(--text-blue);
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .filter-card {
+            border: 1px solid var(--border-main);
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 18px;
+        }
+
+        .filter-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 7px;
+        }
+
+        .admin-input,
+        .admin-select {
+            height: 42px;
+            border-radius: 7px;
+            border: 1px solid #30384e;
+            background: #0f1322 !important;
+            color: #ffffff !important;
+            font-size: 14px;
+            box-shadow: none !important;
+        }
+
+        .admin-input:focus,
+        .admin-select:focus {
+            border-color: var(--primary) !important;
+            background: #161824 !important;
+            color: #ffffff !important;
+        }
+
+        .admin-input::placeholder {
+            color: #64748b;
+        }
+
+        .admin-select option {
+            background-color: #11121a !important;
+            color: #ffffff !important;
+        }
+        
+        .btn-filter {
+            height: 42px;
+            width: 100%;
+            border: none;
+            border-radius: 7px;
+            background: #35304f;
+            color: #ffffff;
+            font-weight: 800;
+        }
+
+        .btn-filter:hover {
+            background: #4f46e5;
+            color: #ffffff;
+        }
+
+        .btn-clear {
+            height: 42px;
+            width: 100%;
+            border-radius: 7px;
+            border: 1px solid #30384e;
+            background: transparent;
+            color: #cbd5e1;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-clear:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+        }
+
+        .table-shell {
+            border: 1px solid var(--border-main);
+            background: var(--bg-panel);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .admin-table {
+            width: 100%;
+            margin: 0;
+            color: #dbeafe;
+            --bs-table-bg: #111827;
+            --bs-table-color: #dbeafe;
+            --bs-table-border-color: #242b3e;
+            --bs-table-hover-bg: #151f36;
+            --bs-table-hover-color: #ffffff;
+        }
+
+        .admin-table thead th {
+            background: #171a24 !important;
+            color: #a9c7f5 !important;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid var(--border-main);
+            padding: 15px 14px;
+            white-space: nowrap;
+        }
+
+        .admin-table tbody tr {
+            background: #111827 !important;
+        }
+
+        .admin-table tbody td {
+            background: #111827 !important;
+            color: #dbeafe !important;
+            border-bottom: 1px solid #242b3e;
+            padding: 16px 14px;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .admin-table tbody tr:hover td {
+            background: #151f36 !important;
+        }
+
+        .question-title {
+            color: #ffffff;
+            font-weight: 800;
+            max-width: 650px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .question-meta {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .deleted-row {
+            opacity: 0.68;
+        }
+
+        .deleted-row .question-title {
+            color: #94a3b8;
+            text-decoration: line-through;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 7px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .pill-type { background: rgba(14, 165, 233, 0.16); color: #7dd3fc; }
+        .pill-level { background: rgba(99, 102, 241, 0.16); color: #c4b5fd; }
+        .pill-easy { background: rgba(16, 185, 129, 0.14); color: #34d399; }
+        .pill-medium { background: rgba(245, 158, 11, 0.16); color: #fbbf24; }
+        .pill-hard { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+        .pill-tech { background: rgba(148, 163, 184, 0.14); color: #cbd5e1; }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 7px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .status-active { background: rgba(16, 185, 129, 0.14); color: #34d399; }
+        .status-draft { background: rgba(148, 163, 184, 0.14); color: #cbd5e1; }
+        .status-archived, .status-deleted { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border: none;
+            background: transparent;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: 0.15s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .action-view { color: #94a3b8; }
+        .action-view:hover { color: #ffffff; }
+        .action-btn i,
+        .action-btn .material-symbols-outlined {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .empty-row {
+            height: 140px;
+            color: #cbd5e1;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .table-footer {
+            padding: 14px 16px;
+            color: #cbd5e1;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid #242b3e;
+            background: #111827;
+        }
+
+        .pager {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .pager a,
+        .pager span {
+            min-width: 34px;
+            height: 34px;
+            border-radius: 7px;
+            border: 1px solid #30384e;
+            color: #cbd5e1;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .pager .active-page {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .error-box {
+            border: 1px solid rgba(239, 68, 68, 0.45);
+            background: rgba(239, 68, 68, 0.08);
+            color: #fecaca;
+            border-radius: 10px;
+            padding: 13px 16px;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 991.98px) {
+            .admin-main-wrapper {
+                margin-left: 0;
+                padding-top: 70px;
+            }
+
+            .admin-content {
+                padding: 20px 14px 50px;
+            }
+
+            .table-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="/devprep/css/components/pagination.css?v=M4UFAnJj6vGhEF9H66VZXLMHxUzMETNEdKjlPhUQjfQ" />
+</head>
+<body class="admin-page">
+    <header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="manager-user">
+            <button class="ad-avatar" id="manager-avatar-btn" type="button" title="manager@devprep.demo" aria-haspopup="true" aria-expanded="false">M</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">M</span>
+                    <span class="ad-dropdown-email">manager@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmb7kQgtAVucjaX78HiHUhaMKu9YrePGNIJGtR_BUwUA4NpUTihlbeu8Xx3hnfDUR4T3Bux1Co3qCPV-xrfeQ3rGzoOuhyO-1Nr0p2DYn-CwKD8I3whIf_iGxkHkx741mm1DUlEK3ktqY1dj__tBym6ttO6JvoetGdR49F37Jzpjeg" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('manager-avatar-btn');
+        const menu = document.getElementById('manager-user');
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!menu.contains(event.target)) {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+</script>
+
+    <aside class="ad-sidebar manager-sidebar" style="overflow-y: auto; overscroll-behavior: contain;">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Manager Console</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item " href="/devprep/manager/">
+            <span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span>
+        </a>
+        <a class="ad-nav-item active" href="/devprep/manager/questionbank/">
+            <span class="material-symbols-outlined">database</span><span class="label">Question Bank</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/techstacks/">
+            <span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/positions/">
+            <span class="material-symbols-outlined">work</span><span class="label">Positions</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/users/">
+            <span class="material-symbols-outlined">group</span><span class="label">Users</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/interviewsessions/">
+            <span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/payments/">
+            <span class="material-symbols-outlined">payments</span><span class="label">Payments</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/creditpackages/">
+            <span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/aifeedback/">
+            <span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/feedback/">
+            <span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/reportedfeedback/">
+            <span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/news/">
+            <span class="material-symbols-outlined">newspaper</span><span class="label">News</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/announcements/">
+            <span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span>
+        </a>    </nav>
+</aside>
+
+
+    <main class="admin-main-wrapper">
+        <div class="admin-content">
+            <div class="d-flex align-items-start justify-content-between gap-3 mb-4">
+                <div>
+                    <h1 class="page-title">Question Bank</h1>
+                    <p class="page-subtitle">Manage interview questions, categories, difficulty levels and publishing status.</p>
+                </div>
+            </div>
+
+            <form method="get" action="/devprep/manager/questionbank/" id="managerFilterForm" class="filter-card" onsubmit="document.getElementById('pageIdxInput').value = 1;">
+                <input type="hidden" name="page" id="pageIdxInput" value="1" />
+                <input type="hidden" name="pageSize" value="10" />
+                <div class="row g-3 align-items-end">
+                    <div class="col-12 col-xl-4">
+                        <div class="filter-label">Search</div>
+                        <input name="keyword" type="text" class="form-control admin-input" placeholder="Search questions" />
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-2">
+                        <div class="filter-label">Category</div>
+                        <select name="categoryId" class="form-select admin-select">
+                            <option value="">All Categories</option>
+                                <option value="d555301e-7d24-5984-8254-848024a6a35e">Architecture</option>
+                                <option value="6b699553-c88e-5f7f-9b12-984daaf1857d">CI/CD</option>
+                                <option value="9b402d6f-19bd-5751-9163-8ace4514a0d1">Data Modeling</option>
+                                <option value="8dfcaf95-2e3d-51ea-b6e2-2731d7982fcf">Docker</option>
+                                <option value="a9fb5b80-4d53-5cb7-b926-cca622f69c5f">JPA</option>
+                                <option value="93ee26fb-beb8-5ad8-965c-20e409285cd9">JavaScript</option>
+                                <option value="22850d22-536d-5b65-b7b2-e28613c61908">LLM</option>
+                                <option value="55033936-a8ed-5b34-a709-6384c8be4b0f">Machine Learning</option>
+                                <option value="903962be-5a77-504a-9342-ccb7f17106e6">Microservices</option>
+                                <option value="da66d7e3-07c7-5f56-977e-10802a3d1ec3">React</option>
+                                <option value="9ccb186f-43ac-5fdb-ba19-be579d2c7749">SQL</option>
+                                <option value="c94aaa68-1b56-534d-86bf-1a5d78a4ab05">Security</option>
+                                <option value="504ba985-9135-5acc-acab-d7a8e461faff">Spring Boot</option>
+                                <option value="5836182f-bf1b-59f2-9b56-ab539433dded">System Design</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-2">
+                        <div class="filter-label">Difficulty</div>
+                        <select name="difficulty" class="form-select admin-select">
+                            <option value="">All Difficulty</option>
+                                <option value="Intern">Intern</option>
+                                <option value="Fresher">Fresher</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Middle">Middle</option>
+                                <option value="Senior">Senior</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-xl-2">
+                        <div class="filter-label">Status</div>
+                        <select name="status" class="form-select admin-select">
+                            <option value="">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Deleted">Deleted</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl-2">
+                        <button class="btn-filter" type="submit">Apply Filter</button>
+                    </div>
+                    <div class="col-12 col-md-6 col-xl-2">
+                        <a class="btn-clear" href="/devprep/manager/questionbank/">Clear</a>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-shell">
+                <div class="table-responsive">
+                    <table class="table admin-table align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width: 46%;">Question</th>
+                                <th style="width: 14%;">Difficulty</th>
+                                <th style="width: 12%;">Status</th>
+                                <th style="width: 12%;" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/b3aceeb5-f783-5c7e-81fe-79726b243622/" class="question-title text-decoration-none d-block" title="Explain the difference between @Component, @Service and @Repository in Spring.">Explain the difference between @Component, @Service and @Repository in Spring.</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-B3ACEEB5
+                                                    <span class="ms-2">Category: Spring Boot</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Easy</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/b3aceeb5-f783-5c7e-81fe-79726b243622/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/9189eba4-2886-5df7-a77c-336304f8e2f5/" class="question-title text-decoration-none d-block" title="How does a JWT-based authentication flow work, and where should the refresh token be stored?">How does a JWT-based authentication flow work, and where should the refresh token be stored?</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-9189EBA4
+                                                    <span class="ms-2">Category: Security</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Medium</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/9189eba4-2886-5df7-a77c-336304f8e2f5/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/ac770778-5e44-55aa-9a5f-5ceb0c135f14/" class="question-title text-decoration-none d-block" title="Describe how you would design an idempotent payment callback (IPN) handler.">Describe how you would design an idempotent payment callback (IPN) handler.</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-AC770778
+                                                    <span class="ms-2">Category: System Design</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Hard</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/ac770778-5e44-55aa-9a5f-5ceb0c135f14/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/9d9eb9db-aac6-5464-bff2-2124d89fb3ba/" class="question-title text-decoration-none d-block" title="What is the N&#x2B;1 query problem in JPA and how do you fix it?">What is the N&#x2B;1 query problem in JPA and how do you fix it?</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-9D9EB9DB
+                                                    <span class="ms-2">Category: JPA</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Medium</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/9d9eb9db-aac6-5464-bff2-2124d89fb3ba/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/e9b6f4a7-27b2-5807-9b37-a2143dcb2dd2/" class="question-title text-decoration-none d-block" title="When would you choose a microservices architecture over a monolith?">When would you choose a microservices architecture over a monolith?</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-E9B6F4A7
+                                                    <span class="ms-2">Category: Architecture</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Medium</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/e9b6f4a7-27b2-5807-9b37-a2143dcb2dd2/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/c1c94215-59a4-50d3-bf7c-35b18067ff28/" class="question-title text-decoration-none d-block" title="Explain database indexing and when an index can hurt performance.">Explain database indexing and when an index can hurt performance.</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-C1C94215
+                                                    <span class="ms-2">Category: SQL</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Medium</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/c1c94215-59a4-50d3-bf7c-35b18067ff28/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/0a3f1b21-a824-59cb-a6fe-8982d406f8c0/" class="question-title text-decoration-none d-block" title="What is the virtual DOM and how does React reconciliation work?">What is the virtual DOM and how does React reconciliation work?</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-0A3F1B21
+                                                    <span class="ms-2">Category: React</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Medium</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/0a3f1b21-a824-59cb-a6fe-8982d406f8c0/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/03aeb68b-3827-5431-b7fe-ee3888d6b742/" class="question-title text-decoration-none d-block" title="Explain event delegation in JavaScript.">Explain event delegation in JavaScript.</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-03AEB68B
+                                                    <span class="ms-2">Category: JavaScript</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Easy</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/03aeb68b-3827-5431-b7fe-ee3888d6b742/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/f50ace37-bc98-5d1a-8d2d-a5a77c9693af/" class="question-title text-decoration-none d-block" title="What is the difference between fine-tuning and retrieval-augmented generation?">What is the difference between fine-tuning and retrieval-augmented generation?</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-F50ACE37
+                                                    <span class="ms-2">Category: LLM</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Medium</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/f50ace37-bc98-5d1a-8d2d-a5a77c9693af/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <a href="/devprep/manager/questionbank/522ad378-34ba-5c6f-8b38-61f076759c2a/" class="question-title text-decoration-none d-block" title="How does QLoRA reduce the memory needed to fine-tune a large model?">How does QLoRA reduce the memory needed to fine-tune a large model?</a>
+                                            <div class="question-meta">
+                                                ID:
+                                                Q-522AD378
+                                                    <span class="ms-2">Category: LLM</span>
+                                            </div>
+                                        </td>
+                                        <td><span class="pill pill-tech">Hard</span></td>
+                                        <td>
+                                            <span class="status-badge status-active">
+                                                <span style="font-size: 8px;">&bull;</span>
+                                                Active
+                                            </span>
+                                        </td>
+                                        <td class="text-end">
+                                            <a class="action-btn action-view"
+                                               href="/devprep/manager/questionbank/522ad378-34ba-5c6f-8b38-61f076759c2a/"
+                                               title="View details">
+                                                <span class="material-symbols-outlined">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    <div>
+                        Showing <strong>1</strong>-<strong>10</strong> of <strong>16</strong> questions
+                    </div>
+
+                            <nav class="devprep-pagination" aria-label="Pagination">
+            <span class="devprep-page-link devprep-page-direction disabled" aria-disabled="true">Previous</span>
+
+
+            <a class="devprep-page-link active"
+               href="/devprep/manager/questionbank/?page=1&amp;pageSize=10"
+               aria-label="Go to page 1"
+               aria-current="page">1</a>
+            <a class="devprep-page-link "
+               href="/devprep/manager/questionbank/?page=2&amp;pageSize=10"
+               aria-label="Go to page 2">2</a>
+
+
+            <a class="devprep-page-link devprep-page-direction" href="/devprep/manager/questionbank/?page=2&amp;pageSize=10" aria-label="Go to next page">Next</a>
+    </nav>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

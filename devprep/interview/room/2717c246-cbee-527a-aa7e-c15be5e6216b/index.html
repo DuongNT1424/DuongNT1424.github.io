@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"candidate",page:"/Interview/Room/2717c246-cbee-527a-aa7e-c15be5e6216b"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Room - DevPrep</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/devprep/css/theme-session.css?v=y1-LZI9Hj_csM_AlXECQsoYE0cmfp5JyjmH7UNZt4yE" />
+    <link rel="stylesheet" href="/devprep/lib/driver.js/driver.css?v=SzmEgafOg3WvTZ9Y85QQxzoLcHJv5RNobT1RwQrXbLU" />
+    <link rel="stylesheet" href="/devprep/css/pages/interview-room.css?v=pMXU5r8qjeJiZXDS7WILYLt5tfRirl4Ql2DiLacsenw" />
+</head>
+<body class="room-page">
+
+
+    <div id="room-app"
+         class="room-layout"
+         data-session-id="2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-remaining-seconds="1140"
+         data-current-question-id="f1edf219-a505-534e-8949-d081ecc2c240"
+         data-verification-check-id=""
+         data-verification-check-expires-at=""
+         data-idle-reminder-seconds="120"
+         data-idle-hard-seconds="300"
+         data-idle-elapsed-seconds="0"
+         data-total-questions="5"
+         data-answered-questions="2"
+         data-initial-status="InProgress"
+         data-pause-count="0"
+         data-pauses-remaining="2"
+         data-paused-seconds-remaining="300"
+         data-has-seen-tour="true"
+         data-tour-seen-url="/Interview/TourSeen"
+         data-message-url="/Interview/Message/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-complete-url="/Interview/CompleteSession/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-cancel-url="/Interview/EndSession/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-pause-url="/Interview/Pause/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-unpause-url="/Interview/Unpause/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-camera-violation-url="/Interview/CameraViolation/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-verify-in-session-url="/Verification/VerifyInSession?sessionId=2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-in-session-check-url="/Verification/InSessionCheck?sessionId=2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-tab-event-url="/Verification/RecordTabEvent?sessionId=2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-tts-url="/Interview/Tts"
+         data-stt-url="/Interview/Stt"
+         data-hint-url="/Interview/Hint"
+         data-report-url="/Evaluation/Report"
+         data-details-url="/Interview/Details/2717c246-cbee-527a-aa7e-c15be5e6216b"
+         data-is-active="true">
+
+        <!-- LEFT PANEL: Session Info -->
+        <aside class="room-sidebar">
+            <div class="room-sidebar-top">
+                <div class="timer-box">
+                    <span class="timer-label">TIME REMAINING</span>
+                    <div class="timer-value" id="timer">--:--</div>
+                </div>
+
+                <div class="session-info">
+                    <span class="session-info-title">SESSION OVERVIEW</span>
+                    <div class="info-block info-block-role">
+                        <span class="info-key">Role</span>
+                        <span class="info-val">Backend Developer</span>
+                    </div>
+                    <div class="session-info-meta">
+                        <div class="info-block info-block-meta">
+                            <span class="info-key">Level</span>
+                            <span class="info-chip">Junior</span>
+                        </div>
+                        <div class="info-block info-block-meta">
+                            <span class="info-key">Status</span>
+                            <span class="info-status" id="status-text">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- In-session cheating check warning (identity mismatch / multiple faces).
+                     Hidden until interview-room.js's background check actually flags something —
+                     see the .camera-status-warning/.content-warning tint pattern this reuses. -->
+                <div class="integrity-alert d-none" id="cheating-warning"
+                     role="alert" aria-live="assertive">
+                    <span class="material-symbols-outlined integrity-alert-icon"
+                          id="integrity-status-icon">warning</span>
+                    <div class="integrity-alert-content">
+                        <strong class="integrity-alert-title"
+                                id="integrity-status-title">Verification warning</strong>
+                        <span class="integrity-alert-message"
+                              id="integrity-status-message"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-progress">
+                <div class="room-progress-head">
+                    <span class="k">PROGRESS</span>
+                    <span class="v" id="progress-text">2 / 5</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width:40%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CENTER PANEL: Chat -->
+        <main class="room-chat">
+            <div class="room-chat-header">
+                <div class="chat-header-left">
+                    <div class="avatar">
+                        <span class="material-symbols-outlined">smart_toy</span>
+                    </div>
+                    <div>
+                        <div class="title">DevPrep AI <span class="status-dot"></span></div>
+                        <div class="subtitle">Active Session</div>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <button id="replay-tour-btn" type="button" title="Replay the guided tour" >
+                        <span class="material-symbols-outlined">help_outline</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages">
+                <div class="ai-glow"></div>
+                <div class="chat-row chat-row-ai">
+                    <div class="chat-bubble chat-bubble-ai chat-bubble-greeting">Welcome, and thank you for joining today&#x27;s Backend Developer interview at the Junior level. I&#x27;ll ask a series of questions to explore how you think and what you know &#x2014; take your time, feel free to think out loud, and answer just as you would in a real interview. Ready when you are. Let&#x27;s begin!</div>
+                </div>
+                    <div class="chat-row chat-row-ai">
+                        <div class="chat-bubble chat-bubble-ai">Explain the difference between @Component, @Service and @Repository in Spring.</div>
+                    </div>
+                    <div class="chat-row chat-row-user">
+                        <div class="chat-bubble chat-bubble-user">@Component is the generic stereotype; @Service marks business logic and @Repository marks data access, which also enables exception translation for persistence errors.</div>
+                    </div>
+                    <div class="chat-row chat-row-ai">
+                        <div class="chat-bubble chat-bubble-ai">How does a JWT-based authentication flow work, and where should the refresh token be stored?</div>
+                    </div>
+                    <div class="chat-row chat-row-user">
+                        <div class="chat-bubble chat-bubble-user">The client logs in and receives a short-lived access token plus a refresh token. The access token goes in the Authorization header; the refresh token should live in an HttpOnly cookie so scripts cannot read it.</div>
+                    </div>
+                    <div class="chat-row chat-row-ai">
+                        <div class="chat-bubble chat-bubble-ai">Describe how you would design an idempotent payment callback (IPN) handler.</div>
+                    </div>
+            </div>
+
+
+            <div id="idle-modal-backdrop" class="idle-modal-backdrop d-none"></div>
+            <div id="idle-banner" class="idle-banner d-none"></div>
+
+            <!-- In-session cheating strike popup — same .idle-banner/.idle-modal-backdrop shell as
+                 the idle Tier-1 reminder above, a separate DOM instance so the two can never
+                 collide (see interview-room.js showCheatingBanner/hideCheatingBanner). Only for a
+                 real strike (identity mismatch / multiple faces / no-face just converted) — the
+                 sidebar #cheating-warning above still carries the gentle no-face-not-yet-a-strike
+                 reminder on its own, this popup never covers that case. -->
+            <div id="cheating-banner-backdrop" class="idle-modal-backdrop d-none"></div>
+            <div id="cheating-banner" class="idle-banner d-none"></div>
+
+            <div class="chat-input-bar">
+                <div class="chat-input-inner">
+                    <textarea id="answer-input" class="chat-input" rows="1"
+                              placeholder="Type your answer…"
+                              ></textarea>
+                    <button id="mic-btn" class="btn-mic" type="button" title="Record a voice answer" >
+                        <span class="material-symbols-outlined">mic</span>
+                    </button>
+                    <button id="send-btn" class="btn-send" >
+                        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">send</span>
+                    </button>
+                </div>
+                <p id="content-warning" class="content-warning d-none" role="alert"></p>
+                <div class="input-hint">Press Enter to send, Shift + Enter for new line</div>
+            </div>
+
+            <!-- Covers the whole chat panel while paused — hides the current question and history
+                 so pausing can't be used to read carefully / look things up. -->
+            <div id="pause-overlay" class="pause-overlay d-none">
+                <div class="pause-overlay-content">
+                    <span class="material-symbols-outlined pause-overlay-icon">pause_circle</span>
+                    <div class="pause-overlay-title">Interview Paused</div>
+                    <div class="pause-overlay-sub" id="pause-overlay-quota"></div>
+                    <button id="resume-btn" class="btn-camera" type="button">Resume Interview</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL: Camera & Controls -->
+        <aside class="room-camera">
+            <div class="room-camera-top">
+                <div class="camera-section">
+                    <span class="camera-label">CAMERA PREVIEW</span>
+                    <div class="camera-box">
+                        <video id="camera-video" autoplay playsinline muted class="camera-feed d-none"></video>
+                        <div id="camera-placeholder" class="camera-placeholder">
+                            <span class="material-symbols-outlined">videocam_off</span>
+                            <span>Camera off</span>
+                        </div>
+                        <!-- Camera is mandatory (anti-cheating) — this overlay reports its current
+                             state and is updated by interview-room.js. -->
+                        <span id="camera-status" class="camera-status">Camera: Starting…</span>
+                    </div>
+                </div>
+
+                <div class="ai-voice-section">
+                    <div class="ai-voice-header">
+                        <span class="camera-label">AI VOICE</span>
+                        <button id="voice-toggle" class="toggle-switch is-on" type="button" aria-pressed="true">
+                            <span class="toggle-knob"></span>
+                        </button>
+                    </div>
+                    <div class="visualizer">
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                        <div class="waveform-bar"></div>
+                    </div>
+                    <span class="ai-voice-caption">AI voice</span>
+                </div>
+            </div>
+
+            <div class="room-camera-actions">
+                <span class="quick-actions-label">QUICK ACTIONS</span>
+                <button id="hint-btn" class="btn-secondary" type="button" >
+                    <span class="material-symbols-outlined icon-hint">lightbulb</span>
+                    Ask for hint
+                </button>
+                <button id="skip-btn" class="btn-secondary" type="button" >
+                    <span class="material-symbols-outlined icon-skip">skip_next</span>
+                    Skip question
+                </button>
+                <button id="pause-btn" class="btn-secondary" type="button" >
+                    <span class="material-symbols-outlined icon-pause">pause_circle</span>
+                    <span id="pause-btn-label">Pause Interview</span>
+                </button>
+                <span class="quick-actions-note" id="pause-quota-text"></span>
+                <button id="cancel-interview-btn" class="btn-cancel-interview" type="button" aria-label="Cancel Interview" >
+                    <span class="material-symbols-outlined">exit_to_app</span>
+                    Cancel Interview
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <dialog id="cancel-interview-dialog"
+            class="cancel-interview-dialog"
+            aria-modal="true"
+            aria-labelledby="cancel-interview-title"
+            aria-describedby="cancel-interview-description">
+        <div class="cancel-interview-dialog-content">
+            <h2 id="cancel-interview-title">Cancel this interview?</h2>
+            <p id="cancel-interview-description">
+                Cancelling ends this session immediately. Any answers already submitted may still be evaluated,
+                and you can still submit Interview Feedback.
+                <strong>Credit already spent on this interview will not be refunded.</strong>
+            </p>
+            <div class="cancel-interview-dialog-actions">
+                <button id="continue-interview-btn" class="btn-continue-interview" type="button">Continue Interview</button>
+                <button id="confirm-cancel-interview-btn" class="btn-confirm-cancel" type="button">Cancel Interview</button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="/devprep/lib/driver.js/driver.js.iife.js?v=PjeQ3qgRjICnodga-UVPj2_ppd0YDoQ86LpjjFtEZ1M"></script>
+    <script src="/devprep/js/pages/content-filter.js?v=JEYVdeDmtrWfpmum8z63yyqLUrJOAze7VazxOJFYj-U"></script>
+    <script src="/devprep/js/pages/interview-room.js?v=Q8F0jFPgD5ypGKdhAMO1rv0JmN-AHx4wopBzM2DsqlY"></script>
+</body>
+</html>

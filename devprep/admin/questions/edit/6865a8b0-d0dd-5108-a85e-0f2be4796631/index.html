@@ -1,0 +1,724 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"admin",page:"/admin/questions/edit/6865a8b0-d0dd-5108-a85e-0f2be4796631"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>Update Question - DevPrep AI Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@500&display=swap"
+          rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          rel="stylesheet" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+
+    <style>
+        body.admin-page {
+            margin: 0;
+            padding: 0;
+            background-color: #0f0f11;
+            color: #ffffff;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .admin-main-wrapper {
+            margin-left: 260px;
+            padding-top: 70px;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .page-container {
+            padding: 28px 30px 60px;
+        }
+
+        .page-title {
+            color: #ffffff;
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            color: #a1a1aa;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .form-card {
+            background-color: #16161a;
+            border: 1px solid #26262b;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            border-bottom: 1px solid #26262b;
+            padding-bottom: 11px;
+            margin-bottom: 22px;
+        }
+
+            .section-title i {
+                color: #6366f1;
+            }
+
+        .field-label {
+            display: block;
+            color: #a1a1aa;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .custom-input {
+            width: 100%;
+            background-color: #0f0f11 !important;
+            border: 1px solid #26262b !important;
+            color: #ffffff !important;
+            border-radius: 8px !important;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            box-shadow: none !important;
+        }
+
+            .custom-input:focus {
+                border-color: #6366f1 !important;
+                box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+            }
+
+            .custom-input::placeholder {
+                color: #52525b !important;
+            }
+
+        select.custom-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23a1a1aa' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 16px center !important;
+            background-size: 12px 12px !important;
+        }
+
+            select.custom-input option {
+                color: #ffffff !important;
+                background-color: #11121a !important;
+            }
+
+        .status-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-check {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .status-option {
+            min-width: 118px;
+            background-color: #0f0f11;
+            border: 1px solid #303038;
+            color: #a1a1aa;
+            border-radius: 8px;
+            padding: 11px 18px;
+            font-size: 0.87rem;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+
+            .status-option:hover {
+                background-color: #202026;
+                border-color: #52525b;
+                color: #ffffff;
+            }
+
+            .status-option::before {
+                content: "";
+                width: 9px;
+                height: 9px;
+                border: 2px solid currentColor;
+                border-radius: 50%;
+                display: inline-block;
+                margin-right: 7px;
+                vertical-align: 1px;
+            }
+
+        #statusActive:checked + .status-active {
+            color: #34d399;
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.12);
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.35);
+        }
+
+        #statusDraft:checked + .status-draft {
+            color: #fbbf24;
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.12);
+            box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35);
+        }
+
+        #statusArchived:checked + .status-archived {
+            color: #f87171;
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.12);
+            box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.35);
+        }
+
+        #statusInactive:checked + .status-inactive {
+            color: #c4b5fd;
+            border-color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.12);
+            box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.35);
+        }
+
+        .action-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            padding-top: 8px;
+        }
+
+        .btn-cancel {
+            min-width: 145px;
+            border: 1px solid #3f3f46;
+            color: #ffffff;
+            background: transparent;
+            border-radius: 8px;
+            padding: 11px 24px;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+        }
+
+            .btn-cancel:hover {
+                color: #ffffff;
+                background-color: #27272a;
+            }
+
+        .btn-save {
+            min-width: 170px;
+            border: none;
+            color: #ffffff;
+            background-color: #6366f1;
+            border-radius: 8px;
+            padding: 11px 24px;
+            font-weight: 700;
+        }
+
+            .btn-save:hover {
+                background-color: #4f46e5;
+            }
+
+            .btn-save:disabled {
+                opacity: 0.65;
+                cursor: not-allowed;
+            }
+
+        @media (max-width: 991.98px) {
+            .admin-main-wrapper {
+                margin-left: 0;
+                padding-top: 80px;
+            }
+
+            .page-container {
+                padding: 20px 15px 50px;
+            }
+
+            .status-option {
+                flex: 1;
+                min-width: 130px;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+
+    <header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="ad-user">
+            <button class="ad-avatar" id="ad-avatar-btn" type="button" title="admin@devprep.demo" aria-haspopup="true" aria-expanded="false">A</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">A</span>
+                    <span class="ad-dropdown-email">admin@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmYCpOcZYlNm5aeQSBv_qaIOT6ZojGMktvhr5tn6i-16c8b_g6lk1XFddJyWH3MjMbM8CuundrRzAvkT9id8jrppzRjTjVthIehbcwKBVIPziY_Ucd2TImVgJd_K-nuyh7Cw6Kep_SJd-W2TZGOqVbyR-FaEBEl7QQDXl2EXuq0V8w" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('ad-avatar-btn');
+        const menu = document.getElementById('ad-user');
+        if (btn && menu) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const open = menu.classList.toggle('open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', function (e) {
+                if (!menu.contains(e.target)) { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+            });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape') menu.classList.remove('open'); });
+        }
+    })();
+</script>
+
+    <aside class="ad-sidebar">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Admin Dashboard</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item" href="/devprep/admin/"><span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span></a>
+        <a class="ad-nav-item active" href="/devprep/admin/questions/"><span class="material-symbols-outlined">quiz</span><span class="label">Question Bank</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/techstacks/"><span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/positions/"><span class="material-symbols-outlined">work</span><span class="label">Positions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/user/"><span class="material-symbols-outlined">group</span><span class="label">Users</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/interviewsessions/"><span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/payment/payments/"><span class="material-symbols-outlined">payments</span><span class="label">Payments</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/payment/packages/"><span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/credits/"><span class="material-symbols-outlined">price_change</span><span class="label">Credit Adjust</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/aifeedback/"><span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/systemfeedback/"><span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/reportedfeedback/"><span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/news/"><span class="material-symbols-outlined">newspaper</span><span class="label">News</span></a>
+        <a class="ad-nav-item" href="/devprep/admin/announcements/"><span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span></a>
+    </nav>
+</aside>
+
+
+    <main class="admin-main-wrapper">
+        <div class="container-fluid page-container">
+
+            <div class="mb-4">
+                <h1 class="page-title">
+                    Update Interview Question
+                </h1>
+
+                <p class="page-subtitle">
+                    Edit question information, difficulty, status and classification.
+                </p>
+            </div>
+
+                <form id="updateQuestionForm" method="post" action="/devprep/admin/questions/edit/6865a8b0-d0dd-5108-a85e-0f2be4796631/" novalidate>
+
+                    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmYCpOcZYlNm5aeQSBv_qaIOT6ZojGMktvhr5tn6i-16c8b_g6lk1XFddJyWH3MjMbM8CuundrRzAvkT9id8jrppzRjTjVthIehbcwKBVIPziY_Ucd2TImVgJd_K-nuyh7Cw6Kep_SJd-W2TZGOqVbyR-FaEBEl7QQDXl2EXuq0V8w" />
+
+                    <!-- Question information -->
+                    <section class="form-card">
+                        <div class="section-title">
+                            <i class="fa-regular fa-file-lines"></i>
+                            Question Information
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="field-label"
+                                   for="questionInput">
+                                Question content
+                            </label>
+
+                            <!-- QUAN TRỌNG: name phải là Question -->
+                            <textarea id="questionInput"
+                                      class="form-control custom-input"
+                                      rows="5"
+                                      required
+                                      name="Question"
+                                      placeholder="Enter question content...">Describe a slowly changing dimension and how you would implement Type 2.</textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="field-label"
+                                   for="answerInput">
+                                Answer
+                            </label>
+
+                            <textarea id="answerInput"
+                                      class="form-control custom-input"
+                                      rows="5"
+                                      name="Answer"
+                                      placeholder="Enter the expected answer...">A strong answer explains the core concept, gives a concrete example from a real project, and mentions the trade-offs.</textarea>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="field-label"
+                                       for="categoryInput">
+                                    Category
+                                </label>
+
+                                <select id="categoryInput"
+                                        class="form-select custom-input"
+                                        required
+                                        name="CategoryId">
+
+                                    <option value="" disabled>
+                                        Select Category
+                                    </option>
+
+                                            <option value="d555301e-7d24-5984-8254-848024a6a35e">
+                                                Architecture
+                                            </option>
+                                            <option value="6b699553-c88e-5f7f-9b12-984daaf1857d">
+                                                CI/CD
+                                            </option>
+                                            <option value="9b402d6f-19bd-5751-9163-8ace4514a0d1" selected="selected">
+                                                Data Modeling
+                                            </option>
+                                            <option value="8dfcaf95-2e3d-51ea-b6e2-2731d7982fcf">
+                                                Docker
+                                            </option>
+                                            <option value="a9fb5b80-4d53-5cb7-b926-cca622f69c5f">
+                                                JPA
+                                            </option>
+                                            <option value="93ee26fb-beb8-5ad8-965c-20e409285cd9">
+                                                JavaScript
+                                            </option>
+                                            <option value="22850d22-536d-5b65-b7b2-e28613c61908">
+                                                LLM
+                                            </option>
+                                            <option value="55033936-a8ed-5b34-a709-6384c8be4b0f">
+                                                Machine Learning
+                                            </option>
+                                            <option value="903962be-5a77-504a-9342-ccb7f17106e6">
+                                                Microservices
+                                            </option>
+                                            <option value="da66d7e3-07c7-5f56-977e-10802a3d1ec3">
+                                                React
+                                            </option>
+                                            <option value="9ccb186f-43ac-5fdb-ba19-be579d2c7749">
+                                                SQL
+                                            </option>
+                                            <option value="c94aaa68-1b56-534d-86bf-1a5d78a4ab05">
+                                                Security
+                                            </option>
+                                            <option value="504ba985-9135-5acc-acab-d7a8e461faff">
+                                                Spring Boot
+                                            </option>
+                                            <option value="5836182f-bf1b-59f2-9b56-ab539433dded">
+                                                System Design
+                                            </option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="field-label"
+                                       for="difficultyInput">
+                                    Difficulty
+                                </label>
+
+                                <select id="difficultyInput"
+                                        class="form-select custom-input"
+                                        required
+                                        name="Difficulty">
+
+                                    <option value="" disabled>
+                                        Select Difficulty
+                                    </option>
+
+                                        <option value="Intern">
+                                            Intern
+                                        </option>
+                                        <option value="Fresher">
+                                            Fresher
+                                        </option>
+                                        <option value="Junior">
+                                            Junior
+                                        </option>
+                                        <option value="Middle">
+                                            Middle
+                                        </option>
+                                        <option value="Senior">
+                                            Senior
+                                        </option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Position and status -->
+                    <section class="form-card">
+                        <div class="section-title">
+                            <i class="fa-solid fa-layer-group"></i>
+                            Position & Status
+                        </div>
+                        <div class="mb-4">
+                            <label class="field-label"
+                                   for="positionInput">
+                                Position
+                            </label>
+
+                            <select id="positionInput"
+                                    class="form-select custom-input"
+                                    name="PositionId">
+
+                                <option value="">-- No position --</option>
+
+                                        <option value="d8983e6e-5c68-533a-b405-614725bd5fb8">
+                                            Backend Developer
+                                        </option>
+                                        <option value="5a2e6fd4-6f7c-5ff7-b5c9-991b06fb9a89">
+                                            Frontend Developer
+                                        </option>
+                                        <option value="0a2724ce-1401-53d8-8048-e401f18b859a">
+                                            Fullstack Developer
+                                        </option>
+                                        <option value="7cb490f2-014f-5e78-ba6e-5e409141a691">
+                                            AI Engineer
+                                        </option>
+                                        <option value="4378c930-d85b-5a6c-ac38-252309e3709b" selected="selected">
+                                            Data Engineer
+                                        </option>
+                                        <option value="6566b797-89a5-5ef8-952b-5c07b080b1e1">
+                                            DevOps Engineer
+                                        </option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="field-label">
+                                Status
+                            </label>
+
+                            <div class="status-options">
+
+                                <input type="radio"
+                                       class="btn-check"
+                                       name="Status"
+                                       id="statusActive"
+                                       value="Active"
+                                       checked="checked" />
+
+                                <label class="status-option status-active"
+                                       for="statusActive">
+                                    Active
+                                </label>
+
+                                <input type="radio"
+                                       class="btn-check"
+                                       name="Status"
+                                       id="statusDraft"
+                                       value="Draft" />
+
+                                <label class="status-option status-draft"
+                                       for="statusDraft">
+                                    Draft
+                                </label>
+
+
+
+
+
+                            </div>
+                        </div>
+                    </section>
+
+
+
+
+
+
+                    <div class="action-area">
+                        <a href="/devprep/admin/questions/"
+                           class="btn-cancel">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                id="btnSaveQuestion"
+                                class="btn-save">
+                            Save Changes
+                        </button>
+                    </div>
+
+                </form>
+
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const updateForm = document.getElementById('updateQuestionForm');
+        const saveButton = document.getElementById('btnSaveQuestion');
+
+        if (updateForm) {
+            updateForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const form = this;
+                const questionInput = form.querySelector('[name="Question"]');
+                const difficultyInput = form.querySelector('[name="Difficulty"]');
+                const categoryInput = form.querySelector('[name="CategoryId"]');
+                const statusInput = form.querySelector('[name="Status"]:checked');
+
+                if (!questionInput || !questionInput.value.trim()) {
+                    await Swal.fire({
+                        title: 'Update Failed!',
+                        text: 'Please enter the question text.',
+                        icon: 'error',
+                        background: '#16161a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#ef4444'
+                    });
+
+                    questionInput?.focus();
+                    return;
+                }
+
+                if (!difficultyInput || !difficultyInput.value.trim()) {
+                    await Swal.fire({
+                        title: 'Update Failed!',
+                        text: 'Please choose a difficulty.',
+                        icon: 'error',
+                        background: '#16161a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#ef4444'
+                    });
+
+                    difficultyInput?.focus();
+                    return;
+                }
+
+                if (!categoryInput || !categoryInput.value) {
+                    await Swal.fire({
+                        title: 'Update Failed!',
+                        text: 'Please choose a category.',
+                        icon: 'error',
+                        background: '#16161a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#ef4444'
+                    });
+
+                    categoryInput?.focus();
+                    return;
+                }
+
+                if (!statusInput) {
+                    await Swal.fire({
+                        title: 'Update Failed!',
+                        text: 'Please choose a status.',
+                        icon: 'error',
+                        background: '#16161a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#ef4444'
+                    });
+
+                    return;
+                }
+
+                const formData = new FormData(form);
+
+                try {
+                    saveButton.disabled = true;
+                    saveButton.textContent = 'Saving...';
+
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+
+                    let result = null;
+
+                    try {
+                        result = await response.json();
+                    } catch {
+                        result = null;
+                    }
+
+                    if (!response.ok || !result?.success) {
+                        throw new Error(
+                            result?.message ??
+                            'An error occurred while updating the question.'
+                        );
+                    }
+
+                    await Swal.fire({
+                        title: 'Updated Successfully!',
+                        text: result.message ??
+                            'The question has been updated successfully.',
+                        icon: 'success',
+                        background: '#16161a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#6366f1',
+                        timer: 1700,
+                        showConfirmButton: false
+                    });
+
+                    window.location.href = '/admin/questions';
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Update Failed!',
+                        text: error.message,
+                        icon: 'error',
+                        background: '#16161a',
+                        color: '#ffffff',
+                        confirmButtonColor: '#ef4444'
+                    });
+                } finally {
+                    saveButton.disabled = false;
+                    saveButton.textContent = 'Save Changes';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head><script>window.__DP={root:"/devprep",role:"manager",page:"/Manager/News"};</script><script src="/devprep/demo/devprep-data.js"></script><script src="/devprep/demo/devprep-shim.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>News Articles - DevPrep AI Manager Console</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="/devprep/css/admin.css?v=BNW5wTENxevTYMNj-rRQZcPNDZ0HiFz64vzhZsXluec" />
+    <style>
+        :root {
+            --bg-main: #0b0c10;
+            --bg-panel: #111827;
+            --bg-panel-2: #151f36;
+            --bg-head: #171a24;
+            --border-main: #252b3d;
+            --text-main: #ffffff;
+            --text-muted: #9ca3af;
+            --text-blue: #93c5fd;
+            --primary: #6366f1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .admin-main-wrapper {
+            margin-left: 260px;
+            padding-top: 70px;
+            min-height: 100vh;
+            background: var(--bg-main);
+        }
+
+        .admin-content {
+            padding: 24px 28px 48px;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: var(--text-blue);
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+
+        .filter-card {
+            margin-bottom: 24px;
+        }
+
+        .filter-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 7px;
+        }
+
+        .admin-input, .admin-select {
+            height: 42px;
+            border-radius: 8px;
+            border: 1px solid #292c3d !important;
+            background: #11121a !important;
+            color: #ffffff !important;
+            font-size: 14px;
+            box-shadow: none !important;
+        }
+
+        .admin-input:focus, .admin-select:focus {
+            border-color: var(--primary) !important;
+            background: #161824 !important;
+            color: #ffffff !important;
+        }
+
+        .admin-select option {
+            background-color: #11121a !important;
+            color: #ffffff !important;
+        }
+
+        .admin-input::placeholder { color: #64748b; }
+
+        .btn-filter {
+            height: 42px; width: 100%; border: none; border-radius: 8px;
+            background: #2e2a47; color: #ffffff; font-weight: 800;
+        }
+        .btn-filter:hover { background: #3b3659; color: #ffffff; }
+
+        .table-shell {
+            border: 1px solid #242636;
+            background: #11121a;
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 8px;
+        }
+
+        .admin-table {
+            width: 100%; margin: 0; color: #cbd5e1;
+            --bs-table-bg: transparent; --bs-table-color: #cbd5e1;
+            --bs-table-border-color: #1e202e; --bs-table-hover-bg: #171926;
+            --bs-table-hover-color: #ffffff;
+        }
+
+        .admin-table thead th {
+            background: #161722 !important; color: #94a3b8 !important;
+            font-family: 'Inter', sans-serif; font-size: 12px;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            border-bottom: 1px solid #242636;
+            padding: 16px 14px; white-space: nowrap;
+        }
+
+        .admin-table tbody tr { background: transparent !important; }
+        .admin-table tbody td {
+            background: transparent !important; color: #cbd5e1 !important;
+            border-bottom: 1px solid #1e202e; padding: 18px 14px;
+            vertical-align: middle; font-size: 14px;
+        }
+        .admin-table tbody tr:hover td { background: #171926 !important; }
+
+        .news-title { color: #ffffff !important; font-weight: 700; max-width: 360px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 10px; border-radius: 6px;
+            font-family: 'Inter', sans-serif; font-size: 11px;
+            font-weight: 800;
+        }
+        .status-published { background: rgba(16,185,129,.14); color: #10b981; }
+        .status-draft { background: rgba(245,158,11,.14); color: #f59e0b; }
+        .status-archived { background: rgba(239,68,68,.15); color: #f87171; }
+        .status-deleted { background: rgba(239,68,68,.15); color: #f87171; }
+        .status-dot { width: 6px; height: 6px; border-radius: 999px; display: inline-block; background-color: currentColor; }
+
+        .deleted-row { opacity: 0.72; }
+        .deleted-row .news-title { color: #94a3b8 !important; text-decoration: line-through; }
+
+        .slug-text, .summary-text, .date-text { color: #94a3b8 !important; }
+        .summary-text { max-width: 380px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .action-btn { color: #94a3b8 !important; background: none; border: none; padding: 0; line-height: 1; text-decoration: none; display: inline-flex; align-items: center; }
+        .action-btn:hover { color: #ffffff !important; }
+
+        .empty-row { color: #94a3b8 !important; padding: 44px 0 !important; text-align: center; }
+
+        .page-footer { background: #11121a; border-top: 1px solid #242636; padding: 18px; }
+        .page-link-custom { background: #11121a !important; border: 1px solid #242636 !important; color: #94a3b8 !important; padding: 8px 13px; border-radius: 6px; text-decoration: none; min-width: 38px; text-align: center; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 14px; }
+        .page-link-custom:hover { background: #1c1d29 !important; color: #ffffff !important; }
+        .page-link-custom.active { background: #6366f1 !important; border-color: #6366f1 !important; color: #ffffff !important; }
+        .page-link-custom.disabled { background: #0b0c10 !important; border-color: #161722 !important; color: #475569 !important; pointer-events: none; }
+
+        @media (max-width: 991.98px) {
+            .admin-main-wrapper { margin-left: 0; padding-top: 70px; }
+            .admin-content { padding: 20px 14px 50px; }
+            .table-footer { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body class="admin-page">
+    <header class="ad-topbar">
+    <div class="ad-topbar-left">
+        <span class="ad-brand">DevPrep AI</span>
+    </div>
+
+    <div class="ad-topbar-right">
+        <div class="ad-user" id="manager-user">
+            <button class="ad-avatar" id="manager-avatar-btn" type="button" title="manager@devprep.demo" aria-haspopup="true" aria-expanded="false">M</button>
+            <div class="ad-dropdown" role="menu">
+                <div class="ad-dropdown-head">
+                    <span class="ad-dropdown-avatar">M</span>
+                    <span class="ad-dropdown-email">manager@devprep.demo</span>
+                </div>
+                <form method="post" class="m-0" action="/devprep/auth/login/">
+                    <button type="submit" class="ad-dropdown-item" role="menuitem">
+                        <span class="material-symbols-outlined">logout</span> Logout
+                    </button>
+                <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KAizZJiQMJBvce500EFVmbwwbgGRZj1R2AgPhqhs74S0BQ9N99Mz2R83IJVJs9Onjlt-e0jcphfoBxj4Y6pv7DVJ0le-_RYVSO8_VGNq0bk3mEK9gtyUCRBHAOMpVBglgI8B0n_X-o5fgDIA3LRwehc8EOEeVA5Ns-sXkO--dW9UAvg8VBoT7koFRBWjWBDgQ" /></form>
+            </div>
+        </div>
+    </div>
+</header>
+
+<script>
+    (function () {
+        const btn = document.getElementById('manager-avatar-btn');
+        const menu = document.getElementById('manager-user');
+        if (!btn || !menu) return;
+
+        btn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            const open = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!menu.contains(event.target)) {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                menu.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    })();
+</script>
+
+    <aside class="ad-sidebar manager-sidebar" style="overflow-y: auto; overscroll-behavior: contain;">
+    <div class="ad-sidebar-head">
+        <div class="ad-console">
+            <div>
+                <h2>Manager Console</h2>
+            </div>
+        </div>
+    </div>
+
+    <nav class="ad-nav">
+        <a class="ad-nav-item " href="/devprep/manager/">
+            <span class="material-symbols-outlined">dashboard</span><span class="label">Dashboard</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/questionbank/">
+            <span class="material-symbols-outlined">database</span><span class="label">Question Bank</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/techstacks/">
+            <span class="material-symbols-outlined">stacks</span><span class="label">Tech Stacks</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/positions/">
+            <span class="material-symbols-outlined">work</span><span class="label">Positions</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/users/">
+            <span class="material-symbols-outlined">group</span><span class="label">Users</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/interviewsessions/">
+            <span class="material-symbols-outlined">history</span><span class="label">Interview Sessions</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/payments/">
+            <span class="material-symbols-outlined">payments</span><span class="label">Payments</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/creditpackages/">
+            <span class="material-symbols-outlined">account_balance_wallet</span><span class="label">Credit Packages</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/aifeedback/">
+            <span class="material-symbols-outlined">smart_toy</span><span class="label">AI Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/feedback/">
+            <span class="material-symbols-outlined">forum</span><span class="label">System Feedback</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/reportedfeedback/">
+            <span class="material-symbols-outlined">flag</span><span class="label">Reported Feedback</span>
+        </a>
+        <a class="ad-nav-item active" href="/devprep/manager/news/">
+            <span class="material-symbols-outlined">newspaper</span><span class="label">News</span>
+        </a>
+        <a class="ad-nav-item " href="/devprep/manager/announcements/">
+            <span class="material-symbols-outlined">campaign</span><span class="label">Announcements</span>
+        </a>    </nav>
+</aside>
+
+
+    <main class="admin-main-wrapper">
+        <div class="admin-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="page-title m-0">Content Inventory</h1>
+                    <div class="page-subtitle mt-2">Manage news articles, status, categories and content visibility.</div>
+                </div>
+            </div>
+
+            <form method="get" action="/devprep/manager/news/" id="managerFilterForm" class="filter-card" onsubmit="document.getElementById('pageIdxInput').value = 1;">
+                <input type="hidden" name="page" id="pageIdxInput" value="1" />
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <div class="filter-label">Search</div>
+                        <input name="keyword" type="text" class="form-control admin-input" placeholder="Search news articles, slugs..." />
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-label">Status</div>
+                        <select name="status" class="form-select admin-select">
+                            <option value="">All Statuses</option>
+                            <option value="Published">Published</option>
+                            <option value="Draft">Draft</option>
+                            <option value="Archived">Archived</option>
+                            <option value="Deleted">Deleted</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="filter-label">Category</div>
+                        <select name="categoryId" class="form-select admin-select">
+                            <option value="">All Categories</option>
+                                    <option value="67e3691b-c484-544c-a36c-30d7cf21a3b1">K&#x1EF9; n&#x103;ng ph&#x1ECF;ng v&#x1EA5;n</option>
+                                    <option value="1a03e029-43e7-5e3e-9aad-d580d0d13ed7">CV &amp; h&#x1ED3; s&#x1A1;</option>
+                                    <option value="204209eb-fa4f-5b89-b9ab-73f028261765">C&#xF4;ng ngh&#x1EC7;</option>
+                                    <option value="5e1cbdc6-b936-5354-b95b-056c1626bc52">L&#x1ED9; tr&#xEC;nh h&#x1ECD;c</option>
+                                    <option value="dbd52931-0c10-573f-b6a5-5088e649e562">Tin t&#x1EE9;c DevPrep</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn-filter" type="submit">Apply Filter</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="table-shell">
+                <div class="table-responsive">
+                    <table class="table admin-table align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width: 28%;">Title & Slug</th>
+                                <th style="width: 28%;">Summary</th>
+                                <th style="width: 12%;">Status</th>
+                                <th style="width: 8%;">Views</th>
+                                <th style="width: 14%;">Created At</th>
+                                <th style="width: 8%;" class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="5 c&#xE2;u h&#x1ECF;i Spring Boot hay g&#x1EB7;p nh&#x1EA5;t khi ph&#x1ECF;ng v&#x1EA5;n Junior">5 c&#xE2;u h&#x1ECF;i Spring Boot hay g&#x1EB7;p nh&#x1EA5;t khi ph&#x1ECF;ng v&#x1EA5;n Junior</div>
+                                            <div class="slug-text">bai-viet-1-5-cu-hi-spring-boot-hay-gp-nht-khi-phng-vn-junior</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-published">
+                                                <span class="status-dot"></span>
+                                                PUBLISHED
+                                            </span>
+                                        </td>
+                                        <td>
+1.2k                                        </td>
+                                        <td class="date-text">12/11/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/3d424520-e56c-5afa-bd8c-931f0af2b4d8/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="C&#xE1;ch tr&#x1EA3; l&#x1EDD;i c&#xE2;u h&#x1ECF;i system design khi b&#x1EA1;n m&#x1EDB;i ra tr&#x1B0;&#x1EDD;ng">C&#xE1;ch tr&#x1EA3; l&#x1EDD;i c&#xE2;u h&#x1ECF;i system design khi b&#x1EA1;n m&#x1EDB;i ra tr&#x1B0;&#x1EDD;ng</div>
+                                            <div class="slug-text">bai-viet-2-cch-tr-li-cu-hi-system-design-khi-bn-mi-ra-trng</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-published">
+                                                <span class="status-dot"></span>
+                                                PUBLISHED
+                                            </span>
+                                        </td>
+                                        <td>
+1.1k                                        </td>
+                                        <td class="date-text">06/11/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/8c663c42-5d1b-5260-a2a2-382b3732cf52/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="Chu&#x1EA9;n b&#x1ECB; CV IT: nh&#x1EEF;ng l&#x1ED7;i khi&#x1EBF;n nh&#xE0; tuy&#x1EC3;n d&#x1EE5;ng b&#x1ECF; qua">Chu&#x1EA9;n b&#x1ECB; CV IT: nh&#x1EEF;ng l&#x1ED7;i khi&#x1EBF;n nh&#xE0; tuy&#x1EC3;n d&#x1EE5;ng b&#x1ECF; qua</div>
+                                            <div class="slug-text">bai-viet-3-chun-b-cv-it-nhng-li-khin-nh-tuyn-dng-b-qua</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-published">
+                                                <span class="status-dot"></span>
+                                                PUBLISHED
+                                            </span>
+                                        </td>
+                                        <td>
+966                                        </td>
+                                        <td class="date-text">31/10/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/89dc86fb-5c33-5155-98e7-91696679f1d2/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="RAG v&#xE0; fine-tuning: n&#xEA;n ch&#x1ECD;n c&#xE1;ch n&#xE0;o?">RAG v&#xE0; fine-tuning: n&#xEA;n ch&#x1ECD;n c&#xE1;ch n&#xE0;o?</div>
+                                            <div class="slug-text">bai-viet-4-rag-v-fine-tuning-nn-chn-cch-no</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-published">
+                                                <span class="status-dot"></span>
+                                                PUBLISHED
+                                            </span>
+                                        </td>
+                                        <td>
+829                                        </td>
+                                        <td class="date-text">25/10/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/f1a9f130-d323-55c0-b335-6a9f22cd55f4/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="L&#x1ED9; tr&#xEC;nh h&#x1ECD;c Backend Java trong 6 th&#xE1;ng">L&#x1ED9; tr&#xEC;nh h&#x1ECD;c Backend Java trong 6 th&#xE1;ng</div>
+                                            <div class="slug-text">bai-viet-5-l-trnh-hc-backend-java-trong-6-thng</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-published">
+                                                <span class="status-dot"></span>
+                                                PUBLISHED
+                                            </span>
+                                        </td>
+                                        <td>
+692                                        </td>
+                                        <td class="date-text">19/10/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/5ca124e6-3764-5592-9f8e-48430e1ce0de/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="DevPrep ra m&#x1EAF;t ch&#x1EBF; &#x111;&#x1ED9; ph&#x1ECF;ng v&#x1EA5;n b&#x1EB1;ng gi&#x1ECD;ng n&#xF3;i">DevPrep ra m&#x1EAF;t ch&#x1EBF; &#x111;&#x1ED9; ph&#x1ECF;ng v&#x1EA5;n b&#x1EB1;ng gi&#x1ECD;ng n&#xF3;i</div>
+                                            <div class="slug-text">bai-viet-6-devprep-ra-mt-ch-phng-vn-bng-ging-ni</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-published">
+                                                <span class="status-dot"></span>
+                                                PUBLISHED
+                                            </span>
+                                        </td>
+                                        <td>
+555                                        </td>
+                                        <td class="date-text">13/10/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/d7ea7ed5-d214-5b8d-b6bf-0dd2ea5e5696/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr class="">
+                                        <td>
+                                            <div class="news-title" title="K&#x1EF9; n&#x103;ng giao ti&#x1EBF;p trong ph&#x1ECF;ng v&#x1EA5;n k&#x1EF9; thu&#x1EAD;t">K&#x1EF9; n&#x103;ng giao ti&#x1EBF;p trong ph&#x1ECF;ng v&#x1EA5;n k&#x1EF9; thu&#x1EAD;t</div>
+                                            <div class="slug-text">bai-viet-7-k-nng-giao-tip-trong-phng-vn-k-thut</div>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text" title="T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.">
+                                                T&#xF3;m t&#x1EAF;t ng&#x1EAF;n gi&#xFA;p b&#x1EA1;n n&#x1EAF;m nhanh n&#x1ED9;i dung ch&#xED;nh c&#x1EE7;a b&#xE0;i vi&#x1EBF;t v&#xE0; &#xE1;p d&#x1EE5;ng ngay cho bu&#x1ED5;i ph&#x1ECF;ng v&#x1EA5;n s&#x1EAF;p t&#x1EDB;i.
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge status-draft">
+                                                <span class="status-dot"></span>
+                                                DRAFT
+                                            </span>
+                                        </td>
+                                        <td>
+418                                        </td>
+                                        <td class="date-text">07/10/2026 09:30</td>
+                                        <td class="text-end pe-4">
+                                            <a class="action-btn action-view" href="/devprep/manager/news/0d2bf1f0-8cdf-59c0-9d06-17b2eacfadfc/" title="View details">
+                                                <span class="material-symbols-outlined fs-5">visibility</span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -70,6 +70,8 @@ window.SITE = {
       stack: ["Java 17", "Spring Boot", "Spring Data JPA", "Thymeleaf", "SQL Server"],
       status: "ui",
       demo: "booknest/index.html",
+      demoLabel: { vi: "Demo cửa hàng", en: "Store demo" },
+      demoAdmin: "booknest/admin/index.html",
       demoNote: {
         vi: "Bản demo giao diện với dữ liệu mẫu: xem được cả trang cửa hàng lẫn trang quản trị, các thao tác lưu đã được tắt.",
         en: "UI demo with sample data: browse both the store and the admin panel. Saving is turned off."
@@ -188,6 +190,7 @@ window.SITE = {
     statusSoon: { vi: "Đang chuẩn bị demo", en: "Demo in preparation" },
     statusUi: { vi: "Demo giao diện", en: "UI demo" },
     openDemo: { vi: "Mở demo", en: "Open demo" },
+    adminDemo: { vi: "Demo trang quản trị", en: "Admin demo" },
     watchVideo: { vi: "Xem video demo", en: "Watch demo video" },
     hideVideo: { vi: "Đóng video", en: "Close video" },
     videoNewTab: { vi: "Mở video trên Google Drive", en: "Open the video on Google Drive" },

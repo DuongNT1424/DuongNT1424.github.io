@@ -37,7 +37,8 @@
       var statusText = p.status === "live" ? tr(S.ui.statusLive) : p.status === "ui" ? tr(S.ui.statusUi) : tr(S.ui.statusSoon);
 
       var actions = el("div", { class: "row-actions" });
-      if (live && p.demo) actions.appendChild(link(p.demo, tr(S.ui.openDemo), "btn primary", p.demo.indexOf("http") === 0));
+      if (live && p.demo) actions.appendChild(link(p.demo, p.demoLabel ? tr(p.demoLabel) : tr(S.ui.openDemo), "btn primary", p.demo.indexOf("http") === 0));
+      if (p.demoAdmin) actions.appendChild(link(p.demoAdmin, tr(S.ui.adminDemo), "btn primary", false));
       var player = null;
       if (p.video) {
         var vbtn = el("button", { class: "btn primary", type: "button", "aria-expanded": "false", "aria-controls": "v-" + p.id, text: tr(S.ui.watchVideo) });

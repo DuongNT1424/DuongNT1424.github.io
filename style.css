@@ -109,6 +109,8 @@ main { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
   padding: 28px 28px; border-top: 1px solid var(--line);
 }
 .row:first-child { border-top: 0; }
+.row:focus { outline: none; }
+.row.is-target { box-shadow: inset 4px 0 0 var(--ink); }
 .row-main { min-width: 0; }
 .status { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
 .is-live .status { color: var(--live); }

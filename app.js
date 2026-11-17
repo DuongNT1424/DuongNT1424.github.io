@@ -79,7 +79,7 @@
       var stack = el("ul", { class: "stack", "aria-label": "Tech stack" });
       p.stack.forEach(function (s) { stack.appendChild(el("li", { text: s })); });
 
-      var row = el("li", { class: "row " + (p.status === "live" ? "is-live" : p.status === "ui" ? "is-ui" : "is-soon") }, [
+      var row = el("li", { id: p.id, tabindex: "-1", class: "row " + (p.status === "live" ? "is-live" : p.status === "ui" ? "is-ui" : "is-soon") }, [
         el("div", { class: "row-main" }, [
           el("p", { class: "status" }, [el("span", { class: "dot", "aria-hidden": "true" }), document.createTextNode(statusText)]),
           el("h3", { text: p.name }),
@@ -172,4 +172,18 @@
   });
 
   render();
+
+  // Deep links from the CV, e.g. /#booknest: scroll to the project and open its details
+  function focusHash() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var row = id && document.getElementById(id);
+    if (!row || !row.classList.contains("row")) return;
+    var t = row.querySelector(".toggle");
+    if (t && t.getAttribute("aria-expanded") === "false") t.click();
+    row.classList.add("is-target");
+    row.scrollIntoView({ block: "start" });
+    row.focus({ preventScroll: true });
+  }
+  window.addEventListener("hashchange", focusHash);
+  focusHash();
 })();

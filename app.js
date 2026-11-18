@@ -180,15 +180,16 @@
   if (window.CursorSwarm && !location.hash) {
     try {
       window.cursorSwarm = new CursorSwarm({
-        cursors: 3,
-        names: ["BACKEND", "AI", "DATA"],
-        colors: ["#14304a", "#1d8a5a", "#2563a8"],
+        cursors: 5,
+        names: ["BACKEND", "AI", "DATA", "JAVA", ".NET"],
+        colors: ["#14304a", "#1d8a5a", "#2563a8", "#a86b12", "#7c3aed"],
         startPosition: "corners",
         ignore: ".top, .skip",
         deconstruct: false,
         exitAfterBuild: "edge",
         hudPosition: "bottom-right",
-        speed: 1.5
+        speed: 0.9,
+        maxSpeed: 2
       }).init();
     } catch (e) { document.documentElement.classList.remove("cs-cloak"); }
   } else {

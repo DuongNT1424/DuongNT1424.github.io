@@ -12,16 +12,21 @@
   window.addEventListener("load", function () {
     setTimeout(function () {
       try {
+        var preset = {
+          booknest: { names: ["STORE", "ADMIN", "DATA", "CART", "ORDER"], colors: ["#f97316", "#14304a", "#2a9d8f", "#e76f51", "#6d597a"] },
+          devprep: { names: ["CANDIDATE", "ADMIN", "AI", "MANAGER", "CV"], colors: ["#8b5cf6", "#22d3ee", "#a3e635", "#f472b6", "#fbbf24"] }
+        }[d.demo] || {};
         window.cursorSwarm = new CursorSwarm({
-          cursors: 3,
-          names: (d.names || "UI,API,DATA").split(","),
-          colors: (d.colors || "#14304a,#1d8a5a,#2563a8").split(","),
+          cursors: 5,
+          names: preset.names || (d.names || "UI,API,DATA").split(","),
+          colors: preset.colors || (d.colors || "#14304a,#1d8a5a,#2563a8").split(","),
           startPosition: "corners",
           ignore: d.ignore || null,
           deconstruct: false,
           exitAfterBuild: "edge",
           hud: false,
-          speed: 1.8
+          speed: 0.9,
+          maxSpeed: 2
         }).init();
       } catch (e) { document.documentElement.classList.remove("cs-cloak"); }
       clearTimeout(safety);

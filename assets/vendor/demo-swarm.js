@@ -1,0 +1,30 @@
+/* Plays the cursor-swarm intro on the first page a visitor opens in a demo, then stays out of the way. */
+(function () {
+  var me = document.currentScript; if (!me || !window.CursorSwarm) return;
+  var d = me.dataset, key = "swarm-seen-" + (d.demo || "demo");
+  var seen = false;
+  try { seen = sessionStorage.getItem(key) === "1"; sessionStorage.setItem(key, "1"); } catch (e) { seen = true; }
+  if (seen || (d.skip && new RegExp(d.skip, "i").test(location.pathname))) return;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  window.__swarmIntro = true;
+  CursorSwarm.cloak();
+  var safety = setTimeout(function () { document.documentElement.classList.remove("cs-cloak"); }, 3500);
+  window.addEventListener("load", function () {
+    setTimeout(function () {
+      try {
+        window.cursorSwarm = new CursorSwarm({
+          cursors: 3,
+          names: (d.names || "UI,API,DATA").split(","),
+          colors: (d.colors || "#14304a,#1d8a5a,#2563a8").split(","),
+          startPosition: "corners",
+          ignore: d.ignore || null,
+          deconstruct: false,
+          exitAfterBuild: "edge",
+          hud: false,
+          speed: 1.8
+        }).init();
+      } catch (e) { document.documentElement.classList.remove("cs-cloak"); }
+      clearTimeout(safety);
+    }, 250);
+  });
+})();

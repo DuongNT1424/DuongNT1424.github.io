@@ -5,9 +5,14 @@
   var PAGES = {}; DATA.pages.forEach(function (p) { PAGES[p] = 1; });
 
   // Show the announcement popup only on the first page of a visit.
+  // (when the cursor-swarm intro plays on this page, the popup waits for the next page)
   try {
-    if (sessionStorage.getItem("dp-demo-seen")) sessionStorage.setItem("devprep-ann-hidden", "1");
-    sessionStorage.setItem("dp-demo-seen", "1");
+    if (window.__swarmIntro) { sessionStorage.setItem("devprep-ann-hidden", "1"); sessionStorage.setItem("dp-ann-deferred", "1"); }
+    else if (sessionStorage.getItem("dp-ann-deferred")) { sessionStorage.removeItem("devprep-ann-hidden"); sessionStorage.removeItem("dp-ann-deferred"); sessionStorage.setItem("dp-demo-seen", "1"); }
+    else {
+      if (sessionStorage.getItem("dp-demo-seen")) sessionStorage.setItem("devprep-ann-hidden", "1");
+      sessionStorage.setItem("dp-demo-seen", "1");
+    }
   } catch (e) {}
 
   function stripRoot(path) { return path.indexOf(ROOT + "/") === 0 ? path.slice(ROOT.length) : path; }

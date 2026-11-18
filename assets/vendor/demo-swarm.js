@@ -1,7 +1,10 @@
 /* Plays the cursor-swarm intro on the first page a visitor opens in a demo, then stays out of the way. */
 (function () {
   var me = document.currentScript; if (!me || !window.CursorSwarm) return;
-  var d = me.dataset, key = "swarm-seen-" + (d.demo || "demo");
+  var d = me.dataset;
+  // one intro per area of a demo: the store / candidate side, the admin panel and the manager console each get their own
+  var area = /\/admin(\/|$)/i.test(location.pathname) ? "admin" : /\/manager(\/|$)/i.test(location.pathname) ? "manager" : "main";
+  var key = "swarm-seen-" + (d.demo || "demo") + "-" + area;
   var seen = false;
   try { seen = sessionStorage.getItem(key) === "1"; sessionStorage.setItem(key, "1"); } catch (e) { seen = true; }
   if (seen || (d.skip && new RegExp(d.skip, "i").test(location.pathname))) return;

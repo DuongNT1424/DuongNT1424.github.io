@@ -166,12 +166,34 @@
   }
 
   document.getElementById("lang").addEventListener("click", function () {
+    if (window.cursorSwarm) { try { window.cursorSwarm.stop({ reveal: true }); } catch (e) {} }
     lang = lang === "vi" ? "en" : "vi";
     try { localStorage.setItem("lang", lang); } catch (e) {}
     render();
   });
 
   render();
+
+  // Cursor swarm: three agent cursors build the page as the visitor scrolls.
+  // Skipped for deep links from the CV (the visitor wants the project right away)
+  // and for people who prefer reduced motion (handled by the library).
+  if (window.CursorSwarm && !location.hash) {
+    try {
+      window.cursorSwarm = new CursorSwarm({
+        cursors: 3,
+        names: ["BACKEND", "AI", "DATA"],
+        colors: ["#14304a", "#1d8a5a", "#2563a8"],
+        startPosition: "corners",
+        ignore: ".top, .skip",
+        deconstruct: false,
+        exitAfterBuild: "edge",
+        hudPosition: "bottom-right",
+        speed: 1.5
+      }).init();
+    } catch (e) { document.documentElement.classList.remove("cs-cloak"); }
+  } else {
+    document.documentElement.classList.remove("cs-cloak");
+  }
 
   // Deep links from the CV, e.g. /#booknest: scroll to the project and open its details
   function focusHash() {
